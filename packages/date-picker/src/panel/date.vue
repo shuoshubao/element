@@ -150,33 +150,33 @@
 </template>
 
 <script type="text/babel">
+import ElButton from 'element-ui/packages/button/index';
+import ElInput from 'element-ui/packages/input/index';
+import Locale from 'element-ui/src/mixins/locale';
+import Clickoutside from 'element-ui/src/utils/clickoutside';
 import {
+    changeYearMonthAndClampDate,
+    clearMilliseconds,
+    clearTime,
+    extractDateFormat,
+    extractTimeFormat,
     formatDate,
-    parseDate,
     getWeekNumber,
     isDate,
     modifyDate,
     modifyTime,
     modifyWithTimeString,
-    clearMilliseconds,
-    clearTime,
-    prevYear,
-    nextYear,
-    prevMonth,
     nextMonth,
-    changeYearMonthAndClampDate,
-    extractDateFormat,
-    extractTimeFormat,
+    nextYear,
+    parseDate,
+    prevMonth,
+    prevYear,
     timeWithinRange
 } from 'element-ui/src/utils/date-util';
-import Clickoutside from 'element-ui/src/utils/clickoutside';
-import Locale from 'element-ui/src/mixins/locale';
-import ElInput from 'element-ui/packages/input';
-import ElButton from 'element-ui/packages/button';
-import TimePicker from './time';
-import YearTable from '../basic/year-table';
-import MonthTable from '../basic/month-table';
-import DateTable from '../basic/date-table';
+import DateTable from '../basic/date-table.vue';
+import MonthTable from '../basic/month-table.vue';
+import YearTable from '../basic/year-table.vue';
+import TimePicker from './time.vue';
 
 export default {
     mixins: [Locale],
@@ -218,7 +218,6 @@ export default {
 
         selectionMode(newVal) {
             if (newVal === 'month') {
-                /* istanbul ignore next */
                 if (this.currentView !== 'year' || this.currentView !== 'month') {
                     this.currentView = 'month';
                 }

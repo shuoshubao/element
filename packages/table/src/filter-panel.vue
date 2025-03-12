@@ -36,14 +36,14 @@
 </template>
 
 <script type="text/babel">
-import Popper from 'element-ui/src/utils/vue-popper';
-import { PopupManager } from 'element-ui/src/utils/popup';
+import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index';
+import ElCheckbox from 'element-ui/packages/checkbox/index';
+import ElScrollbar from 'element-ui/packages/scrollbar/index';
 import Locale from 'element-ui/src/mixins/locale';
 import Clickoutside from 'element-ui/src/utils/clickoutside';
+import { PopupManager } from 'element-ui/src/utils/popup/index';
+import Popper from 'element-ui/src/utils/vue-popper';
 import Dropdown from './dropdown';
-import ElCheckbox from 'element-ui/packages/checkbox';
-import ElCheckboxGroup from 'element-ui/packages/checkbox-group';
-import ElScrollbar from 'element-ui/packages/scrollbar';
 
 export default {
     name: 'ElTableFilterPanel',

@@ -1,9 +1,9 @@
 <script>
-import Clickoutside from 'element-ui/src/utils/clickoutside';
+import ElButton from 'element-ui/packages/button/index';
+import ElButtonGroup from 'element-ui/packages/button/src/button-group.vue';
 import Emitter from 'element-ui/src/mixins/emitter';
 import Migrating from 'element-ui/src/mixins/migrating';
-import ElButton from 'element-ui/packages/button';
-import ElButtonGroup from 'element-ui/packages/button-group';
+import Clickoutside from 'element-ui/src/utils/clickoutside';
 import { generateId } from 'element-ui/src/utils/util';
 
 export default {

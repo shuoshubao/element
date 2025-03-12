@@ -45,9 +45,9 @@
 </template>
 
 <script>
-import ElCheckboxGroup from 'element-ui/packages/checkbox-group';
-import ElCheckbox from 'element-ui/packages/checkbox';
-import ElInput from 'element-ui/packages/input';
+import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index';
+import ElCheckbox from 'element-ui/packages/checkbox/index';
+import ElInput from 'element-ui/packages/input/index';
 import Locale from 'element-ui/src/mixins/locale';
 
 export default {

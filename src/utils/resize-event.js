@@ -3,7 +3,6 @@ import { debounce } from 'throttle-debounce';
 
 const isServer = typeof window === 'undefined';
 
-/* istanbul ignore next */
 const resizeHandler = function (entries) {
     for (let entry of entries) {
         const listeners = entry.target.__resizeListeners__ || [];
@@ -15,7 +14,6 @@ const resizeHandler = function (entries) {
     }
 };
 
-/* istanbul ignore next */
 export const addResizeListener = function (element, fn) {
     if (isServer) return;
     if (!element.__resizeListeners__) {
@@ -26,7 +24,6 @@ export const addResizeListener = function (element, fn) {
     element.__resizeListeners__.push(fn);
 };
 
-/* istanbul ignore next */
 export const removeResizeListener = function (element, fn) {
     if (!element || !element.__resizeListeners__) return;
     element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);

@@ -1,6 +1,5 @@
-import Radio from './src/radio';
+import Radio from './src/radio.vue';
 
-/* istanbul ignore next */
 Radio.install = function (Vue) {
     Vue.component(Radio.name, Radio);
 };

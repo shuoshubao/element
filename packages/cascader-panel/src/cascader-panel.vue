@@ -5,12 +5,12 @@
 </template>
 
 <script>
-import CascaderMenu from './cascader-menu';
-import Store from './store';
-import merge from 'element-ui/src/utils/merge';
 import AriaUtils from 'element-ui/src/utils/aria-utils';
+import merge from 'element-ui/src/utils/merge';
 import scrollIntoView from 'element-ui/src/utils/scroll-into-view';
-import { noop, coerceTruthyValueToArray, isEqual, isEmpty, valueEquals } from 'element-ui/src/utils/util';
+import { coerceTruthyValueToArray, isEmpty, isEqual, noop, valueEquals } from 'element-ui/src/utils/util';
+import CascaderMenu from './cascader-menu.vue';
+import Store from './store';
 
 const { keys: KeyCode } = AriaUtils;
 const DefaultProps = {

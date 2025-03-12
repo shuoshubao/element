@@ -1,12 +1,12 @@
+import ElCheckbox from 'element-ui/packages/checkbox/index';
+import ElTooltip from 'element-ui/packages/tooltip/index';
+import { addClass, getStyle, hasClass, removeClass } from 'element-ui/src/utils/dom';
 import { arrayFindIndex } from 'element-ui/src/utils/util';
-import { getCell, getColumnByCell, getRowIdentity, objectEquals } from './util';
-import { getStyle, hasClass, removeClass, addClass } from 'element-ui/src/utils/dom';
-import ElCheckbox from 'element-ui/packages/checkbox';
-import ElTooltip from 'element-ui/packages/tooltip';
 import debounce from 'throttle-debounce/debounce';
 import LayoutObserver from './layout-observer';
 import { mapStates } from './store/helper';
 import TableRow from './table-row.js';
+import { getCell, getColumnByCell, getRowIdentity, objectEquals } from './util';
 
 export default {
     name: 'ElTableBody',

@@ -39,8 +39,8 @@
 import AsyncValidator from 'async-validator';
 import emitter from 'element-ui/src/mixins/emitter';
 import objectAssign from 'element-ui/src/utils/merge';
-import { noop, getPropByPath } from 'element-ui/src/utils/util';
-import LabelWrap from './label-wrap';
+import { getPropByPath, noop } from 'element-ui/src/utils/util';
+import LabelWrap from './label-wrap.vue';
 export default {
     name: 'ElFormItem',
 

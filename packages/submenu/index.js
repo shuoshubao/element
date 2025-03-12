@@ -1,6 +1,12 @@
-import ElSubmenu from '../menu/src/submenu';
+/*
+ * @Author: shuoshubao
+ * @Date: 2025-03-12 10:35:42
+ * @LastEditors: shuoshubao
+ * @LastEditTime: 2025-03-12 11:36:55
+ * @Description:
+ */
+import ElSubmenu from '../menu/src/submenu.vue';
 
-/* istanbul ignore next */
 ElSubmenu.install = function (Vue) {
     Vue.component(ElSubmenu.name, ElSubmenu);
 };

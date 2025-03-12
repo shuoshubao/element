@@ -1,6 +1,5 @@
-import Image from './src/main';
+import Image from './src/main.vue';
 
-/* istanbul ignore next */
 Image.install = function (Vue) {
     Vue.component(Image.name, Image);
 };

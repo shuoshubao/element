@@ -23,14 +23,14 @@
 </template>
 
 <script>
-import SvPanel from './sv-panel';
-import HueSlider from './hue-slider';
-import AlphaSlider from './alpha-slider';
-import Predefine from './predefine';
-import Popper from 'element-ui/src/utils/vue-popper';
+import ElButton from 'element-ui/packages/button/index';
+import ElInput from 'element-ui/packages/input/index';
 import Locale from 'element-ui/src/mixins/locale';
-import ElInput from 'element-ui/packages/input';
-import ElButton from 'element-ui/packages/button';
+import Popper from 'element-ui/src/utils/vue-popper';
+import AlphaSlider from './alpha-slider.vue';
+import HueSlider from './hue-slider.vue';
+import Predefine from './predefine.vue';
+import SvPanel from './sv-panel.vue';
 
 export default {
     name: 'el-color-picker-dropdown',

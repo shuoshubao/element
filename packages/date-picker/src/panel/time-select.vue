@@ -18,7 +18,7 @@
 </template>
 
 <script type="text/babel">
-import ElScrollbar from 'element-ui/packages/scrollbar';
+import ElScrollbar from 'element-ui/packages/scrollbar/index';
 import scrollIntoView from 'element-ui/src/utils/scroll-into-view';
 
 const parseTime = function (time) {
@@ -32,7 +32,7 @@ const parseTime = function (time) {
             minutes
         };
     }
-    /* istanbul ignore next */
+
     return null;
 };
 

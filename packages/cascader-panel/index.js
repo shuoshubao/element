@@ -1,6 +1,5 @@
-import CascaderPanel from './src/cascader-panel';
+import CascaderPanel from './src/cascader-panel.vue';
 
-/* istanbul ignore next */
 CascaderPanel.install = function (Vue) {
     Vue.component(CascaderPanel.name, CascaderPanel);
 };

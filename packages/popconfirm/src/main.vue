@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import ElPopover from 'element-ui/packages/popover';
-import ElButton from 'element-ui/packages/button';
-import { t } from 'element-ui/src/locale';
+import ElButton from 'element-ui/packages/button/index';
+import ElPopover from 'element-ui/packages/popover/index';
+import { t } from 'element-ui/src/locale/index';
 
 export default {
     name: 'ElPopconfirm',

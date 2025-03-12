@@ -1,5 +1,5 @@
-import Picker from '../picker';
-import Panel from '../panel/time-select';
+import Panel from '../panel/time-select.vue';
+import Picker from '../picker.vue';
 
 export default {
     mixins: [Picker],

@@ -52,8 +52,8 @@
     </transition-group>
 </template>
 <script>
+import ElProgress from 'element-ui/packages/progress/index';
 import Locale from 'element-ui/src/mixins/locale';
-import ElProgress from 'element-ui/packages/progress';
 
 export default {
     name: 'ElUploadList',

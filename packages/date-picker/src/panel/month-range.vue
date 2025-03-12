@@ -81,12 +81,12 @@
 </template>
 
 <script type="text/babel">
-import { isDate, modifyWithTimeString, prevYear, nextYear, nextMonth } from 'element-ui/src/utils/date-util';
-import Clickoutside from 'element-ui/src/utils/clickoutside';
+import ElButton from 'element-ui/packages/button/index';
+import ElInput from 'element-ui/packages/input/index';
 import Locale from 'element-ui/src/mixins/locale';
-import MonthTable from '../basic/month-table';
-import ElInput from 'element-ui/packages/input';
-import ElButton from 'element-ui/packages/button';
+import Clickoutside from 'element-ui/src/utils/clickoutside';
+import { isDate, modifyWithTimeString, nextMonth, nextYear, prevYear } from 'element-ui/src/utils/date-util';
+import MonthTable from '../basic/month-table.vue';
 
 const calcDefaultValue = defaultValue => {
     if (Array.isArray(defaultValue)) {

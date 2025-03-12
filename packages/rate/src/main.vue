@@ -27,9 +27,9 @@
 </template>
 
 <script>
+import Migrating from 'element-ui/src/mixins/migrating';
 import { hasClass } from 'element-ui/src/utils/dom';
 import { isObject } from 'element-ui/src/utils/types';
-import Migrating from 'element-ui/src/mixins/migrating';
 
 export default {
     name: 'ElRate',
@@ -242,7 +242,7 @@ export default {
 
         showDecimalIcon(item) {
             let showWhenDisabled = this.rateDisabled && this.valueDecimal > 0 && item - 1 < this.value && item > this.value;
-            /* istanbul ignore next */
+
             let showWhenAllowHalf = this.allowHalf && this.pointerAtLeftHalf && item - 0.5 <= this.currentValue && item > this.currentValue;
             return showWhenDisabled || showWhenAllowHalf;
         },

@@ -1,6 +1,6 @@
 <script>
-import ElCheckbox from 'element-ui/packages/checkbox';
-import ElRadio from 'element-ui/packages/radio';
+import ElCheckbox from 'element-ui/packages/checkbox/index';
+import ElRadio from 'element-ui/packages/radio/index';
 import { isEqual } from 'element-ui/src/utils/util';
 
 const stopPropagation = e => e.stopPropagation();

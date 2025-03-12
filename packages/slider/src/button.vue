@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import ElTooltip from 'element-ui/packages/tooltip';
+import ElTooltip from 'element-ui/packages/tooltip/index';
 
 export default {
     name: 'ElSliderButton',

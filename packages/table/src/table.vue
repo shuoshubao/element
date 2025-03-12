@@ -207,17 +207,17 @@
 </template>
 
 <script type="text/babel">
-import ElCheckbox from 'element-ui/packages/checkbox';
-import { debounce, throttle } from 'throttle-debounce';
-import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import ElCheckbox from 'element-ui/packages/checkbox/index';
 import Mousewheel from 'element-ui/src/directives/mousewheel';
 import Locale from 'element-ui/src/mixins/locale';
 import Migrating from 'element-ui/src/mixins/migrating';
+import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import { debounce, throttle } from 'throttle-debounce';
 import { createStore, mapStates } from './store/helper';
-import TableLayout from './table-layout';
 import TableBody from './table-body';
-import TableHeader from './table-header';
 import TableFooter from './table-footer';
+import TableHeader from './table-header';
+import TableLayout from './table-layout';
 import { parseHeight } from './util';
 
 let tableIdSeed = 1;

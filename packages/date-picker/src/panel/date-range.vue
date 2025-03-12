@@ -182,27 +182,27 @@
 </template>
 
 <script type="text/babel">
+import ElButton from 'element-ui/packages/button/index';
+import ElInput from 'element-ui/packages/input/index';
+import Locale from 'element-ui/src/mixins/locale';
+import Clickoutside from 'element-ui/src/utils/clickoutside';
 import {
+    extractDateFormat,
+    extractTimeFormat,
     formatDate,
-    parseDate,
     isDate,
     modifyDate,
     modifyTime,
     modifyWithTimeString,
-    prevYear,
-    nextYear,
-    prevMonth,
-    nextMonth,
     nextDate,
-    extractDateFormat,
-    extractTimeFormat
+    nextMonth,
+    nextYear,
+    parseDate,
+    prevMonth,
+    prevYear
 } from 'element-ui/src/utils/date-util';
-import Clickoutside from 'element-ui/src/utils/clickoutside';
-import Locale from 'element-ui/src/mixins/locale';
-import TimePicker from './time';
-import DateTable from '../basic/date-table';
-import ElInput from 'element-ui/packages/input';
-import ElButton from 'element-ui/packages/button';
+import DateTable from '../basic/date-table.vue';
+import TimePicker from './time.vue';
 
 const calcDefaultValue = defaultValue => {
     if (Array.isArray(defaultValue)) {

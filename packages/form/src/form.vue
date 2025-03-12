@@ -76,7 +76,7 @@ export default {
                 this.fields.push(field);
             }
         });
-        /* istanbul ignore next */
+
         this.$on('el.form.removeField', field => {
             if (field.prop) {
                 this.fields.splice(this.fields.indexOf(field), 1);

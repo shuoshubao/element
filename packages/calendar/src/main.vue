@@ -37,12 +37,12 @@
 </template>
 
 <script>
+import ElButton from 'element-ui/packages/button/index';
+import ElButtonGroup from 'element-ui/packages/button/src/button-group.vue';
 import Locale from 'element-ui/src/mixins/locale';
 import fecha from 'element-ui/src/utils/date';
-import ElButton from 'element-ui/packages/button';
-import ElButtonGroup from 'element-ui/packages/button-group';
-import DateTable from './date-table';
 import { validateRangeInOneMonth } from 'element-ui/src/utils/date-util';
+import DateTable from './date-table.vue';
 
 const validTypes = ['prev-month', 'today', 'next-month'];
 const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
