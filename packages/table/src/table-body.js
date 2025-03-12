@@ -5,7 +5,7 @@ import { arrayFindIndex } from 'element-ui/src/utils/util';
 import debounce from 'throttle-debounce/debounce';
 import LayoutObserver from './layout-observer';
 import { mapStates } from './store/helper';
-import TableRow from './table-row.js';
+import TableRow from './table-row';
 import { getCell, getColumnByCell, getRowIdentity, objectEquals } from './util';
 
 export default {
