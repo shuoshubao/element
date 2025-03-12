@@ -1,20 +1,20 @@
 <template>
-  <header class="el-header" :style="{ height }">
-    <slot></slot>
-  </header>
+    <header class="el-header" :style="{ height }">
+        <slot></slot>
+    </header>
 </template>
 
 <script>
-  export default {
+export default {
     name: 'ElHeader',
 
     componentName: 'ElHeader',
 
     props: {
-      height: {
-        type: String,
-        default: '60px'
-      }
+        height: {
+            type: String,
+            default: '60px'
+        }
     }
-  };
+};
 </script>
