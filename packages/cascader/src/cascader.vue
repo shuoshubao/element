@@ -116,7 +116,7 @@ import { isDef } from 'element-ui/src/utils/shared';
 import { isFunction, isUndefined } from 'element-ui/src/utils/types';
 import { isEmpty, isEqual, kebabCase } from 'element-ui/src/utils/util';
 import Popper from 'element-ui/src/utils/vue-popper';
-import debounce from 'throttle-debounce/debounce';
+import { debounce } from 'lodash';
 
 const { keys: KeyCode } = AriaUtils;
 const MigratingProps = {
@@ -338,7 +338,7 @@ export default {
             this.computePresentContent();
         }
 
-        this.filterHandler = debounce(this.debounce, () => {
+        this.filterHandler = debounce(() => {
             const { inputValue } = this;
 
             if (!inputValue) {
@@ -354,7 +354,7 @@ export default {
             } else {
                 this.filtering = false;
             }
-        });
+        }, this.debounce);
 
         addResizeListener(this.$el, this.updateStyle);
     },

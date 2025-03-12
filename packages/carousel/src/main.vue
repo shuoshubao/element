@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import throttle from 'throttle-debounce/throttle';
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import { throttle } from 'lodash';
 
 export default {
     name: 'ElCarousel',
@@ -157,12 +157,16 @@ export default {
     },
 
     created() {
-        this.throttledArrowClick = throttle(300, true, index => {
-            this.setActiveItem(index);
-        });
-        this.throttledIndicatorHover = throttle(300, index => {
+        this.throttledArrowClick = throttle(
+            index => {
+                this.setActiveItem(index);
+            },
+            300,
+            { trailing: false }
+        );
+        this.throttledIndicatorHover = throttle(index => {
             this.handleIndicatorHover(index);
-        });
+        }, 300);
     },
 
     mounted() {

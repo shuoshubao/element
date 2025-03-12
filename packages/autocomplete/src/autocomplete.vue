@@ -59,7 +59,7 @@ import Focus from 'element-ui/src/mixins/focus';
 import Migrating from 'element-ui/src/mixins/migrating';
 import Clickoutside from 'element-ui/src/utils/clickoutside';
 import { generateId } from 'element-ui/src/utils/util';
-import debounce from 'throttle-debounce/debounce';
+import { debounce } from 'lodash';
 import ElAutocompleteSuggestions from './autocomplete-suggestions.vue';
 
 export default {
@@ -156,7 +156,7 @@ export default {
         }
     },
     mounted() {
-        this.debouncedGetData = debounce(this.debounce, this.getData);
+        this.debouncedGetData = debounce(this.getData, this.debounce);
         this.$on('item-click', item => {
             this.select(item);
         });

@@ -1,7 +1,7 @@
-import Popper from 'element-ui/src/utils/vue-popper';
-import debounce from 'throttle-debounce/debounce';
-import { addClass, removeClass, on, off } from 'element-ui/src/utils/dom';
+import { addClass, off, on, removeClass } from 'element-ui/src/utils/dom';
 import { generateId } from 'element-ui/src/utils/util';
+import Popper from 'element-ui/src/utils/vue-popper';
+import { debounce } from 'lodash';
 import Vue from 'vue';
 
 export default {
@@ -72,7 +72,7 @@ export default {
             }
         }).$mount();
 
-        this.debounceClose = debounce(200, () => this.handleClosePopper());
+        this.debounceClose = debounce(() => this.handleClosePopper(), 200);
     },
 
     render(h) {

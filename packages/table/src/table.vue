@@ -212,7 +212,7 @@ import Mousewheel from 'element-ui/src/directives/mousewheel';
 import Locale from 'element-ui/src/mixins/locale';
 import Migrating from 'element-ui/src/mixins/migrating';
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
-import { debounce, throttle } from 'throttle-debounce';
+import { debounce, throttle } from 'lodash';
 import { createStore, mapStates } from './store/helper';
 import TableBody from './table-body';
 import TableFooter from './table-footer';
@@ -428,9 +428,9 @@ export default {
             }
         },
 
-        throttleSyncPostion: throttle(16, function () {
+        throttleSyncPostion: throttle(function () {
             this.syncPostion();
-        }),
+        }, 16),
 
         onScroll(evt) {
             const raf = window.requestAnimationFrame;
@@ -636,7 +636,7 @@ export default {
 
     created() {
         this.tableId = `el-table_${tableIdSeed++}`;
-        this.debouncedUpdateLayout = debounce(50, () => this.doLayout());
+        this.debouncedUpdateLayout = debounce(() => this.doLayout(), 50);
     },
 
     mounted() {

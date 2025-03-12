@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import throttle from 'throttle-debounce/throttle';
+import { throttle } from 'lodash';
 
 const cubic = value => value ** 3;
 const easeInOutCubic = value => (value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2);
@@ -60,7 +60,7 @@ export default {
 
     mounted() {
         this.init();
-        this.throttledScrollHandler = throttle(300, this.onScroll);
+        this.throttledScrollHandler = throttle(this.onScroll, 300);
         this.container.addEventListener('scroll', this.throttledScrollHandler);
     },
 

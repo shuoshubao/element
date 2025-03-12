@@ -12,9 +12,7 @@
     },
     "dependencies": {
         "async-validator": "~1.8.1",
-        "deepmerge": "^1.2.0",
-        "normalize-wheel": "^1.0.1",
-        "throttle-debounce": "^1.0.1"
+        "normalize-wheel": "^1.0.1"
     },
     "devDependencies": {
         "@babel/core": "^7.26.10",

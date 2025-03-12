@@ -129,7 +129,7 @@ import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/re
 import scrollIntoView from 'element-ui/src/utils/scroll-into-view';
 import { isKorean } from 'element-ui/src/utils/shared';
 import { getValueByPath, isEdge, isIE, valueEquals } from 'element-ui/src/utils/util';
-import debounce from 'throttle-debounce/debounce';
+import { debounce } from 'lodash';
 import NavigationMixin from './navigation-mixin';
 import ElOption from './option.vue';
 import ElSelectMenu from './select-dropdown.vue';
@@ -423,13 +423,13 @@ export default {
             this.$emit('input', '');
         }
 
-        this.debouncedOnInputChange = debounce(this.debounce, () => {
+        this.debouncedOnInputChange = debounce(() => {
             this.onInputChange();
-        });
+        }, this.debounce);
 
-        this.debouncedQueryChange = debounce(this.debounce, e => {
+        this.debouncedQueryChange = debounce(e => {
             this.handleQueryChange(e.target.value);
-        });
+        }, this.debounce);
 
         this.$on('handleOptionClick', this.handleOptionSelect);
         this.$on('setSelected', this.setSelected);

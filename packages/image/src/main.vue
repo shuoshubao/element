@@ -26,7 +26,7 @@
 import Locale from 'element-ui/src/mixins/locale';
 import { getScrollContainer, isInContainer, off, on } from 'element-ui/src/utils/dom';
 import { isHtmlElement, isString } from 'element-ui/src/utils/types';
-import throttle from 'throttle-debounce/throttle';
+import { throttle } from 'lodash';
 import ImageViewer from './image-viewer.vue';
 
 const isSupportObjectFit = () => document.documentElement.style.objectFit !== undefined;
@@ -183,7 +183,7 @@ export default {
 
             if (_scrollContainer) {
                 this._scrollContainer = _scrollContainer;
-                this._lazyLoadHandler = throttle(200, this.handleLazyLoad);
+                this._lazyLoadHandler = throttle(this.handleLazyLoad, 200);
                 on(_scrollContainer, 'scroll', this._lazyLoadHandler);
                 this.handleLazyLoad();
             }

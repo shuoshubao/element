@@ -2,7 +2,7 @@ import ElCheckbox from 'element-ui/packages/checkbox/index';
 import ElTooltip from 'element-ui/packages/tooltip/index';
 import { addClass, getStyle, hasClass, removeClass } from 'element-ui/src/utils/dom';
 import { arrayFindIndex } from 'element-ui/src/utils/util';
-import debounce from 'throttle-debounce/debounce';
+import { debounce } from 'lodash';
 import LayoutObserver from './layout-observer';
 import { mapStates } from './store/helper';
 import TableRow from './table-row';
@@ -106,7 +106,7 @@ export default {
     },
 
     created() {
-        this.activateTooltip = debounce(50, tooltip => tooltip.handleShowPopper());
+        this.activateTooltip = debounce(tooltip => tooltip.handleShowPopper(), 50);
     },
 
     methods: {
@@ -292,13 +292,13 @@ export default {
             this.table.$emit('cell-mouse-leave', oldHoverState.row, oldHoverState.column, oldHoverState.cell, event);
         },
 
-        handleMouseEnter: debounce(30, function (index) {
+        handleMouseEnter: debounce(function (index) {
             this.store.commit('setHoverRow', index);
-        }),
+        }, 30),
 
-        handleMouseLeave: debounce(30, function () {
+        handleMouseLeave: debounce(function () {
             this.store.commit('setHoverRow', null);
-        }),
+        }, 30),
 
         handleContextMenu(event, row) {
             this.handleEvent(event, row, 'contextmenu');
@@ -339,8 +339,8 @@ export default {
             const displayStyle = display
                 ? null
                 : {
-                    display: 'none'
-                };
+                      display: 'none'
+                  };
             return (
                 <TableRow
                     style={[displayStyle, this.getRowStyle(row, $index)]}

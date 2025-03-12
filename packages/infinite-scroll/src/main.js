@@ -1,6 +1,6 @@
-import throttle from 'throttle-debounce/debounce';
-import { isHtmlElement, isFunction, isUndefined, isDefined } from 'element-ui/src/utils/types';
 import { getScrollContainer } from 'element-ui/src/utils/dom';
+import { isDefined, isFunction, isHtmlElement, isUndefined } from 'element-ui/src/utils/types';
+import { debounce } from 'lodash';
 
 const getStyleComputedProperty = (element, property) => {
     if (element === window) {
@@ -115,7 +115,7 @@ export default {
         // only include vertical scroll
         const container = getScrollContainer(el, true);
         const { delay, immediate } = getScrollOptions(el, vm);
-        const onScroll = throttle(delay, handleScroll.bind(el, cb));
+        const onScroll = debounce(handleScroll.bind(el, cb), delay);
 
         el[scope] = { el, vm, container, onScroll };
 
