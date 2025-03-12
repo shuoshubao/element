@@ -206,7 +206,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import ElCheckbox from 'element-ui/packages/checkbox/index';
 import Mousewheel from 'element-ui/src/directives/mousewheel';
 import Locale from 'element-ui/src/mixins/locale';

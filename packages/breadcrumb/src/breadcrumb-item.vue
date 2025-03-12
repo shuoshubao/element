@@ -7,6 +7,7 @@
         <span v-else class="el-breadcrumb__separator" role="presentation">{{ separator }}</span>
     </span>
 </template>
+
 <script>
 export default {
     name: 'ElBreadcrumbItem',

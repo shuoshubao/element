@@ -333,7 +333,7 @@ export default {
         handleMouseDown(event, column) {
             if (this.$isServer) return;
             if (column.children && column.children.length > 0) return;
-            /* istanbul ignore if */
+
             if (this.draggingColumn && this.border) {
                 this.dragging = true;
 

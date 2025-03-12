@@ -33,10 +33,10 @@ const defaults = {
     distinguishCancelAndClose: false
 };
 
-import Vue from 'vue';
-import msgboxVue from './main.vue';
 import merge from 'element-ui/src/utils/merge';
 import { isVNode } from 'element-ui/src/utils/vdom';
+import Vue from 'vue';
+import msgboxVue from './main.vue';
 
 const MessageBoxConstructor = Vue.extend(msgboxVue);
 
@@ -135,7 +135,6 @@ const MessageBox = function (options, callback) {
 
     if (typeof Promise !== 'undefined') {
         return new Promise((resolve, reject) => {
-            // eslint-disable-line
             msgQueue.push({
                 options: merge({}, defaults, MessageBox.defaults, options),
                 callback: callback,
@@ -229,4 +228,5 @@ MessageBox.close = () => {
 };
 
 export default MessageBox;
+
 export { MessageBox };

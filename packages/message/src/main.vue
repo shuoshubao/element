@@ -19,7 +19,7 @@
     </transition>
 </template>
 
-<script type="text/babel">
+<script>
 const typeMap = {
     success: 'success',
     info: 'info',

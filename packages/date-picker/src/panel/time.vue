@@ -22,7 +22,7 @@
     </transition>
 </template>
 
-<script type="text/babel">
+<script>
 import Locale from 'element-ui/src/mixins/locale';
 import { clearMilliseconds, isDate, limitTimeRange, timeWithinRange } from 'element-ui/src/utils/date-util';
 import TimeSpinner from '../basic/time-spinner.vue';

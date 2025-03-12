@@ -20,11 +20,12 @@
         </div>
     </div>
 </template>
+
 <script>
-import IconSuccess from './icon-success.vue';
 import IconError from './icon-error.vue';
-import IconWarning from './icon-warning.vue';
 import IconInfo from './icon-info.vue';
+import IconSuccess from './icon-success.vue';
+import IconWarning from './icon-warning.vue';
 
 const IconMap = {
     success: 'icon-success',

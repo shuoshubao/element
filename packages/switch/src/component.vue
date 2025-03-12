@@ -30,6 +30,7 @@
         </span>
     </div>
 </template>
+
 <script>
 import emitter from 'element-ui/src/mixins/emitter';
 import Focus from 'element-ui/src/mixins/focus';
@@ -158,7 +159,6 @@ export default {
         }
     },
     mounted() {
-        /* istanbul ignore if */
         this.coreWidth = this.width || 40;
         if (this.activeColor || this.inactiveColor) {
             this.setBackgroundColor();

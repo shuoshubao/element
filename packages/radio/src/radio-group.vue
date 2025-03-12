@@ -3,6 +3,7 @@
         <slot></slot>
     </component>
 </template>
+
 <script>
 import Emitter from 'element-ui/src/mixins/emitter';
 
@@ -12,6 +13,7 @@ const keyCode = Object.freeze({
     RIGHT: 39,
     DOWN: 40
 });
+
 export default {
     name: 'ElRadioGroup',
 

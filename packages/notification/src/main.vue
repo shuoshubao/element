@@ -24,7 +24,7 @@
     </transition>
 </template>
 
-<script type="text/babel">
+<script>
 let typeMap = {
     success: 'success',
     info: 'info',

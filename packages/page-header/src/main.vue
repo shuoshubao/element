@@ -14,6 +14,7 @@
 
 <script>
 import { t } from 'element-ui/src/locale/index';
+
 export default {
     name: 'ElPageHeader',
 

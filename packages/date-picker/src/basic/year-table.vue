@@ -43,9 +43,9 @@
     </table>
 </template>
 
-<script type="text/babel">
+<script>
+import { getDayCountOfYear, isDate, nextDate, range } from 'element-ui/src/utils/date-util';
 import { hasClass } from 'element-ui/src/utils/dom';
-import { isDate, range, nextDate, getDayCountOfYear } from 'element-ui/src/utils/date-util';
 import { arrayFindIndex, coerceTruthyValueToArray } from 'element-ui/src/utils/util';
 
 const datesInYear = year => {

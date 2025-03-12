@@ -149,7 +149,7 @@
     </transition>
 </template>
 
-<script type="text/babel">
+<script>
 import ElButton from 'element-ui/packages/button/index';
 import ElInput from 'element-ui/packages/input/index';
 import Locale from 'element-ui/src/mixins/locale';
@@ -185,7 +185,6 @@ export default {
 
     watch: {
         showTime(val) {
-            /* istanbul ignore if */
             if (!val) return;
             this.$nextTick(_ => {
                 const inputElm = this.$refs.input.$el;

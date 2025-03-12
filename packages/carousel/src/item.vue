@@ -20,6 +20,7 @@
 <script>
 import { autoprefixer } from 'element-ui/src/utils/util';
 const CARD_SCALE = 0.83;
+
 export default {
     name: 'ElCarouselItem',
 

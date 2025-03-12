@@ -302,7 +302,7 @@ export default {
             if (this.rateDisabled) {
                 return;
             }
-            /* istanbul ignore if */
+
             if (this.allowHalf) {
                 let target = event.target;
                 if (hasClass(target, 'el-rate__item')) {

@@ -20,7 +20,7 @@
     </ul>
 </template>
 
-<script type="text/babel">
+<script>
 export default {
     name: 'ElPager',
 
@@ -64,7 +64,6 @@ export default {
                 }
             }
 
-            /* istanbul ignore if */
             if (!isNaN(newPage)) {
                 if (newPage < 1) {
                     newPage = 1;

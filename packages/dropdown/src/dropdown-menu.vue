@@ -5,6 +5,7 @@
         </ul>
     </transition>
 </template>
+
 <script>
 import Popper from 'element-ui/src/utils/vue-popper';
 

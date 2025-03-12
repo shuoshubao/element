@@ -1,8 +1,8 @@
 <script type="text/jsx">
 import emitter from 'element-ui/src/mixins/emitter';
 import Migrating from 'element-ui/src/mixins/migrating';
+import { addClass, hasClass, removeClass } from 'element-ui/src/utils/dom';
 import Menubar from 'element-ui/src/utils/menu/aria-menubar';
-import { addClass, removeClass, hasClass } from 'element-ui/src/utils/dom';
 
 export default {
   name: 'ElMenu',
@@ -317,7 +317,7 @@ export default {
     this.$on('item-click', this.handleItemClick);
     this.$on('submenu-click', this.handleSubmenuClick);
     if (this.mode === 'horizontal') {
-      new Menubar(this.$el); // eslint-disable-line
+      new Menubar(this.$el);
     }
     this.$watch('items', this.updateActiveIndex);
   }

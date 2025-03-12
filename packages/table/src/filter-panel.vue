@@ -35,7 +35,7 @@
     </transition>
 </template>
 
-<script type="text/babel">
+<script>
 import ElCheckboxGroup from 'element-ui/packages/checkbox-group/index';
 import ElCheckbox from 'element-ui/packages/checkbox/index';
 import ElScrollbar from 'element-ui/packages/scrollbar/index';

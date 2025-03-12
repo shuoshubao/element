@@ -378,7 +378,6 @@ export default {
         },
 
         internalPageCount(newVal) {
-            /* istanbul ignore if */
             const oldPage = this.internalCurrentPage;
             if (newVal > 0 && oldPage === 0) {
                 this.internalCurrentPage = 1;

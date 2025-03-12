@@ -79,7 +79,7 @@
     </transition>
 </template>
 
-<script type="text/babel">
+<script>
 import ElButton from 'element-ui/packages/button/index';
 import ElInput from 'element-ui/packages/input/index';
 import { t } from 'element-ui/src/locale/index';

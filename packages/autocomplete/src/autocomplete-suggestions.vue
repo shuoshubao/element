@@ -14,6 +14,7 @@
         </div>
     </transition>
 </template>
+
 <script>
 import ElScrollbar from 'element-ui/packages/scrollbar/index';
 import Emitter from 'element-ui/src/mixins/emitter';

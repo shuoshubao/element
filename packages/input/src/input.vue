@@ -87,12 +87,13 @@
         <span v-if="isWordLimitVisible && type === 'textarea'" class="el-input__count">{{ textLength }}/{{ upperLimit }}</span>
     </div>
 </template>
+
 <script>
 import emitter from 'element-ui/src/mixins/emitter';
 import Migrating from 'element-ui/src/mixins/migrating';
-import calcTextareaHeight from './calcTextareaHeight';
 import merge from 'element-ui/src/utils/merge';
 import { isKorean } from 'element-ui/src/utils/shared';
+import calcTextareaHeight from './calcTextareaHeight';
 
 export default {
     name: 'ElInput',

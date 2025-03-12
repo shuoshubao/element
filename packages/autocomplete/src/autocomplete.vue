@@ -51,6 +51,7 @@
         </el-autocomplete-suggestions>
     </div>
 </template>
+
 <script>
 import ElInput from 'element-ui/packages/input/index';
 import Emitter from 'element-ui/src/mixins/emitter';

@@ -12,11 +12,11 @@
     </table>
 </template>
 
-<script type="text/babel">
+<script>
 import Locale from 'element-ui/src/mixins/locale';
-import { isDate, range, getDayCountOfMonth, nextDate } from 'element-ui/src/utils/date-util';
+import { getDayCountOfMonth, isDate, nextDate, range } from 'element-ui/src/utils/date-util';
 import { hasClass } from 'element-ui/src/utils/dom';
-import { arrayFindIndex, coerceTruthyValueToArray, arrayFind } from 'element-ui/src/utils/util';
+import { arrayFind, arrayFindIndex, coerceTruthyValueToArray } from 'element-ui/src/utils/util';
 
 const datesInMonth = (year, month) => {
     const numOfDays = getDayCountOfMonth(year, month);
@@ -45,6 +45,7 @@ const removeFromArray = function (arr, pred) {
     const idx = typeof pred === 'function' ? arrayFindIndex(arr, pred) : arr.indexOf(pred);
     return idx >= 0 ? [...arr.slice(0, idx), ...arr.slice(idx + 1)] : arr;
 };
+
 export default {
     props: {
         disabledDate: {},

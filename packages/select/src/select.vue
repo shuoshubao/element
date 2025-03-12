@@ -117,7 +117,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import ElInput from 'element-ui/packages/input/index';
 import ElScrollbar from 'element-ui/packages/scrollbar/index';
 import ElTag from 'element-ui/packages/tag/index';

@@ -5,6 +5,7 @@
         </svg>
     </span>
 </template>
+
 <script>
 export default {
     name: 'ElSpinner',

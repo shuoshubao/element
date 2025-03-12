@@ -9,6 +9,7 @@
         </ul>
     </li>
 </template>
+
 <script>
 export default {
     name: 'ElMenuItemGroup',

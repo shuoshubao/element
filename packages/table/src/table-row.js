@@ -1,4 +1,5 @@
 import ElCheckbox from 'element-ui/packages/checkbox/index';
+
 export default {
     name: 'ElTableRow',
     props: [

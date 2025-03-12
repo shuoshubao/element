@@ -181,7 +181,7 @@
     </transition>
 </template>
 
-<script type="text/babel">
+<script>
 import ElButton from 'element-ui/packages/button/index';
 import ElInput from 'element-ui/packages/input/index';
 import Locale from 'element-ui/src/mixins/locale';
