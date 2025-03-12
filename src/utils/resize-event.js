@@ -1,4 +1,3 @@
-import ResizeObserver from 'resize-observer-polyfill';
 import { debounce } from 'throttle-debounce';
 
 const isServer = typeof window === 'undefined';
