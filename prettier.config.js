@@ -1,10 +1,3 @@
-/*
- * @Author: shuoshubao
- * @Date: 2025-03-12 10:32:59
- * @LastEditors: shuoshubao
- * @LastEditTime: 2025-03-12 10:35:00
- * @Description: prettier 配置
- */
 module.exports = {
     printWidth: 160,
     useTabs: false,

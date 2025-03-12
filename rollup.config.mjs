@@ -1,10 +1,3 @@
-/*
- * @Author: shuoshubao
- * @Date: 2025-03-12 11:20:35
- * @LastEditors: shuoshubao
- * @LastEditTime: 2025-03-12 13:36:17
- * @Description: rollup 配置
- */
 import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
@@ -42,7 +35,7 @@ export default defineConfig([
         input: 'src/index.js',
         output: {
             format: 'esm',
-            file: 'dist/index.esm.js'
+            file: 'dist/index.js'
         },
         plugins,
         logLevel: 'silent'

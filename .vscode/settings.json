@@ -15,19 +15,10 @@
     },
     "eslint.enable": true,
     "editor.copyWithSyntaxHighlighting": false,
-    "fileheader.customMade": {
-        "Author": "git config user.name",
-        "Date": "Do not edit",
-        "LastEditors": "git config user.name",
-        "LastEditTime": "Do not edit",
-        "Description": ""
-    },
-    "fileheader.cursorMode": {
-        "description": "",
-        "param": "",
-        "return": ""
-    },
     "fileheader.configObj": {
+        "autoAdd": false,
+        "autoAlready": false,
+        "createHeader": false,
         "prohibitAutoAdd": ["html", "json", "md", "less", "sh"]
     }
 }
