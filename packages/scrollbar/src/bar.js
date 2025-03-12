@@ -24,7 +24,7 @@ export default {
         const { size, move, bar } = this;
 
         return (
-            <div class={['el-scrollbar__bar', 'is-' + bar.key]} onMousedown={this.clickTrackHandler}>
+            <div class={['el-scrollbar__bar', `is-${bar.key}`]} onMousedown={this.clickTrackHandler}>
                 <div ref="thumb" class="el-scrollbar__thumb" onMousedown={this.clickThumbHandler} style={renderThumbStyle({ size, move, bar })}></div>
             </div>
         );

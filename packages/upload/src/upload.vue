@@ -3,10 +3,10 @@ import ajax from './ajax';
 import UploadDragger from './upload-dragger.vue';
 
 export default {
-    inject: ['uploader'],
     components: {
         UploadDragger
     },
+    inject: ['uploader'],
     props: {
         type: String,
         action: {
@@ -30,11 +30,11 @@ export default {
         drag: Boolean,
         onPreview: {
             type: Function,
-            default: function () {}
+            default() {}
         },
         onRemove: {
             type: Function,
-            default: function () {}
+            default() {}
         },
         fileList: Array,
         autoUpload: Boolean,
@@ -60,7 +60,7 @@ export default {
             return str.indexOf('image') !== -1;
         },
         handleChange(ev) {
-            const files = ev.target.files;
+            const { files } = ev.target;
 
             if (!files) return;
             this.uploadFiles(files);
@@ -181,7 +181,7 @@ export default {
     },
 
     render(h) {
-        let { handleClick, drag, name, handleChange, multiple, accept, listType, uploadFiles, disabled, handleKeydown } = this;
+        const { handleClick, drag, name, handleChange, multiple, accept, listType, uploadFiles, disabled, handleKeydown } = this;
         const data = {
             class: {
                 'el-upload': true

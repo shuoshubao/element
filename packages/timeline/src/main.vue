@@ -2,6 +2,12 @@
 export default {
     name: 'ElTimeline',
 
+    provide() {
+        return {
+            timeline: this
+        };
+    },
+
     props: {
         reverse: {
             type: Boolean,
@@ -9,14 +15,8 @@ export default {
         }
     },
 
-    provide() {
-        return {
-            timeline: this
-        };
-    },
-
     render() {
-        const reverse = this.reverse;
+        const { reverse } = this;
         const classes = {
             'el-timeline': true,
             'is-reverse': reverse

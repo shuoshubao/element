@@ -5,7 +5,7 @@ const weeks = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
 const newArray = function (start, end) {
-    let result = [];
+    const result = [];
     for (let i = start; i <= end; i++) {
         result.push(i);
     }
@@ -81,9 +81,8 @@ export const getStartDateOfMonth = function (year, month) {
 
     if (day === 0) {
         return prevDate(result, 7);
-    } else {
-        return prevDate(result, day);
     }
+    return prevDate(result, day);
 };
 
 export const getWeekNumber = function (src) {

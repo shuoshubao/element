@@ -3,6 +3,7 @@ import { addClass, getStyle, removeClass } from 'element-ui/src/utils/dom';
 import { PopupManager } from 'element-ui/src/utils/popup/index';
 import Vue from 'vue';
 import Loading from './loading.vue';
+
 const Mask = Vue.extend(Loading);
 
 const loadingDirective = {};
@@ -26,15 +27,15 @@ loadingDirective.install = Vue => {
 
                         ['top', 'left'].forEach(property => {
                             const scroll = property === 'top' ? 'scrollTop' : 'scrollLeft';
-                            el.maskStyle[property] =
+                            el.maskStyle[property] = `${
                                 el.getBoundingClientRect()[property] +
                                 document.body[scroll] +
                                 document.documentElement[scroll] -
-                                parseInt(getStyle(document.body, `margin-${property}`), 10) +
-                                'px';
+                                parseInt(getStyle(document.body, `margin-${property}`), 10)
+                            }px`;
                         });
                         ['height', 'width'].forEach(property => {
-                            el.maskStyle[property] = el.getBoundingClientRect()[property] + 'px';
+                            el.maskStyle[property] = `${el.getBoundingClientRect()[property]}px`;
                         });
 
                         insertDom(document.body, el, binding);
@@ -92,7 +93,7 @@ loadingDirective.install = Vue => {
     };
 
     Vue.directive('loading', {
-        bind: function (el, binding, vnode) {
+        bind(el, binding, vnode) {
             const textExr = el.getAttribute('element-loading-text');
             const spinnerExr = el.getAttribute('element-loading-spinner');
             const backgroundExr = el.getAttribute('element-loading-background');
@@ -115,14 +116,14 @@ loadingDirective.install = Vue => {
             binding.value && toggleLoading(el, binding);
         },
 
-        update: function (el, binding) {
+        update(el, binding) {
             el.instance.setText(el.getAttribute('element-loading-text'));
             if (binding.oldValue !== binding.value) {
                 toggleLoading(el, binding);
             }
         },
 
-        unbind: function (el, binding) {
+        unbind(el, binding) {
             if (el.domInserted) {
                 el.mask && el.mask.parentNode && el.mask.parentNode.removeChild(el.mask);
                 toggleLoading(el, { value: false, modifiers: binding.modifiers });

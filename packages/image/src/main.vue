@@ -1,7 +1,7 @@
 <template>
     <div class="el-image">
         <slot v-if="loading" name="placeholder">
-            <div class="el-image__placeholder"></div>
+            <div class="el-image__placeholder" />
         </slot>
         <slot v-else-if="error" name="error">
             <div class="el-image__error">{{ t('el.image.error') }}</div>
@@ -10,14 +10,14 @@
             v-else
             class="el-image__inner"
             v-bind="$attrs"
-            v-on="$listeners"
-            @click="clickHandler"
             :src="src"
             :style="imageStyle"
             :class="{ 'el-image__inner--center': alignCenter, 'el-image__preview': preview }"
+            v-on="$listeners"
+            @click="clickHandler"
         />
         <template v-if="preview">
-            <image-viewer :z-index="zIndex" :initial-index="imageIndex" v-if="showViewer" :on-close="closeViewer" :url-list="previewSrcList" />
+            <ImageViewer v-if="showViewer" :z-index="zIndex" :initial-index="imageIndex" :on-close="closeViewer" :url-list="previewSrcList" />
         </template>
     </div>
 </template>
@@ -44,12 +44,12 @@ let prevOverflow = '';
 export default {
     name: 'ElImage',
 
-    mixins: [Locale],
-    inheritAttrs: false,
-
     components: {
         ImageViewer
     },
+
+    mixins: [Locale],
+    inheritAttrs: false,
 
     props: {
         src: String,
@@ -95,7 +95,7 @@ export default {
         },
         imageIndex() {
             let previewIndex = 0;
-            const initialIndex = this.initialIndex;
+            const { initialIndex } = this;
             if (initialIndex >= 0) {
                 previewIndex = initialIndex;
                 return previewIndex;

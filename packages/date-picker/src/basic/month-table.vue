@@ -1,8 +1,8 @@
 <template>
-    <table @click="handleMonthTableClick" @mousemove="handleMouseMove" class="el-month-table">
+    <table class="el-month-table" @click="handleMonthTableClick" @mousemove="handleMouseMove">
         <tbody>
             <tr v-for="(row, key) in rows" :key="key">
-                <td :class="getCellStyle(cell)" v-for="(cell, key) in row" :key="key">
+                <td v-for="(cell, key) in row" :key="key" :class="getCellStyle(cell)">
                     <div>
                         <a class="cell">{{ t('el.datepicker.months.' + months[cell.text]) }}</a>
                     </div>
@@ -31,11 +31,11 @@ const clearDate = date => {
 const getMonthTimestamp = function (time) {
     if (typeof time === 'number' || typeof time === 'string') {
         return clearDate(new Date(time)).getTime();
-    } else if (time instanceof Date) {
-        return clearDate(time).getTime();
-    } else {
-        return NaN;
     }
+    if (time instanceof Date) {
+        return clearDate(time).getTime();
+    }
+    return NaN;
 };
 
 // remove the first element that satisfies `pred` from arr
@@ -47,6 +47,7 @@ const removeFromArray = function (arr, pred) {
 };
 
 export default {
+    mixins: [Locale],
     props: {
         disabledDate: {},
         value: {},
@@ -73,10 +74,57 @@ export default {
         }
     },
 
-    mixins: [Locale],
+    data() {
+        return {
+            months: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+            tableRows: [[], [], []],
+            lastRow: null,
+            lastColumn: null
+        };
+    },
+
+    computed: {
+        rows() {
+            // TODO: refactory rows / getCellClasses
+            const rows = this.tableRows;
+            const { disabledDate } = this;
+            const selectedDate = [];
+            const now = getMonthTimestamp(new Date());
+
+            for (let i = 0; i < 3; i++) {
+                const row = rows[i];
+                for (let j = 0; j < 4; j++) {
+                    let cell = row[j];
+                    if (!cell) {
+                        cell = { row: i, column: j, type: 'normal', inRange: false, start: false, end: false };
+                    }
+
+                    cell.type = 'normal';
+
+                    const index = i * 4 + j;
+                    const time = new Date(this.date.getFullYear(), index).getTime();
+                    cell.inRange = time >= getMonthTimestamp(this.minDate) && time <= getMonthTimestamp(this.maxDate);
+                    cell.start = this.minDate && time === getMonthTimestamp(this.minDate);
+                    cell.end = this.maxDate && time === getMonthTimestamp(this.maxDate);
+                    const isToday = time === now;
+
+                    if (isToday) {
+                        cell.type = 'today';
+                    }
+                    cell.text = index;
+                    const cellDate = new Date(time);
+                    cell.disabled = typeof disabledDate === 'function' && disabledDate(cellDate);
+                    cell.selected = arrayFind(selectedDate, date => date.getTime() === cellDate.getTime());
+
+                    this.$set(row, j, cell);
+                }
+            }
+            return rows;
+        }
+    },
 
     watch: {
-        'rangeState.endDate'(newVal) {
+        'rangeState.endDate': function (newVal) {
             this.markRange(this.minDate, newVal);
         },
 
@@ -91,15 +139,6 @@ export default {
                 this.markRange(this.minDate, this.maxDate);
             }
         }
-    },
-
-    data() {
-        return {
-            months: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
-            tableRows: [[], [], []],
-            lastRow: null,
-            lastColumn: null
-        };
     },
 
     methods: {
@@ -139,7 +178,7 @@ export default {
             minDate = getMonthTimestamp(minDate);
             maxDate = getMonthTimestamp(maxDate) || minDate;
             [minDate, maxDate] = [Math.min(minDate, maxDate), Math.max(minDate, maxDate)];
-            const rows = this.rows;
+            const { rows } = this;
             for (let i = 0, k = rows.length; i < k; i++) {
                 const row = rows[i];
                 for (let j = 0, l = row.length; j < l; j++) {
@@ -156,7 +195,7 @@ export default {
         handleMouseMove(event) {
             if (!this.rangeState.selecting) return;
 
-            let target = event.target;
+            let { target } = event;
             if (target.tagName === 'A') {
                 target = target.parentNode.parentNode;
             }
@@ -186,7 +225,7 @@ export default {
             }
         },
         handleMonthTableClick(event) {
-            let target = event.target;
+            let { target } = event;
             if (target.tagName === 'A') {
                 target = target.parentNode.parentNode;
             }
@@ -222,46 +261,6 @@ export default {
             } else {
                 this.$emit('pick', month);
             }
-        }
-    },
-
-    computed: {
-        rows() {
-            // TODO: refactory rows / getCellClasses
-            const rows = this.tableRows;
-            const disabledDate = this.disabledDate;
-            const selectedDate = [];
-            const now = getMonthTimestamp(new Date());
-
-            for (let i = 0; i < 3; i++) {
-                const row = rows[i];
-                for (let j = 0; j < 4; j++) {
-                    let cell = row[j];
-                    if (!cell) {
-                        cell = { row: i, column: j, type: 'normal', inRange: false, start: false, end: false };
-                    }
-
-                    cell.type = 'normal';
-
-                    const index = i * 4 + j;
-                    const time = new Date(this.date.getFullYear(), index).getTime();
-                    cell.inRange = time >= getMonthTimestamp(this.minDate) && time <= getMonthTimestamp(this.maxDate);
-                    cell.start = this.minDate && time === getMonthTimestamp(this.minDate);
-                    cell.end = this.maxDate && time === getMonthTimestamp(this.maxDate);
-                    const isToday = time === now;
-
-                    if (isToday) {
-                        cell.type = 'today';
-                    }
-                    cell.text = index;
-                    let cellDate = new Date(time);
-                    cell.disabled = typeof disabledDate === 'function' && disabledDate(cellDate);
-                    cell.selected = arrayFind(selectedDate, date => date.getTime() === cellDate.getTime());
-
-                    this.$set(row, j, cell);
-                }
-            }
-            return rows;
         }
     }
 };

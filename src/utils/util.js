@@ -1,7 +1,7 @@
 import { isObject, isString } from 'element-ui/src/utils/types';
 import Vue from 'vue';
 
-const hasOwnProperty = Object.prototype.hasOwnProperty;
+const { hasOwnProperty } = Object.prototype;
 
 export function noop() {}
 
@@ -10,14 +10,14 @@ export function hasOwn(obj, key) {
 }
 
 function extend(to, _from) {
-    for (let key in _from) {
+    for (const key in _from) {
         to[key] = _from[key];
     }
     return to;
 }
 
 export function toObject(arr) {
-    var res = {};
+    const res = {};
     for (let i = 0; i < arr.length; i++) {
         if (arr[i]) {
             extend(res, arr[i]);
@@ -49,11 +49,11 @@ export function getPropByPath(obj, path, strict) {
     path = path.replace(/\[(\w+)\]/g, '.$1');
     path = path.replace(/^\./, '');
 
-    let keyArr = path.split('.');
+    const keyArr = path.split('.');
     let i = 0;
     for (let len = keyArr.length; i < len - 1; ++i) {
         if (!tempObj && !strict) break;
-        let key = keyArr[i];
+        const key = keyArr[i];
         if (key in tempObj) {
             tempObj = tempObj[key];
         } else {
@@ -107,11 +107,11 @@ export const arrayFind = function (arr, pred) {
 export const coerceTruthyValueToArray = function (val) {
     if (Array.isArray(val)) {
         return val;
-    } else if (val) {
-        return [val];
-    } else {
-        return [];
     }
+    if (val) {
+        return [val];
+    }
+    return [];
 };
 
 export const isIE = function () {
@@ -156,11 +156,11 @@ export const looseEqual = function (a, b) {
     const isObjectB = isObject(b);
     if (isObjectA && isObjectB) {
         return JSON.stringify(a) === JSON.stringify(b);
-    } else if (!isObjectA && !isObjectB) {
-        return String(a) === String(b);
-    } else {
-        return false;
     }
+    if (!isObjectA && !isObjectB) {
+        return String(a) === String(b);
+    }
+    return false;
 };
 
 export const arrayEquals = function (arrayA, arrayB) {

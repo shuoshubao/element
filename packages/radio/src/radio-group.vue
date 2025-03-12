@@ -1,6 +1,6 @@
 <template>
     <component :is="_elTag" class="el-radio-group" role="radiogroup" @keydown="handleKeydown">
-        <slot></slot>
+        <slot />
     </component>
 </template>
 
@@ -19,13 +19,13 @@ export default {
 
     componentName: 'ElRadioGroup',
 
+    mixins: [Emitter],
+
     inject: {
         elFormItem: {
             default: ''
         }
     },
-
-    mixins: [Emitter],
 
     props: {
         value: {},
@@ -40,12 +40,17 @@ export default {
             return (this.elFormItem || {}).elFormItemSize;
         },
         _elTag() {
-            let tag = (this.$vnode.data || {}).tag;
+            let { tag } = this.$vnode.data || {};
             if (!tag || tag === 'component') tag = 'div';
             return tag;
         },
         radioGroupSize() {
             return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
+        }
+    },
+    watch: {
+        value(value) {
+            this.dispatch('ElFormItem', 'el.form.change', [this.value]);
         }
     },
 
@@ -65,10 +70,10 @@ export default {
     methods: {
         handleKeydown(e) {
             // 左右上下按键 可以在radio组内切换不同选项
-            const target = e.target;
+            const { target } = e;
             const className = target.nodeName === 'INPUT' ? '[type=radio]' : '[role=radio]';
             const radios = this.$el.querySelectorAll(className);
-            const length = radios.length;
+            const { length } = radios;
             const index = [].indexOf.call(radios, target);
             const roleRadios = this.$el.querySelectorAll('[role=radio]');
             switch (e.keyCode) {
@@ -99,11 +104,6 @@ export default {
                 default:
                     break;
             }
-        }
-    },
-    watch: {
-        value(value) {
-            this.dispatch('ElFormItem', 'el.form.change', [this.value]);
         }
     }
 };

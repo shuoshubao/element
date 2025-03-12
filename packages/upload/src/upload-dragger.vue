@@ -8,20 +8,20 @@
         @dragover.prevent="onDragover"
         @dragleave.prevent="dragover = false"
     >
-        <slot></slot>
+        <slot />
     </div>
 </template>
 
 <script>
 export default {
     name: 'ElUploadDrag',
-    props: {
-        disabled: Boolean
-    },
     inject: {
         uploader: {
             default: ''
         }
+    },
+    props: {
+        disabled: Boolean
     },
     data() {
         return {
@@ -36,7 +36,7 @@ export default {
         },
         onDrop(e) {
             if (this.disabled || !this.uploader) return;
-            const accept = this.uploader.accept;
+            const { accept } = this.uploader;
             this.dragover = false;
             if (!accept) {
                 this.$emit('file', e.dataTransfer.files);

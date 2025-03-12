@@ -40,12 +40,12 @@ const toHex = function ({ r, g, b }) {
         value = Math.min(Math.round(value), 255);
         const high = Math.floor(value / 16);
         const low = value % 16;
-        return '' + (INT_HEX_MAP[high] || high) + (INT_HEX_MAP[low] || low);
+        return `${INT_HEX_MAP[high] || high}${INT_HEX_MAP[low] || low}`;
     };
 
     if (isNaN(r) || isNaN(g) || isNaN(b)) return '';
 
-    return '#' + hexOne(r) + hexOne(g) + hexOne(b);
+    return `#${hexOne(r)}${hexOne(g)}${hexOne(b)}`;
 };
 
 const HEX_INT_MAP = { A: 10, B: 11, C: 12, D: 13, E: 14, F: 15 };
@@ -59,8 +59,8 @@ const parseHexChannel = function (hex) {
 };
 
 const hsl2hsv = function (hue, sat, light) {
-    sat = sat / 100;
-    light = light / 100;
+    sat /= 100;
+    light /= 100;
     let smin = sat;
     const lmin = Math.max(light, 0.01);
     let sv;
@@ -90,8 +90,9 @@ const rgb2hsv = function (r, g, b) {
 
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
-    let h, s;
-    let v = max;
+    let h;
+    let s;
+    const v = max;
 
     const d = max - min;
     s = max === 0 ? 0 : d / max;
@@ -155,7 +156,7 @@ export default class Color {
 
         options = options || {};
 
-        for (let option in options) {
+        for (const option in options) {
             if (options.hasOwnProperty(option)) {
                 this[option] = options[option];
             }
@@ -166,7 +167,7 @@ export default class Color {
 
     set(prop, value) {
         if (arguments.length === 1 && typeof prop === 'object') {
-            for (let p in prop) {
+            for (const p in prop) {
                 if (prop.hasOwnProperty(p)) {
                     this.set(p, prop[p]);
                 }
@@ -175,12 +176,12 @@ export default class Color {
             return;
         }
 
-        this['_' + prop] = value;
+        this[`_${prop}`] = value;
         this.doOnChange();
     }
 
     get(prop) {
-        return this['_' + prop];
+        return this[`_${prop}`];
     }
 
     toRgb() {
@@ -255,7 +256,9 @@ export default class Color {
         } else if (value.indexOf('#') !== -1) {
             const hex = value.replace('#', '').trim();
             if (!/^(?:[0-9a-fA-F]{3}){1,2}|[0-9a-fA-F]{8}$/.test(hex)) return;
-            let r, g, b;
+            let r;
+            let g;
+            let b;
 
             if (hex.length === 3) {
                 r = parseHexChannel(hex[0] + hex[0]);

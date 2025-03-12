@@ -6,12 +6,11 @@ import { isEqual } from 'element-ui/src/utils/util';
 const stopPropagation = e => e.stopPropagation();
 
 export default {
-    inject: ['panel'],
-
     components: {
         ElCheckbox,
         ElRadio
     },
+    inject: ['panel'],
 
     props: {
         node: {
@@ -96,9 +95,11 @@ export default {
 
             if (multiple) {
                 return this.renderCheckbox(h);
-            } else if (checkStrictly) {
+            }
+            if (checkStrictly) {
                 return this.renderRadio(h);
-            } else if (isLeaf && isChecked) {
+            }
+            if (isLeaf && isChecked) {
                 return this.renderCheckIcon(h);
             }
 
@@ -110,7 +111,8 @@ export default {
 
             if (node.loading) {
                 return this.renderLoadingIcon(h);
-            } else if (!isLeaf) {
+            }
+            if (!isLeaf) {
                 return this.renderExpandIcon(h);
             }
 

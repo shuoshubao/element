@@ -2,15 +2,15 @@
     <transition name="el-fade-in">
         <div
             v-if="visible"
-            @click.stop="handleClick"
             :style="{
                 right: styleRight,
                 bottom: styleBottom
             }"
             class="el-backtop"
+            @click.stop="handleClick"
         >
             <slot>
-                <el-icon name="caret-top"></el-icon>
+                <el-icon name="caret-top" />
             </slot>
         </div>
     </transition>
@@ -19,7 +19,7 @@
 <script>
 import throttle from 'throttle-debounce/throttle';
 
-const cubic = value => Math.pow(value, 3);
+const cubic = value => value ** 3;
 const easeInOutCubic = value => (value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2);
 
 export default {
@@ -64,6 +64,10 @@ export default {
         this.container.addEventListener('scroll', this.throttledScrollHandler);
     },
 
+    beforeDestroy() {
+        this.container.removeEventListener('scroll', this.throttledScrollHandler);
+    },
+
     methods: {
         init() {
             this.container = document;
@@ -77,7 +81,7 @@ export default {
             }
         },
         onScroll() {
-            const scrollTop = this.el.scrollTop;
+            const { scrollTop } = this.el;
             this.visible = scrollTop >= this.visibilityHeight;
         },
         handleClick(e) {
@@ -85,7 +89,7 @@ export default {
             this.$emit('click', e);
         },
         scrollToTop() {
-            const el = this.el;
+            const { el } = this;
             const beginTime = Date.now();
             const beginValue = el.scrollTop;
             const rAF = window.requestAnimationFrame || (func => setTimeout(func, 16));
@@ -100,10 +104,6 @@ export default {
             };
             rAF(frameFunc);
         }
-    },
-
-    beforeDestroy() {
-        this.container.removeEventListener('scroll', this.throttledScrollHandler);
     }
 };
 </script>

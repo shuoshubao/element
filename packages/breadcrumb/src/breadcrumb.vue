@@ -1,12 +1,18 @@
 <template>
     <div class="el-breadcrumb" aria-label="Breadcrumb" role="navigation">
-        <slot></slot>
+        <slot />
     </div>
 </template>
 
 <script>
 export default {
     name: 'ElBreadcrumb',
+
+    provide() {
+        return {
+            elBreadcrumb: this
+        };
+    },
 
     props: {
         separator: {
@@ -17,12 +23,6 @@ export default {
             type: String,
             default: ''
         }
-    },
-
-    provide() {
-        return {
-            elBreadcrumb: this
-        };
     },
 
     mounted() {

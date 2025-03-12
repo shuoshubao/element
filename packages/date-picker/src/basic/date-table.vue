@@ -3,17 +3,17 @@
         cellspacing="0"
         cellpadding="0"
         class="el-date-table"
+        :class="{ 'is-week-mode': selectionMode === 'week' }"
         @click="handleClick"
         @mousemove="handleMouseMove"
-        :class="{ 'is-week-mode': selectionMode === 'week' }"
     >
         <tbody>
             <tr>
                 <th v-if="showWeekNumber">{{ t('el.datepicker.week') }}</th>
                 <th v-for="(week, key) in WEEKS" :key="key">{{ t('el.datepicker.weeks.' + week) }}</th>
             </tr>
-            <tr class="el-date-table__row" v-for="(row, key) in rows" :class="{ current: isWeekActive(row[1]) }" :key="key">
-                <td v-for="(cell, key) in row" :class="getCellClasses(cell)" :key="key">
+            <tr v-for="(row, key) in rows" :key="key" class="el-date-table__row" :class="{ current: isWeekActive(row[1]) }">
+                <td v-for="(cell, key) in row" :key="key" :class="getCellClasses(cell)">
                     <div>
                         <span>
                             {{ cell.text }}
@@ -43,11 +43,11 @@ const WEEKS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const getDateTimestamp = function (time) {
     if (typeof time === 'number' || typeof time === 'string') {
         return _clearTime(new Date(time)).getTime();
-    } else if (time instanceof Date) {
-        return _clearTime(time).getTime();
-    } else {
-        return NaN;
     }
+    if (time instanceof Date) {
+        return _clearTime(time).getTime();
+    }
+    return NaN;
 };
 
 // remove the first element that satisfies `pred` from arr
@@ -106,6 +106,14 @@ export default {
         }
     },
 
+    data() {
+        return {
+            tableRows: [[], [], [], [], [], []],
+            lastRow: null,
+            lastColumn: null
+        };
+    },
+
     computed: {
         offsetDay() {
             const week = this.firstDayOfWeek;
@@ -143,9 +151,9 @@ export default {
             const rows = this.tableRows;
             let count = 1;
 
-            const startDate = this.startDate;
-            const disabledDate = this.disabledDate;
-            const cellClassName = this.cellClassName;
+            const { startDate } = this;
+            const { disabledDate } = this;
+            const { cellClassName } = this;
             const selectedDate = this.selectionMode === 'dates' ? coerceTruthyValueToArray(this.value) : [];
             const now = getDateTimestamp(new Date());
 
@@ -195,7 +203,7 @@ export default {
                         }
                     }
 
-                    let cellDate = new Date(time);
+                    const cellDate = new Date(time);
                     cell.disabled = typeof disabledDate === 'function' && disabledDate(cellDate);
                     cell.selected = arrayFind(selectedDate, date => date.getTime() === cellDate.getTime());
                     cell.customClass = typeof cellClassName === 'function' && cellClassName(cellDate);
@@ -219,7 +227,7 @@ export default {
     },
 
     watch: {
-        'rangeState.endDate'(newVal) {
+        'rangeState.endDate': function (newVal) {
             this.markRange(this.minDate, newVal);
         },
 
@@ -236,14 +244,6 @@ export default {
         }
     },
 
-    data() {
-        return {
-            tableRows: [[], [], [], [], [], []],
-            lastRow: null,
-            lastColumn: null
-        };
-    },
-
     methods: {
         cellMatchesDate(cell, date) {
             const value = new Date(date);
@@ -251,10 +251,10 @@ export default {
         },
 
         getCellClasses(cell) {
-            const selectionMode = this.selectionMode;
+            const { selectionMode } = this;
             const defaultValue = this.defaultValue ? (Array.isArray(this.defaultValue) ? this.defaultValue : [this.defaultValue]) : [];
 
-            let classes = [];
+            const classes = [];
             if ((cell.type === 'normal' || cell.type === 'today') && !cell.disabled) {
                 classes.push('available');
                 if (cell.type === 'today') {
@@ -335,8 +335,8 @@ export default {
             maxDate = getDateTimestamp(maxDate) || minDate;
             [minDate, maxDate] = [Math.min(minDate, maxDate), Math.max(minDate, maxDate)];
 
-            const startDate = this.startDate;
-            const rows = this.rows;
+            const { startDate } = this;
+            const { rows } = this;
             for (let i = 0, k = rows.length; i < k; i++) {
                 const row = rows[i];
                 for (let j = 0, l = row.length; j < l; j++) {
@@ -356,7 +356,7 @@ export default {
         handleMouseMove(event) {
             if (!this.rangeState.selecting) return;
 
-            let target = event.target;
+            let { target } = event;
             if (target.tagName === 'SPAN') {
                 target = target.parentNode.parentNode;
             }
@@ -388,7 +388,7 @@ export default {
         },
 
         handleClick(event) {
-            let target = event.target;
+            let { target } = event;
             if (target.tagName === 'SPAN') {
                 target = target.parentNode.parentNode;
             }
@@ -422,11 +422,11 @@ export default {
                 this.$emit('pick', newDate);
             } else if (this.selectionMode === 'week') {
                 const weekNumber = getWeekNumber(newDate);
-                const value = newDate.getFullYear() + 'w' + weekNumber;
+                const value = `${newDate.getFullYear()}w${weekNumber}`;
                 this.$emit('pick', {
                     year: newDate.getFullYear(),
                     week: weekNumber,
-                    value: value,
+                    value,
                     date: newDate
                 });
             } else if (this.selectionMode === 'dates') {

@@ -11,14 +11,14 @@ export default {
 
     componentName: 'ElDropdown',
 
-    mixins: [Emitter, Migrating],
-
     directives: { Clickoutside },
 
     components: {
         ElButton,
         ElButtonGroup
     },
+
+    mixins: [Emitter, Migrating],
 
     provide() {
         return {
@@ -85,10 +85,6 @@ export default {
         }
     },
 
-    mounted() {
-        this.$on('menu-item-click', this.handleMenuItemClick);
-    },
-
     watch: {
         visible(val) {
             this.broadcast('ElDropdownMenu', 'visible', val);
@@ -105,6 +101,10 @@ export default {
                 }
             }
         }
+    },
+
+    mounted() {
+        this.$on('menu-item-click', this.handleMenuItemClick);
     },
 
     methods: {
@@ -148,7 +148,7 @@ export default {
             }
         },
         handleTriggerKeyDown(ev) {
-            const keyCode = ev.keyCode;
+            const { keyCode } = ev;
             if ([38, 40].indexOf(keyCode) > -1) {
                 // up/down
                 this.removeTabindex();
@@ -165,8 +165,8 @@ export default {
             }
         },
         handleItemKeyDown(ev) {
-            const keyCode = ev.keyCode;
-            const target = ev.target;
+            const { keyCode } = ev;
+            const { target } = ev;
             const currentIndex = this.menuItemsArray.indexOf(target);
             const max = this.menuItemsArray.length - 1;
             let nextIndex;
@@ -218,14 +218,14 @@ export default {
                 // 自定义
                 this.triggerElm.setAttribute('role', 'button');
                 this.triggerElm.setAttribute('tabindex', this.tabindex);
-                this.triggerElm.setAttribute('class', (this.triggerElm.getAttribute('class') || '') + ' el-dropdown-selfdefine'); // 控制
+                this.triggerElm.setAttribute('class', `${this.triggerElm.getAttribute('class') || ''} el-dropdown-selfdefine`); // 控制
             }
         },
         initEvent() {
-            let { trigger, show, hide, handleClick, splitButton, handleTriggerKeyDown, handleItemKeyDown } = this;
+            const { trigger, show, hide, handleClick, splitButton, handleTriggerKeyDown, handleItemKeyDown } = this;
             this.triggerElm = splitButton ? this.$refs.trigger.$el : this.$slots.default[0].elm;
 
-            let dropdownElm = this.dropdownElm;
+            const { dropdownElm } = this;
 
             this.triggerElm.addEventListener('keydown', handleTriggerKeyDown); // triggerElm keydown
             dropdownElm.addEventListener('keydown', handleItemKeyDown, true); // item keydown
@@ -270,7 +270,7 @@ export default {
     },
 
     render(h) {
-        let { hide, splitButton, type, dropdownSize, disabled } = this;
+        const { hide, splitButton, type, dropdownSize, disabled } = this;
 
         const handleMainButtonClick = event => {
             this.$emit('click', event);
@@ -292,7 +292,7 @@ export default {
         } else {
             triggerElm = this.$slots.default;
             const vnodeData = triggerElm[0].data || {};
-            let { attrs = {} } = vnodeData;
+            const { attrs = {} } = vnodeData;
             if (disabled && !attrs.disabled) {
                 attrs.disabled = true;
                 vnodeData.attrs = attrs;

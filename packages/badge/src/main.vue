@@ -1,10 +1,9 @@
 <template>
     <div class="el-badge">
-        <slot></slot>
+        <slot />
         <transition name="el-zoom-in-center">
             <sup
                 v-show="!hidden && (content || content === 0 || isDot)"
-                v-text="content"
                 class="el-badge__content"
                 :class="[
                     type ? 'el-badge__content--' + type : null,
@@ -13,7 +12,8 @@
                         'is-dot': isDot
                     }
                 ]"
-            ></sup>
+                v-text="content"
+            />
         </transition>
     </div>
 </template>
@@ -39,8 +39,8 @@ export default {
         content() {
             if (this.isDot) return;
 
-            const value = this.value;
-            const max = this.max;
+            const { value } = this;
+            const { max } = this;
 
             if (typeof value === 'number' && typeof max === 'number') {
                 return max < value ? `${max}+` : value;

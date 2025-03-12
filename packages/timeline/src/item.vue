@@ -1,6 +1,6 @@
 <template>
     <li class="el-timeline-item">
-        <div class="el-timeline-item__tail"></div>
+        <div class="el-timeline-item__tail" />
 
         <div
             v-if="!$slots.dot"
@@ -10,10 +10,10 @@
                 backgroundColor: color
             }"
         >
-            <i v-if="icon" class="el-timeline-item__icon" :class="icon"></i>
+            <i v-if="icon" class="el-timeline-item__icon" :class="icon" />
         </div>
         <div v-if="$slots.dot" class="el-timeline-item__dot">
-            <slot name="dot"></slot>
+            <slot name="dot" />
         </div>
 
         <div class="el-timeline-item__wrapper">
@@ -22,7 +22,7 @@
             </div>
 
             <div class="el-timeline-item__content">
-                <slot></slot>
+                <slot />
             </div>
 
             <div v-if="!hideTimestamp && placement === 'bottom'" class="el-timeline-item__timestamp is-bottom">

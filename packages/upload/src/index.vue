@@ -9,13 +9,13 @@ function noop() {}
 export default {
     name: 'ElUpload',
 
-    mixins: [Migrating],
-
     components: {
         ElProgress,
         UploadList,
         Upload
     },
+
+    mixins: [Migrating],
 
     provide() {
         return {
@@ -148,10 +148,18 @@ export default {
         }
     },
 
+    beforeDestroy() {
+        this.uploadFiles.forEach(file => {
+            if (file.url && file.url.indexOf('blob:') === 0) {
+                URL.revokeObjectURL(file.url);
+            }
+        });
+    },
+
     methods: {
         handleStart(rawFile) {
             rawFile.uid = Date.now() + this.tempIndex++;
-            let file = {
+            const file = {
                 status: 'ready',
                 name: rawFile.name,
                 size: rawFile.size,
@@ -204,9 +212,9 @@ export default {
             if (raw) {
                 file = this.getFile(raw);
             }
-            let doRemove = () => {
+            const doRemove = () => {
                 this.abort(file);
-                let fileList = this.uploadFiles;
+                const fileList = this.uploadFiles;
                 fileList.splice(fileList.indexOf(file), 1);
                 this.onRemove(file, fileList);
             };
@@ -225,7 +233,7 @@ export default {
             }
         },
         getFile(rawFile) {
-            let fileList = this.uploadFiles;
+            const fileList = this.uploadFiles;
             let target;
             fileList.every(item => {
                 target = rawFile.uid === item.uid ? item : null;
@@ -256,14 +264,6 @@ export default {
                 }
             };
         }
-    },
-
-    beforeDestroy() {
-        this.uploadFiles.forEach(file => {
-            if (file.url && file.url.indexOf('blob:') === 0) {
-                URL.revokeObjectURL(file.url);
-            }
-        });
     },
 
     render(h) {

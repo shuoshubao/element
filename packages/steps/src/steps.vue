@@ -1,6 +1,6 @@
 <template>
     <div class="el-steps" :class="[!simple && 'el-steps--' + direction, simple && 'el-steps--simple']">
-        <slot></slot>
+        <slot />
     </div>
 </template>
 
@@ -38,16 +38,6 @@ export default {
         };
     },
 
-    methods: {
-        getMigratingConfig() {
-            return {
-                props: {
-                    center: 'center is removed.'
-                }
-            };
-        }
-    },
-
     watch: {
         active(newVal, oldVal) {
             this.$emit('change', newVal, oldVal);
@@ -57,6 +47,16 @@ export default {
             steps.forEach((child, index) => {
                 child.index = index;
             });
+        }
+    },
+
+    methods: {
+        getMigratingConfig() {
+            return {
+                props: {
+                    center: 'center is removed.'
+                }
+            };
         }
     }
 };

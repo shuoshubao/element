@@ -79,7 +79,7 @@ export default {
     watch: {
         // don't trigger getter of currentRow in getCellClass. see https://jsfiddle.net/oe2b4hqt/
         // update DOM manually. see https://github.com/ElemeFE/element/pull/13954/files#diff-9b450c00d0a9dec0ffad5a3176972e40
-        'store.states.hoverRow'(newVal, oldVal) {
+        'store.states.hoverRow': function (newVal, oldVal) {
             if (!this.store.states.isComplex || this.$isServer) return;
             let raf = window.requestAnimationFrame;
             if (!raf) {
@@ -111,7 +111,7 @@ export default {
 
     methods: {
         getKeyOfRow(row, index) {
-            const rowKey = this.table.rowKey;
+            const { rowKey } = this.table;
             if (rowKey) {
                 return getRowIdentity(row, rowKey);
             }
@@ -121,11 +121,11 @@ export default {
         isColumnHidden(index) {
             if (this.fixed === true || this.fixed === 'left') {
                 return index >= this.leftFixedLeafCount;
-            } else if (this.fixed === 'right') {
-                return index < this.columnsCount - this.rightFixedLeafCount;
-            } else {
-                return index < this.leftFixedLeafCount || index >= this.columnsCount - this.rightFixedLeafCount;
             }
+            if (this.fixed === 'right') {
+                return index < this.columnsCount - this.rightFixedLeafCount;
+            }
+            return index < this.leftFixedLeafCount || index >= this.columnsCount - this.rightFixedLeafCount;
         },
 
         getSpan(row, column, rowIndex, columnIndex) {
@@ -151,7 +151,7 @@ export default {
         },
 
         getRowStyle(row, rowIndex) {
-            const rowStyle = this.table.rowStyle;
+            const { rowStyle } = this.table;
             if (typeof rowStyle === 'function') {
                 return rowStyle.call(null, {
                     row,
@@ -162,7 +162,7 @@ export default {
         },
 
         getRowClass(row, rowIndex) {
-            let selection = this.store.states.selection;
+            const { selection } = this.store.states;
             const classes = ['el-table__row'];
             if (this.table.highlightCurrentRow && row === this.store.states.currentRow) {
                 classes.push('current-row');
@@ -179,7 +179,7 @@ export default {
             if (this.stripe && rowIndex % 2 === 1) {
                 classes.push('el-table__row--striped');
             }
-            const rowClassName = this.table.rowClassName;
+            const { rowClassName } = this.table;
             if (typeof rowClassName === 'string') {
                 classes.push(rowClassName);
             } else if (typeof rowClassName === 'function') {
@@ -199,7 +199,7 @@ export default {
         },
 
         getCellStyle(rowIndex, columnIndex, row, column) {
-            const cellStyle = this.table.cellStyle;
+            const { cellStyle } = this.table;
             if (typeof cellStyle === 'function') {
                 return cellStyle.call(null, {
                     rowIndex,
@@ -218,7 +218,7 @@ export default {
                 classes.push('is-hidden');
             }
 
-            const cellClassName = this.table.cellClassName;
+            const { cellClassName } = this.table;
             if (typeof cellClassName === 'string') {
                 classes.push(cellClassName);
             } else if (typeof cellClassName === 'function') {
@@ -246,7 +246,7 @@ export default {
         },
 
         handleCellMouseEnter(event, row) {
-            const table = this.table;
+            const { table } = this;
             const cell = getCell(event);
 
             if (cell) {
@@ -268,7 +268,7 @@ export default {
             const rangeWidth = range.getBoundingClientRect().width;
             const padding = (parseInt(getStyle(cellChild, 'paddingLeft'), 10) || 0) + (parseInt(getStyle(cellChild, 'paddingRight'), 10) || 0);
             if ((rangeWidth + padding > cellChild.offsetWidth || cellChild.scrollWidth > cellChild.offsetWidth) && this.$refs.tooltip) {
-                const tooltip = this.$refs.tooltip;
+                const { tooltip } = this.$refs;
                 // TODO 会引起整个 Table 的重新渲染，需要优化
                 this.tooltipContent = cell.innerText || cell.textContent;
                 tooltip.referenceElm = cell;
@@ -280,7 +280,7 @@ export default {
         },
 
         handleCellMouseLeave(event) {
-            const tooltip = this.$refs.tooltip;
+            const { tooltip } = this.$refs;
             if (tooltip) {
                 tooltip.setExpectedState(false);
                 tooltip.handleClosePopper();
@@ -314,7 +314,7 @@ export default {
         },
 
         handleEvent(event, row, name) {
-            const table = this.table;
+            const { table } = this;
             const cell = getCell(event);
             let column;
             if (cell) {
@@ -331,16 +331,16 @@ export default {
             const rowClasses = this.getRowClass(row, $index);
             let display = true;
             if (treeRowData) {
-                rowClasses.push('el-table__row--level-' + treeRowData.level);
+                rowClasses.push(`el-table__row--level-${treeRowData.level}`);
                 display = treeRowData.display;
             }
             // 指令 v-show 会覆盖 row-style 中 display
             // 使用 :style 代替 v-show https://github.com/ElemeFE/element/issues/16995
-            let displayStyle = display
+            const displayStyle = display
                 ? null
                 : {
-                      display: 'none'
-                  };
+                    display: 'none'
+                };
             return (
                 <TableRow
                     style={[displayStyle, this.getRowStyle(row, $index)]}
@@ -374,11 +374,11 @@ export default {
         },
 
         wrappedRowRender(row, $index) {
-            const store = this.store;
+            const { store } = this;
             const { isRowExpanded, assertRowKey } = store;
             const { treeData, lazyTreeNodeMap, childrenColumnName, rowKey } = store.states;
             if (this.hasExpandColumn && isRowExpanded(row)) {
-                const renderExpanded = this.table.renderExpanded;
+                const { renderExpanded } = this.table;
                 const tr = this.rowRender(row, $index);
                 if (!renderExpanded) {
                     console.error('[Element Error]renderExpanded is required.');
@@ -388,14 +388,15 @@ export default {
                 return [
                     [
                         tr,
-                        <tr key={'expanded-row__' + tr.key}>
+                        <tr key={`expanded-row__${tr.key}`}>
                             <td colspan={this.columnsCount} class="el-table__cell el-table__expanded-cell">
                                 {renderExpanded(this.$createElement, { row, $index, store: this.store })}
                             </td>
                         </tr>
                     ]
                 ];
-            } else if (Object.keys(treeData).length) {
+            }
+            if (Object.keys(treeData).length) {
                 assertRowKey();
                 // TreeTable 时，rowKey 必须由用户设定，不使用 getKeyOfRow 计算
                 // 在调用 rowRender 函数时，仍然会计算 rowKey，不太好的操作
@@ -462,9 +463,8 @@ export default {
                     traverse(nodes, cur);
                 }
                 return tmp;
-            } else {
-                return this.rowRender(row, $index);
             }
+            return this.rowRender(row, $index);
         }
     }
 };

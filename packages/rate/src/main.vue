@@ -1,25 +1,25 @@
 <template>
     <div
         class="el-rate"
-        @keydown="handleKey"
         role="slider"
         :aria-valuenow="currentValue"
         :aria-valuetext="text"
         aria-valuemin="0"
         :aria-valuemax="max"
         tabindex="0"
+        @keydown="handleKey"
     >
         <span
             v-for="(item, key) in max"
+            :key="key"
             class="el-rate__item"
+            :style="{ cursor: rateDisabled ? 'auto' : 'pointer' }"
             @mousemove="setCurrentValue(item, $event)"
             @mouseleave="resetCurrentValue"
             @click="selectValue(item)"
-            :style="{ cursor: rateDisabled ? 'auto' : 'pointer' }"
-            :key="key"
         >
             <i :class="[classes[item - 1], { hover: hoverIndex === item }]" class="el-rate__icon" :style="getIconStyle(item)">
-                <i v-if="showDecimalIcon(item)" :class="decimalIconClass" :style="decimalStyle" class="el-rate__decimal"></i>
+                <i v-if="showDecimalIcon(item)" :class="decimalIconClass" :style="decimalStyle" class="el-rate__decimal" />
             </i>
         </span>
         <span v-if="showText || showScore" class="el-rate__text" :style="{ color: textColor }">{{ text }}</span>
@@ -40,14 +40,6 @@ export default {
         elForm: {
             default: ''
         }
-    },
-
-    data() {
-        return {
-            pointerAtLeftHalf: true,
-            currentValue: this.value,
-            hoverIndex: -1
-        };
     },
 
     props: {
@@ -127,6 +119,14 @@ export default {
         }
     },
 
+    data() {
+        return {
+            pointerAtLeftHalf: true,
+            currentValue: this.value,
+            hoverIndex: -1
+        };
+    },
+
     computed: {
         text() {
             let result = '';
@@ -192,7 +192,7 @@ export default {
         },
 
         classes() {
-            let result = [];
+            const result = [];
             let i = 0;
             let threshold = this.currentValue;
             if (this.allowHalf && this.currentValue !== Math.floor(this.currentValue)) {
@@ -219,6 +219,12 @@ export default {
         }
     },
 
+    created() {
+        if (!this.value) {
+            this.$emit('input', 0);
+        }
+    },
+
     methods: {
         getMigratingConfig() {
             return {
@@ -241,9 +247,9 @@ export default {
         },
 
         showDecimalIcon(item) {
-            let showWhenDisabled = this.rateDisabled && this.valueDecimal > 0 && item - 1 < this.value && item > this.value;
+            const showWhenDisabled = this.rateDisabled && this.valueDecimal > 0 && item - 1 < this.value && item > this.value;
 
-            let showWhenAllowHalf = this.allowHalf && this.pointerAtLeftHalf && item - 0.5 <= this.currentValue && item > this.currentValue;
+            const showWhenAllowHalf = this.allowHalf && this.pointerAtLeftHalf && item - 0.5 <= this.currentValue && item > this.currentValue;
             return showWhenDisabled || showWhenAllowHalf;
         },
 
@@ -271,8 +277,8 @@ export default {
             if (this.rateDisabled) {
                 return;
             }
-            let currentValue = this.currentValue;
-            const keyCode = e.keyCode;
+            let { currentValue } = this;
+            const { keyCode } = e;
             if (keyCode === 38 || keyCode === 39) {
                 // left / down
                 if (this.allowHalf) {
@@ -304,7 +310,7 @@ export default {
             }
 
             if (this.allowHalf) {
-                let target = event.target;
+                let { target } = event;
                 if (hasClass(target, 'el-rate__item')) {
                     target = target.querySelector('.el-rate__icon');
                 }
@@ -328,12 +334,6 @@ export default {
             }
             this.currentValue = this.value;
             this.hoverIndex = -1;
-        }
-    },
-
-    created() {
-        if (!this.value) {
-            this.$emit('input', 0);
         }
     }
 };

@@ -28,7 +28,7 @@ export const cellStarts = {
 // 这些选项不应该被覆盖
 export const cellForced = {
     selection: {
-        renderHeader: function (h, { store }) {
+        renderHeader(h, { store }) {
             return (
                 <el-checkbox
                     disabled={store.states.data && store.states.data.length === 0}
@@ -38,7 +38,7 @@ export const cellForced = {
                 />
             );
         },
-        renderCell: function (h, { row, column, isSelected, store, $index }) {
+        renderCell(h, { row, column, isSelected, store, $index }) {
             return (
                 <el-checkbox
                     nativeOn-click={event => event.stopPropagation()}
@@ -54,12 +54,12 @@ export const cellForced = {
         resizable: false
     },
     index: {
-        renderHeader: function (h, { column }) {
+        renderHeader(h, { column }) {
             return column.label || '#';
         },
-        renderCell: function (h, { $index, column }) {
+        renderCell(h, { $index, column }) {
             let i = $index + 1;
-            const index = column.index;
+            const { index } = column;
 
             if (typeof index === 'number') {
                 i = $index + index;
@@ -72,10 +72,10 @@ export const cellForced = {
         sortable: false
     },
     expand: {
-        renderHeader: function (h, { column }) {
+        renderHeader(h, { column }) {
             return column.label || '';
         },
-        renderCell: function (h, { row, store, isExpanded }) {
+        renderCell(h, { row, store, isExpanded }) {
             const classes = ['el-table__expand-icon'];
             if (isExpanded) {
                 classes.push('el-table__expand-icon--expanded');
@@ -97,7 +97,7 @@ export const cellForced = {
 };
 
 export function defaultRenderCell(h, { row, column, $index }) {
-    const property = column.property;
+    const { property } = column;
     const value = property && getPropByPath(row, property).v;
     if (column && column.formatter) {
         return column.formatter(row, column, value, $index);
@@ -113,7 +113,7 @@ export function treeCellPrefix(h, { row, treeNode, store }) {
         store.loadOrToggle(row);
     };
     if (treeNode.indent) {
-        ele.push(<span class="el-table__indent" style={{ 'padding-left': treeNode.indent + 'px' }}></span>);
+        ele.push(<span class="el-table__indent" style={{ 'padding-left': `${treeNode.indent}px` }}></span>);
     }
     if (typeof treeNode.expanded === 'boolean' && !treeNode.noLazyChildren) {
         const expandClasses = ['el-table__expand-icon', treeNode.expanded ? 'el-table__expand-icon--expanded' : ''];

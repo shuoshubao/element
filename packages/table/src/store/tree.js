@@ -86,7 +86,7 @@ export default {
 
         updateTreeData() {
             const nested = this.normalizedData;
-            const normalizedLazyNode = this.normalizedLazyNode;
+            const { normalizedLazyNode } = this;
             const keys = Object.keys(nested);
             const newTreeData = {};
             if (keys.length) {

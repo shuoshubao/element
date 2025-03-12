@@ -1,5 +1,7 @@
 <template>
     <el-input
+        v-if="!ranged"
+        v-clickoutside="handleClose"
         class="el-date-editor"
         :class="'el-date-editor--' + type"
         :readonly="!editable || readonly || type === 'dates' || type === 'week' || type === 'years' || type === 'months'"
@@ -7,23 +9,24 @@
         :size="pickerSize"
         :name="name"
         v-bind="firstInputId"
-        v-if="!ranged"
-        v-clickoutside="handleClose"
+        ref="reference"
         :placeholder="placeholder"
+        :value="displayValue"
+        :validateEvent="false"
         @focus="handleFocus"
         @keydown.native="handleKeydown"
-        :value="displayValue"
         @input="value => (userInput = value)"
         @change="handleChange"
         @mouseenter.native="handleMouseEnter"
         @mouseleave.native="showClose = false"
-        :validateEvent="false"
-        ref="reference"
     >
-        <i slot="prefix" class="el-input__icon" :class="triggerClass" @click="handleFocus"></i>
-        <i slot="suffix" class="el-input__icon" @click="handleClickIcon" :class="[showClose ? '' + clearIcon : '']" v-if="haveTrigger"></i>
+        <i slot="prefix" class="el-input__icon" :class="triggerClass" @click="handleFocus" />
+        <i v-if="haveTrigger" slot="suffix" class="el-input__icon" :class="[showClose ? '' + clearIcon : '']" @click="handleClickIcon" />
     </el-input>
     <div
+        v-else
+        ref="reference"
+        v-clickoutside="handleClose"
         class="el-date-editor el-range-editor el-input__inner"
         :class="[
             'el-date-editor--' + type,
@@ -35,11 +38,8 @@
         @mouseenter="handleMouseEnter"
         @mouseleave="showClose = false"
         @keydown="handleKeydown"
-        ref="reference"
-        v-clickoutside="handleClose"
-        v-else
     >
-        <i :class="['el-input__icon', 'el-range__icon', triggerClass]"></i>
+        <i :class="['el-input__icon', 'el-range__icon', triggerClass]" />
         <input
             autocomplete="off"
             :placeholder="startPlaceholder"
@@ -48,10 +48,10 @@
             v-bind="firstInputId"
             :readonly="!editable || readonly"
             :name="name && name[0]"
+            class="el-range-input"
             @input="handleStartInput"
             @change="handleStartChange"
             @focus="handleFocus"
-            class="el-range-input"
         />
         <slot name="range-separator">
             <span class="el-range-separator">{{ rangeSeparator }}</span>
@@ -64,12 +64,12 @@
             v-bind="secondInputId"
             :readonly="!editable || readonly"
             :name="name && name[1]"
+            class="el-range-input"
             @input="handleEndInput"
             @change="handleEndChange"
             @focus="handleFocus"
-            class="el-range-input"
         />
-        <i @click="handleClickIcon" v-if="haveTrigger" :class="[showClose ? '' + clearIcon : '']" class="el-input__icon el-range__close-icon"></i>
+        <i v-if="haveTrigger" :class="[showClose ? '' + clearIcon : '']" class="el-input__icon el-range__close-icon" @click="handleClickIcon" />
     </div>
 </template>
 
@@ -162,7 +162,7 @@ const TYPE_VALUE_RESOLVER_MAP = {
     default: {
         formatter(value) {
             if (!value) return '';
-            return '' + value;
+            return `${value}`;
         },
         parser(text) {
             if (text === undefined || text === '') return null;
@@ -171,8 +171,8 @@ const TYPE_VALUE_RESOLVER_MAP = {
     },
     week: {
         formatter(value, format) {
-            let week = getWeekNumber(value);
-            let month = value.getMonth();
+            const week = getWeekNumber(value);
+            const month = value.getMonth();
             const trueDate = new Date(value);
             if (week === 1 && month === 11) {
                 trueDate.setHours(0, 0, 0, 0);
@@ -180,7 +180,7 @@ const TYPE_VALUE_RESOLVER_MAP = {
             }
             let date = formatDate(trueDate, format);
 
-            date = /WW/.test(date) ? date.replace(/WW/, week < 10 ? '0' + week : week) : date.replace(/W/, week);
+            date = /WW/.test(date) ? date.replace(/WW/, week < 10 ? `0${week}` : week) : date.replace(/W/, week);
             return date;
         },
         parser(text, format) {
@@ -227,16 +227,15 @@ const TYPE_VALUE_RESOLVER_MAP = {
     number: {
         formatter(value) {
             if (!value) return '';
-            return '' + value;
+            return `${value}`;
         },
         parser(text) {
-            let result = Number(text);
+            const result = Number(text);
 
             if (!isNaN(text)) {
                 return result;
-            } else {
-                return null;
             }
+            return null;
         }
     },
     dates: {
@@ -272,14 +271,14 @@ const PLACEMENT_MAP = {
 
 const parseAsFormatAndType = (value, customFormat, type, rangeSeparator = '-') => {
     if (!value) return null;
-    const parser = (TYPE_VALUE_RESOLVER_MAP[type] || TYPE_VALUE_RESOLVER_MAP['default']).parser;
+    const { parser } = TYPE_VALUE_RESOLVER_MAP[type] || TYPE_VALUE_RESOLVER_MAP.default;
     const format = customFormat || DEFAULT_FORMATS[type];
     return parser(value, format, rangeSeparator);
 };
 
 const formatAsFormatAndType = (value, customFormat, type) => {
     if (!value) return null;
-    const formatter = (TYPE_VALUE_RESOLVER_MAP[type] || TYPE_VALUE_RESOLVER_MAP['default']).formatter;
+    const { formatter } = TYPE_VALUE_RESOLVER_MAP[type] || TYPE_VALUE_RESOLVER_MAP.default;
     const format = customFormat || DEFAULT_FORMATS[type];
     return formatter(value, format);
 };
@@ -328,6 +327,9 @@ const validator = function (val) {
 };
 
 export default {
+    components: { ElInput },
+
+    directives: { Clickoutside },
     mixins: [Emitter, NewPopper],
 
     inject: {
@@ -388,10 +390,6 @@ export default {
         }
     },
 
-    components: { ElInput },
-
-    directives: { Clickoutside },
-
     data() {
         return {
             pickerVisible: false,
@@ -402,51 +400,13 @@ export default {
         };
     },
 
-    watch: {
-        pickerVisible(val) {
-            if (this.readonly || this.pickerDisabled) return;
-            if (val) {
-                this.showPicker();
-                this.valueOnOpen = Array.isArray(this.value) ? [...this.value] : this.value;
-            } else {
-                this.hidePicker();
-                this.emitChange(this.value);
-                this.userInput = null;
-                if (this.validateEvent) {
-                    this.dispatch('ElFormItem', 'el.form.blur');
-                }
-                this.$emit('blur', this);
-                this.blur();
-            }
-        },
-        parsedValue: {
-            immediate: true,
-            handler(val) {
-                if (this.picker) {
-                    this.picker.value = val;
-                }
-            }
-        },
-        defaultValue(val) {
-            // NOTE: should eventually move to jsx style picker + panel ?
-            if (this.picker) {
-                this.picker.defaultValue = val;
-            }
-        },
-        value(val, oldVal) {
-            if (!valueEquals(val, oldVal) && !this.pickerVisible && this.validateEvent) {
-                this.dispatch('ElFormItem', 'el.form.change', val);
-            }
-        }
-    },
-
     computed: {
         ranged() {
             return this.type.indexOf('range') > -1;
         },
 
         reference() {
-            const reference = this.$refs.reference;
+            const { reference } = this.$refs;
             return reference.$el || reference;
         },
 
@@ -480,15 +440,20 @@ export default {
         selectionMode() {
             if (this.type === 'week') {
                 return 'week';
-            } else if (this.type === 'month') {
+            }
+            if (this.type === 'month') {
                 return 'month';
-            } else if (this.type === 'year') {
+            }
+            if (this.type === 'year') {
                 return 'year';
-            } else if (this.type === 'dates') {
+            }
+            if (this.type === 'dates') {
                 return 'dates';
-            } else if (this.type === 'months') {
+            }
+            if (this.type === 'months') {
                 return 'months';
-            } else if (this.type === 'years') {
+            }
+            if (this.type === 'years') {
                 return 'years';
             }
 
@@ -506,13 +471,14 @@ export default {
             const formattedValue = formatAsFormatAndType(this.parsedValue, this.format, this.type, this.rangeSeparator);
             if (Array.isArray(this.userInput)) {
                 return [this.userInput[0] || (formattedValue && formattedValue[0]) || '', this.userInput[1] || (formattedValue && formattedValue[1]) || ''];
-            } else if (this.userInput !== null) {
-                return this.userInput;
-            } else if (formattedValue) {
-                return this.type === 'dates' || this.type === 'years' || this.type === 'months' ? formattedValue.join(', ') : formattedValue;
-            } else {
-                return '';
             }
+            if (this.userInput !== null) {
+                return this.userInput;
+            }
+            if (formattedValue) {
+                return this.type === 'dates' || this.type === 'years' || this.type === 'months' ? formattedValue.join(', ') : formattedValue;
+            }
+            return '';
         },
 
         parsedValue() {
@@ -568,6 +534,44 @@ export default {
         }
     },
 
+    watch: {
+        pickerVisible(val) {
+            if (this.readonly || this.pickerDisabled) return;
+            if (val) {
+                this.showPicker();
+                this.valueOnOpen = Array.isArray(this.value) ? [...this.value] : this.value;
+            } else {
+                this.hidePicker();
+                this.emitChange(this.value);
+                this.userInput = null;
+                if (this.validateEvent) {
+                    this.dispatch('ElFormItem', 'el.form.blur');
+                }
+                this.$emit('blur', this);
+                this.blur();
+            }
+        },
+        parsedValue: {
+            immediate: true,
+            handler(val) {
+                if (this.picker) {
+                    this.picker.value = val;
+                }
+            }
+        },
+        defaultValue(val) {
+            // NOTE: should eventually move to jsx style picker + panel ?
+            if (this.picker) {
+                this.picker.defaultValue = val;
+            }
+        },
+        value(val, oldVal) {
+            if (!valueEquals(val, oldVal) && !this.pickerVisible && this.validateEvent) {
+                this.dispatch('ElFormItem', 'el.form.change', val);
+            }
+        }
+    },
+
     created() {
         // vue-popper
         this.popperOptions = {
@@ -597,18 +601,16 @@ export default {
             const isParsed = isDateObject(value) || (Array.isArray(value) && value.every(isDateObject));
             if (this.valueFormat && !isParsed) {
                 return parseAsFormatAndType(value, this.valueFormat, this.type, this.rangeSeparator) || value;
-            } else {
-                return value;
             }
+            return value;
         },
 
         formatToValue(date) {
             const isFormattable = isDateObject(date) || (Array.isArray(date) && date.every(isDateObject));
             if (this.valueFormat && isFormattable) {
                 return formatAsFormatAndType(date, this.valueFormat, this.type, this.rangeSeparator);
-            } else {
-                return date;
             }
+            return date;
         },
 
         // {parse, formatTo} String deals with user input
@@ -721,7 +723,7 @@ export default {
         },
 
         handleFocus() {
-            const type = this.type;
+            const { type } = this;
 
             if (HAVE_TRIGGER_TYPES.indexOf(type) !== -1 && !this.pickerVisible) {
                 this.pickerVisible = true;
@@ -730,7 +732,7 @@ export default {
         },
 
         handleKeydown(event) {
-            const keyCode = event.keyCode;
+            const { keyCode } = event;
 
             // ESC
             if (keyCode === 27) {
@@ -783,7 +785,7 @@ export default {
         },
 
         handleRangeClick() {
-            const type = this.type;
+            const { type } = this;
 
             if (HAVE_TRIGGER_TYPES.indexOf(type) !== -1 && !this.pickerVisible) {
                 this.pickerVisible = true;
@@ -836,7 +838,7 @@ export default {
 
                 if (options && options.selectableRange) {
                     let ranges = options.selectableRange;
-                    const parser = TYPE_VALUE_RESOLVER_MAP.datetimerange.parser;
+                    const { parser } = TYPE_VALUE_RESOLVER_MAP.datetimerange;
                     const format = DEFAULT_FORMATS.timerange;
 
                     ranges = Array.isArray(ranges) ? ranges : [ranges];
@@ -918,9 +920,8 @@ export default {
             }
             if (this.picker.isValidValue) {
                 return value && this.picker.isValidValue(value);
-            } else {
-                return true;
             }
+            return true;
         }
     }
 };

@@ -45,7 +45,7 @@ export default {
     },
 
     beforeMount() {
-        this._popupId = 'popup-' + idSeed++;
+        this._popupId = `popup-${idSeed++}`;
         PopupManager.register(this._popupId, this);
     },
 
@@ -118,9 +118,9 @@ export default {
 
             const dom = this.$el;
 
-            const modal = props.modal;
+            const { modal } = props;
 
-            const zIndex = props.zIndex;
+            const { zIndex } = props;
             if (zIndex) {
                 PopupManager.zIndex = zIndex;
             }
@@ -138,10 +138,10 @@ export default {
                         this.computedBodyPaddingRight = parseInt(getStyle(document.body, 'paddingRight'), 10);
                     }
                     scrollBarWidth = getScrollBarWidth();
-                    let bodyHasOverflow = document.documentElement.clientHeight < document.body.scrollHeight;
-                    let bodyOverflowY = getStyle(document.body, 'overflowY');
+                    const bodyHasOverflow = document.documentElement.clientHeight < document.body.scrollHeight;
+                    const bodyOverflowY = getStyle(document.body, 'overflowY');
                     if (scrollBarWidth > 0 && (bodyHasOverflow || bodyOverflowY === 'scroll') && this.withoutHiddenClass) {
-                        document.body.style.paddingRight = this.computedBodyPaddingRight + scrollBarWidth + 'px';
+                        document.body.style.paddingRight = `${this.computedBodyPaddingRight + scrollBarWidth}px`;
                     }
                     addClass(document.body, 'el-popup-parent--hidden');
                 }

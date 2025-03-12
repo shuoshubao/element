@@ -15,14 +15,14 @@
         @mouseleave="onMouseLeave"
     >
         <el-tooltip v-if="parentMenu.$options.componentName === 'ElMenu' && rootMenu.collapse && $slots.title" effect="dark" placement="right">
-            <div slot="content"><slot name="title"></slot></div>
+            <div slot="content"><slot name="title" /></div>
             <div style="position: absolute; left: 0; top: 0; height: 100%; width: 100%; display: inline-block; box-sizing: border-box; padding: 0 20px">
-                <slot></slot>
+                <slot />
             </div>
         </el-tooltip>
         <template v-else>
-            <slot></slot>
-            <slot name="title"></slot>
+            <slot />
+            <slot name="title" />
         </template>
     </li>
 </template>
@@ -37,9 +37,9 @@ export default {
 
     componentName: 'ElMenuItem',
 
-    mixins: [Menu, Emitter],
-
     components: { ElTooltip },
+
+    mixins: [Menu, Emitter],
 
     props: {
         index: {
@@ -81,6 +81,14 @@ export default {
             return this.parentMenu !== this.rootMenu;
         }
     },
+    mounted() {
+        this.parentMenu.addItem(this);
+        this.rootMenu.addItem(this);
+    },
+    beforeDestroy() {
+        this.parentMenu.removeItem(this);
+        this.rootMenu.removeItem(this);
+    },
     methods: {
         onMouseEnter() {
             if (this.mode === 'horizontal' && !this.rootMenu.backgroundColor) return;
@@ -96,14 +104,6 @@ export default {
                 this.$emit('click', this);
             }
         }
-    },
-    mounted() {
-        this.parentMenu.addItem(this);
-        this.rootMenu.addItem(this);
-    },
-    beforeDestroy() {
-        this.parentMenu.removeItem(this);
-        this.rootMenu.removeItem(this);
     }
 };
 </script>

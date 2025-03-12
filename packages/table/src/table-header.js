@@ -69,7 +69,7 @@ export default {
     mixins: [LayoutObserver],
 
     render(h) {
-        const originColumns = this.store.states.originColumns;
+        const { originColumns } = this.store.states;
         const columnRows = convertToRows(originColumns, this.columns);
         // 是否拥有多级表头
         const isGroup = columnRows.length > 1;
@@ -189,7 +189,7 @@ export default {
 
     beforeDestroy() {
         const panels = this.filterPanels;
-        for (let prop in panels) {
+        for (const prop in panels) {
             if (panels.hasOwnProperty(prop) && panels[prop]) {
                 panels[prop].$destroy(true);
             }
@@ -205,15 +205,15 @@ export default {
             const after = start + columns[index].colSpan - 1;
             if (this.fixed === true || this.fixed === 'left') {
                 return after >= this.leftFixedLeafCount;
-            } else if (this.fixed === 'right') {
-                return start < this.columnsCount - this.rightFixedLeafCount;
-            } else {
-                return after < this.leftFixedLeafCount || start >= this.columnsCount - this.rightFixedLeafCount;
             }
+            if (this.fixed === 'right') {
+                return start < this.columnsCount - this.rightFixedLeafCount;
+            }
+            return after < this.leftFixedLeafCount || start >= this.columnsCount - this.rightFixedLeafCount;
         },
 
         getHeaderRowStyle(rowIndex) {
-            const headerRowStyle = this.table.headerRowStyle;
+            const { headerRowStyle } = this.table;
             if (typeof headerRowStyle === 'function') {
                 return headerRowStyle.call(null, { rowIndex });
             }
@@ -223,7 +223,7 @@ export default {
         getHeaderRowClass(rowIndex) {
             const classes = [];
 
-            const headerRowClassName = this.table.headerRowClassName;
+            const { headerRowClassName } = this.table;
             if (typeof headerRowClassName === 'string') {
                 classes.push(headerRowClassName);
             } else if (typeof headerRowClassName === 'function') {
@@ -234,7 +234,7 @@ export default {
         },
 
         getHeaderCellStyle(rowIndex, columnIndex, row, column) {
-            const headerCellStyle = this.table.headerCellStyle;
+            const { headerCellStyle } = this.table;
             if (typeof headerCellStyle === 'function') {
                 return headerCellStyle.call(null, {
                     rowIndex,
@@ -261,7 +261,7 @@ export default {
                 classes.push('is-sortable');
             }
 
-            const headerCellClassName = this.table.headerCellClassName;
+            const { headerCellClassName } = this.table;
             if (typeof headerCellClassName === 'string') {
                 classes.push(headerCellClassName);
             } else if (typeof headerCellClassName === 'function') {
@@ -286,7 +286,7 @@ export default {
 
         handleFilterClick(event, column) {
             event.stopPropagation();
-            const target = event.target;
+            const { target } = event;
             let cell = target.tagName === 'TH' ? target : target.parentNode;
             if (hasClass(cell, 'noclick')) return;
             cell = cell.querySelector('.el-table__column-filter-trigger') || cell;
@@ -355,8 +355,8 @@ export default {
                     tableLeft
                 };
 
-                const resizeProxy = table.$refs.resizeProxy;
-                resizeProxy.style.left = this.dragState.startLeft + 'px';
+                const { resizeProxy } = table.$refs;
+                resizeProxy.style.left = `${this.dragState.startLeft}px`;
 
                 document.onselectstart = function () {
                     return false;
@@ -369,7 +369,7 @@ export default {
                     const deltaLeft = event.clientX - this.dragState.startMouseLeft;
                     const proxyLeft = this.dragState.startLeft + deltaLeft;
 
-                    resizeProxy.style.left = Math.max(minLeft, proxyLeft) + 'px';
+                    resizeProxy.style.left = `${Math.max(minLeft, proxyLeft)}px`;
                 };
 
                 const handleMouseUp = () => {
@@ -395,7 +395,7 @@ export default {
                     document.onselectstart = null;
                     document.ondragstart = null;
 
-                    setTimeout(function () {
+                    setTimeout(() => {
                         removeClass(columnEl, 'noclick');
                     }, 0);
                 };
@@ -407,7 +407,7 @@ export default {
 
         handleMouseMove(event, column) {
             if (column.children && column.children.length > 0) return;
-            let target = event.target;
+            let { target } = event;
             while (target && target.tagName !== 'TH') {
                 target = target.parentNode;
             }
@@ -415,7 +415,7 @@ export default {
             if (!column || !column.resizable) return;
 
             if (!this.dragging && this.border) {
-                let rect = target.getBoundingClientRect();
+                const rect = target.getBoundingClientRect();
 
                 const bodyStyle = document.body.style;
                 if (rect.width > 12 && rect.right - event.pageX < 8) {
@@ -447,9 +447,9 @@ export default {
 
         handleSortClick(event, column, givenOrder) {
             event.stopPropagation();
-            let order = column.order === givenOrder ? null : givenOrder || this.toggleOrder(column);
+            const order = column.order === givenOrder ? null : givenOrder || this.toggleOrder(column);
 
-            let target = event.target;
+            let { target } = event;
             while (target && target.tagName !== 'TH') {
                 target = target.parentNode;
             }
@@ -463,10 +463,10 @@ export default {
 
             if (!column.sortable) return;
 
-            const states = this.store.states;
-            let sortProp = states.sortProp;
+            const { states } = this.store;
+            let { sortProp } = states;
             let sortOrder;
-            const sortingColumn = states.sortingColumn;
+            const { sortingColumn } = states;
 
             if (sortingColumn !== column || (sortingColumn === column && sortingColumn.order === null)) {
                 if (sortingColumn) {

@@ -18,7 +18,7 @@ import Utils from './aria-utils';
  *          first focusable element in the dialog will receive focus.
  */
 var aria = aria || {};
-var tabEvent;
+let tabEvent;
 
 aria.Dialog = function (dialog, focusAfterClosed, focusFirst) {
     this.dialogNode = dialog;

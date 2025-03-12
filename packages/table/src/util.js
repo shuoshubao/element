@@ -26,26 +26,29 @@ export const orderBy = function (array, sortKey, reverse, sortMethod, sortBy) {
     } else {
         reverse = reverse && reverse < 0 ? -1 : 1;
     }
-    const getKey = sortMethod
-        ? null
-        : function (value, index) {
-              if (sortBy) {
-                  if (!Array.isArray(sortBy)) {
-                      sortBy = [sortBy];
-                  }
-                  return sortBy.map(function (by) {
-                      if (typeof by === 'string') {
-                          return getValueByPath(value, by);
-                      } else {
-                          return by(value, index, array);
-                      }
-                  });
-              }
-              if (sortKey !== '$key') {
-                  if (isObject(value) && '$value' in value) value = value.$value;
-              }
-              return [isObject(value) ? getValueByPath(value, sortKey) : value];
-          };
+
+    let getKey = null;
+
+    if (!sortMethod) {
+        getKey = function (value, index) {
+            if (sortBy) {
+                if (!Array.isArray(sortBy)) {
+                    sortBy = [sortBy];
+                }
+                return sortBy.map(by => {
+                    if (typeof by === 'string') {
+                        return getValueByPath(value, by);
+                    }
+                    return by(value, index, array);
+                });
+            }
+            if (sortKey !== '$key') {
+                if (isObject(value) && '$value' in value) value = value.$value;
+            }
+            return [isObject(value) ? getValueByPath(value, sortKey) : value];
+        };
+    }
+
     const compare = function (a, b) {
         if (sortMethod) {
             return sortMethod(a.value, b.value);
@@ -61,14 +64,14 @@ export const orderBy = function (array, sortKey, reverse, sortMethod, sortBy) {
         return 0;
     };
     return array
-        .map(function (value, index) {
+        .map((value, index) => {
             return {
-                value: value,
-                index: index,
+                value,
+                index,
                 key: getKey ? getKey(value, index) : null
             };
         })
-        .sort(function (a, b) {
+        .sort((a, b) => {
             let order = compare(a, b);
             if (!order) {
                 // make stable https://en.wikipedia.org/wiki/Sorting_algorithm#Stability
@@ -81,7 +84,7 @@ export const orderBy = function (array, sortKey, reverse, sortMethod, sortBy) {
 
 export const getColumnById = function (table, columnId) {
     let column = null;
-    table.columns.forEach(function (item) {
+    table.columns.forEach(item => {
         if (item.id === columnId) {
             column = item;
         }
@@ -115,13 +118,14 @@ export const getRowIdentity = (row, rowKey) => {
         if (rowKey.indexOf('.') < 0) {
             return row[rowKey];
         }
-        let key = rowKey.split('.');
+        const key = rowKey.split('.');
         let current = row;
         for (let i = 0; i < key.length; i++) {
             current = current[key[i]];
         }
         return current;
-    } else if (typeof rowKey === 'function') {
+    }
+    if (typeof rowKey === 'function') {
         return rowKey.call(null, row);
     }
 };
@@ -182,9 +186,8 @@ export function parseHeight(height) {
     if (typeof height === 'string') {
         if (/^\d+(?:px)?$/.test(height)) {
             return parseInt(height, 10);
-        } else {
-            return height;
         }
+        return height;
     }
     return null;
 }
@@ -265,15 +268,15 @@ export function walkTreeNode(root, cb, childrenKey = 'children', lazyKey = 'hasC
 
 export const objectEquals = function (objectA, objectB) {
     // 取对象a和b的属性名
-    let aProps = Object.getOwnPropertyNames(objectA);
-    let bProps = Object.getOwnPropertyNames(objectB);
+    const aProps = Object.getOwnPropertyNames(objectA);
+    const bProps = Object.getOwnPropertyNames(objectB);
     // 判断属性名的length是否一致
     if (aProps.length !== bProps.length) {
         return false;
     }
     // 循环取出属性名，再判断属性值是否一致
     for (let i = 0; i < aProps.length; i++) {
-        let propName = aProps[i];
+        const propName = aProps[i];
         if (objectA[propName] !== objectB[propName]) {
             return false;
         }

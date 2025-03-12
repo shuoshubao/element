@@ -1,31 +1,31 @@
 <template>
     <transition name="el-notification-fade">
         <div
-            :class="['el-notification', customClass, horizontalClass]"
             v-show="visible"
+            :class="['el-notification', customClass, horizontalClass]"
             :style="positionStyle"
+            role="alert"
             @mouseenter="clearTimer()"
             @mouseleave="startTimer()"
             @click="click"
-            role="alert"
         >
-            <i class="el-notification__icon" :class="[typeClass, iconClass]" v-if="type || iconClass"></i>
+            <i v-if="type || iconClass" class="el-notification__icon" :class="[typeClass, iconClass]" />
             <div class="el-notification__group" :class="{ 'is-with-icon': typeClass || iconClass }">
-                <h2 class="el-notification__title" v-text="title"></h2>
-                <div class="el-notification__content" v-show="message">
+                <h2 class="el-notification__title" v-text="title" />
+                <div v-show="message" class="el-notification__content">
                     <slot>
                         <p v-if="!dangerouslyUseHTMLString">{{ message }}</p>
-                        <p v-else v-html="message"></p>
+                        <p v-else v-html="message" />
                     </slot>
                 </div>
-                <div class="el-notification__closeBtn el-icon-close" v-if="showClose" @click.stop="close"></div>
+                <div v-if="showClose" class="el-notification__closeBtn el-icon-close" @click.stop="close" />
             </div>
         </div>
     </transition>
 </template>
 
 <script>
-let typeMap = {
+const typeMap = {
     success: 'success',
     info: 'info',
     warning: 'warning',
@@ -81,6 +81,19 @@ export default {
             }
         }
     },
+    mounted() {
+        if (this.duration > 0) {
+            this.timer = setTimeout(() => {
+                if (!this.closed) {
+                    this.close();
+                }
+            }, this.duration);
+        }
+        document.addEventListener('keydown', this.keydown);
+    },
+    beforeDestroy() {
+        document.removeEventListener('keydown', this.keydown);
+    },
 
     methods: {
         destroyElement() {
@@ -127,19 +140,6 @@ export default {
                 this.startTimer(); // 恢复倒计时
             }
         }
-    },
-    mounted() {
-        if (this.duration > 0) {
-            this.timer = setTimeout(() => {
-                if (!this.closed) {
-                    this.close();
-                }
-            }, this.duration);
-        }
-        document.addEventListener('keydown', this.keydown);
-    },
-    beforeDestroy() {
-        document.removeEventListener('keydown', this.keydown);
     }
 };
 </script>

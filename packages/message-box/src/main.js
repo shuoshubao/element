@@ -1,3 +1,8 @@
+import merge from 'element-ui/src/utils/merge';
+import { isVNode } from 'element-ui/src/utils/vdom';
+import Vue from 'vue';
+import msgboxVue from './main.vue';
+
 const defaults = {
     title: null,
     message: '',
@@ -33,19 +38,15 @@ const defaults = {
     distinguishCancelAndClose: false
 };
 
-import merge from 'element-ui/src/utils/merge';
-import { isVNode } from 'element-ui/src/utils/vdom';
-import Vue from 'vue';
-import msgboxVue from './main.vue';
-
 const MessageBoxConstructor = Vue.extend(msgboxVue);
 
-let currentMsg, instance;
+let currentMsg;
+let instance;
 let msgQueue = [];
 
 const defaultCallback = action => {
     if (currentMsg) {
-        let callback = currentMsg.callback;
+        const { callback } = currentMsg;
         if (typeof callback === 'function') {
             if (instance.showInput) {
                 callback(instance.inputValue, action);
@@ -85,8 +86,8 @@ const showNextMsg = () => {
         if (msgQueue.length > 0) {
             currentMsg = msgQueue.shift();
 
-            let options = currentMsg.options;
-            for (let prop in options) {
+            const { options } = currentMsg;
+            for (const prop in options) {
                 if (options.hasOwnProperty(prop)) {
                     instance[prop] = options[prop];
                 }
@@ -95,7 +96,7 @@ const showNextMsg = () => {
                 instance.callback = defaultCallback;
             }
 
-            let oldCb = instance.callback;
+            const oldCb = instance.callback;
             instance.callback = (action, instance) => {
                 oldCb(action, instance);
                 showNextMsg();
@@ -137,21 +138,20 @@ const MessageBox = function (options, callback) {
         return new Promise((resolve, reject) => {
             msgQueue.push({
                 options: merge({}, defaults, MessageBox.defaults, options),
-                callback: callback,
-                resolve: resolve,
-                reject: reject
+                callback,
+                resolve,
+                reject
             });
 
             showNextMsg();
         });
-    } else {
-        msgQueue.push({
-            options: merge({}, defaults, MessageBox.defaults, options),
-            callback: callback
-        });
-
-        showNextMsg();
     }
+    msgQueue.push({
+        options: merge({}, defaults, MessageBox.defaults, options),
+        callback
+    });
+
+    showNextMsg();
 };
 
 MessageBox.setDefaults = defaults => {
@@ -168,8 +168,8 @@ MessageBox.alert = (message, title, options) => {
     return MessageBox(
         merge(
             {
-                title: title,
-                message: message,
+                title,
+                message,
                 $type: 'alert',
                 closeOnPressEscape: false,
                 closeOnClickModal: false
@@ -189,8 +189,8 @@ MessageBox.confirm = (message, title, options) => {
     return MessageBox(
         merge(
             {
-                title: title,
-                message: message,
+                title,
+                message,
                 $type: 'confirm',
                 showCancelButton: true
             },
@@ -209,8 +209,8 @@ MessageBox.prompt = (message, title, options) => {
     return MessageBox(
         merge(
             {
-                title: title,
-                message: message,
+                title,
+                message,
                 showCancelButton: true,
                 showInput: true,
                 $type: 'prompt'

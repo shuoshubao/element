@@ -101,7 +101,7 @@ Watcher.prototype.mutations = {
     },
 
     filterChange(states, options) {
-        let { column, values, silent } = options;
+        const { column, values, silent } = options;
         const newFilters = this.updateFilters(column, values);
 
         this.execQuery();
@@ -132,7 +132,7 @@ Watcher.prototype.mutations = {
 };
 
 Watcher.prototype.commit = function (name, ...args) {
-    const mutations = this.mutations;
+    const { mutations } = this;
     if (mutations[name]) {
         mutations[name].apply(this, [this.states].concat(args));
     } else {

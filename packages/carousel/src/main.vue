@@ -3,29 +3,29 @@
         <div class="el-carousel__container" :style="{ height: height }">
             <transition v-if="arrowDisplay" name="carousel-arrow-left">
                 <button
-                    type="button"
                     v-show="(arrow === 'always' || hover) && (loop || activeIndex > 0)"
+                    type="button"
+                    class="el-carousel__arrow el-carousel__arrow--left"
                     @mouseenter="handleButtonEnter('left')"
                     @mouseleave="handleButtonLeave"
                     @click.stop="throttledArrowClick(activeIndex - 1)"
-                    class="el-carousel__arrow el-carousel__arrow--left"
                 >
-                    <i class="el-icon-arrow-left"></i>
+                    <i class="el-icon-arrow-left" />
                 </button>
             </transition>
             <transition v-if="arrowDisplay" name="carousel-arrow-right">
                 <button
-                    type="button"
                     v-show="(arrow === 'always' || hover) && (loop || activeIndex < items.length - 1)"
+                    type="button"
+                    class="el-carousel__arrow el-carousel__arrow--right"
                     @mouseenter="handleButtonEnter('right')"
                     @mouseleave="handleButtonLeave"
                     @click.stop="throttledArrowClick(activeIndex + 1)"
-                    class="el-carousel__arrow el-carousel__arrow--right"
                 >
-                    <i class="el-icon-arrow-right"></i>
+                    <i class="el-icon-arrow-right" />
                 </button>
             </transition>
-            <slot></slot>
+            <slot />
         </div>
         <ul v-if="indicatorPosition !== 'none'" :class="indicatorsClasses">
             <li
@@ -111,7 +111,7 @@ export default {
         },
 
         carouselClasses() {
-            const classes = ['el-carousel', 'el-carousel--' + this.direction];
+            const classes = ['el-carousel', `el-carousel--${this.direction}`];
             if (this.type === 'card') {
                 classes.push('el-carousel--card');
             }
@@ -119,7 +119,7 @@ export default {
         },
 
         indicatorsClasses() {
-            const classes = ['el-carousel__indicators', 'el-carousel__indicators--' + this.direction];
+            const classes = ['el-carousel__indicators', `el-carousel__indicators--${this.direction}`];
             if (this.hasLabel) {
                 classes.push('el-carousel__indicators--labels');
             }
@@ -156,6 +156,31 @@ export default {
         }
     },
 
+    created() {
+        this.throttledArrowClick = throttle(300, true, index => {
+            this.setActiveItem(index);
+        });
+        this.throttledIndicatorHover = throttle(300, index => {
+            this.handleIndicatorHover(index);
+        });
+    },
+
+    mounted() {
+        this.updateItems();
+        this.$nextTick(() => {
+            addResizeListener(this.$el, this.resetItemPosition);
+            if (this.initialIndex < this.items.length && this.initialIndex >= 0) {
+                this.activeIndex = this.initialIndex;
+            }
+            this.startTimer();
+        });
+    },
+
+    beforeDestroy() {
+        if (this.$el) removeResizeListener(this.$el, this.resetItemPosition);
+        this.pauseTimer();
+    },
+
     methods: {
         handleMouseEnter() {
             this.hover = true;
@@ -168,13 +193,11 @@ export default {
         },
 
         itemInStage(item, index) {
-            const length = this.items.length;
+            const { length } = this.items;
             if ((index === length - 1 && item.inStage && this.items[0].active) || (item.inStage && this.items[index + 1] && this.items[index + 1].active)) {
                 return 'left';
-            } else if (
-                (index === 0 && item.inStage && this.items[length - 1].active) ||
-                (item.inStage && this.items[index - 1] && this.items[index - 1].active)
-            ) {
+            }
+            if ((index === 0 && item.inStage && this.items[length - 1].active) || (item.inStage && this.items[index - 1] && this.items[index - 1].active)) {
                 return 'right';
             }
             return false;
@@ -243,7 +266,7 @@ export default {
                 console.warn('[Element Warn][Carousel]index must be an integer.');
                 return;
             }
-            let length = this.items.length;
+            const { length } = this.items;
             const oldIndex = this.activeIndex;
             if (index < 0) {
                 this.activeIndex = this.loop ? length - 1 : 0;
@@ -275,31 +298,6 @@ export default {
                 this.activeIndex = index;
             }
         }
-    },
-
-    created() {
-        this.throttledArrowClick = throttle(300, true, index => {
-            this.setActiveItem(index);
-        });
-        this.throttledIndicatorHover = throttle(300, index => {
-            this.handleIndicatorHover(index);
-        });
-    },
-
-    mounted() {
-        this.updateItems();
-        this.$nextTick(() => {
-            addResizeListener(this.$el, this.resetItemPosition);
-            if (this.initialIndex < this.items.length && this.initialIndex >= 0) {
-                this.activeIndex = this.initialIndex;
-            }
-            this.startTimer();
-        });
-    },
-
-    beforeDestroy() {
-        if (this.$el) removeResizeListener(this.$el, this.resetItemPosition);
-        this.pauseTimer();
     }
 };
 </script>

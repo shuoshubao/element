@@ -43,6 +43,6 @@ export default {
 
 <template>
     <div class="el-checkbox-group" role="group" aria-label="checkbox-group">
-        <slot></slot>
+        <slot />
     </div>
 </template>

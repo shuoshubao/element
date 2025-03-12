@@ -1,14 +1,14 @@
 <template>
     <div class="el-color-hue-slider" :class="{ 'is-vertical': vertical }">
-        <div class="el-color-hue-slider__bar" @click="handleClick" ref="bar"></div>
+        <div ref="bar" class="el-color-hue-slider__bar" @click="handleClick" />
         <div
+            ref="thumb"
             class="el-color-hue-slider__thumb"
             :style="{
                 left: thumbLeft + 'px',
                 top: thumbTop + 'px'
             }"
-            ref="thumb"
-        ></div>
+        />
     </div>
 </template>
 
@@ -16,7 +16,7 @@
 import draggable from '../draggable';
 
 export default {
-    name: 'el-color-hue-slider',
+    name: 'ElColorHueSlider',
 
     props: {
         color: {
@@ -35,8 +35,7 @@ export default {
 
     computed: {
         hueValue() {
-            const hue = this.color.get('hue');
-            return hue;
+            return this.color.get('hue');
         }
     },
 
@@ -46,10 +45,27 @@ export default {
         }
     },
 
+    mounted() {
+        const { bar, thumb } = this.$refs;
+
+        const dragConfig = {
+            drag: event => {
+                this.handleDrag(event);
+            },
+            end: event => {
+                this.handleDrag(event);
+            }
+        };
+
+        draggable(bar, dragConfig);
+        draggable(thumb, dragConfig);
+        this.update();
+    },
+
     methods: {
         handleClick(event) {
-            const thumb = this.$refs.thumb;
-            const target = event.target;
+            const { thumb } = this.$refs;
+            const { target } = event;
 
             if (target !== thumb) {
                 this.handleDrag(event);
@@ -84,7 +100,7 @@ export default {
             const hue = this.color.get('hue');
 
             if (!el) return 0;
-            const thumb = this.$refs.thumb;
+            const { thumb } = this.$refs;
             return Math.round((hue * (el.offsetWidth - thumb.offsetWidth / 2)) / 360);
         },
 
@@ -94,7 +110,7 @@ export default {
             const hue = this.color.get('hue');
 
             if (!el) return 0;
-            const thumb = this.$refs.thumb;
+            const { thumb } = this.$refs;
             return Math.round((hue * (el.offsetHeight - thumb.offsetHeight / 2)) / 360);
         },
 
@@ -102,23 +118,6 @@ export default {
             this.thumbLeft = this.getThumbLeft();
             this.thumbTop = this.getThumbTop();
         }
-    },
-
-    mounted() {
-        const { bar, thumb } = this.$refs;
-
-        const dragConfig = {
-            drag: event => {
-                this.handleDrag(event);
-            },
-            end: event => {
-                this.handleDrag(event);
-            }
-        };
-
-        draggable(bar, dragConfig);
-        draggable(thumb, dragConfig);
-        this.update();
     }
 };
 </script>

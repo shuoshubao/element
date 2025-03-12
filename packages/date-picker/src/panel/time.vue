@@ -2,15 +2,15 @@
     <transition name="el-zoom-in-top" @after-leave="$emit('dodestroy')">
         <div v-show="visible" class="el-time-panel el-popper" :class="popperClass">
             <div class="el-time-panel__content" :class="{ 'has-seconds': showSeconds }">
-                <time-spinner
+                <TimeSpinner
                     ref="spinner"
-                    @change="handleChange"
                     :arrow-control="useArrow"
                     :show-seconds="showSeconds"
                     :am-pm-mode="amPmMode"
-                    @select-range="setSelectionRange"
                     :date="date"
-                ></time-spinner>
+                    @change="handleChange"
+                    @select-range="setSelectionRange"
+                />
             </div>
             <div class="el-time-panel__footer">
                 <button type="button" class="el-time-panel__btn cancel" @click="handleCancel">{{ t('el.datepicker.cancel') }}</button>
@@ -28,15 +28,44 @@ import { clearMilliseconds, isDate, limitTimeRange, timeWithinRange } from 'elem
 import TimeSpinner from '../basic/time-spinner.vue';
 
 export default {
-    mixins: [Locale],
-
     components: {
         TimeSpinner
     },
+    mixins: [Locale],
 
     props: {
         visible: Boolean,
         timeArrowControl: Boolean
+    },
+
+    data() {
+        return {
+            popperClass: '',
+            format: 'HH:mm:ss',
+            value: '',
+            defaultValue: null,
+            date: new Date(),
+            oldValue: new Date(),
+            selectableRange: [],
+            selectionRange: [0, 2],
+            disabled: false,
+            arrowControl: false,
+            needInitAdjust: true
+        };
+    },
+
+    computed: {
+        showSeconds() {
+            return (this.format || '').indexOf('ss') !== -1;
+        },
+        useArrow() {
+            return this.arrowControl || this.timeArrowControl || false;
+        },
+        amPmMode() {
+            if ((this.format || '').indexOf('A') !== -1) return 'A';
+            if ((this.format || '').indexOf('a') !== -1) return 'a';
+            return '';
+        }
     },
 
     watch: {
@@ -75,34 +104,9 @@ export default {
         }
     },
 
-    data() {
-        return {
-            popperClass: '',
-            format: 'HH:mm:ss',
-            value: '',
-            defaultValue: null,
-            date: new Date(),
-            oldValue: new Date(),
-            selectableRange: [],
-            selectionRange: [0, 2],
-            disabled: false,
-            arrowControl: false,
-            needInitAdjust: true
-        };
-    },
-
-    computed: {
-        showSeconds() {
-            return (this.format || '').indexOf('ss') !== -1;
-        },
-        useArrow() {
-            return this.arrowControl || this.timeArrowControl || false;
-        },
-        amPmMode() {
-            if ((this.format || '').indexOf('A') !== -1) return 'A';
-            if ((this.format || '').indexOf('a') !== -1) return 'a';
-            return '';
-        }
+    mounted() {
+        this.$nextTick(() => this.handleConfirm(true, true));
+        this.$emit('mounted');
     },
 
     methods: {
@@ -133,7 +137,7 @@ export default {
         },
 
         handleKeydown(event) {
-            const keyCode = event.keyCode;
+            const { keyCode } = event;
             const mapping = { 38: -1, 40: 1, 37: -1, 39: 1 };
 
             // Left or Right
@@ -149,7 +153,6 @@ export default {
                 const step = mapping[keyCode];
                 this.$refs.spinner.scrollDown(step);
                 event.preventDefault();
-                return;
             }
         },
 
@@ -168,11 +171,6 @@ export default {
             const next = (index + step + list.length) % list.length;
             this.$refs.spinner.emitSelectRange(mapping[next]);
         }
-    },
-
-    mounted() {
-        this.$nextTick(() => this.handleConfirm(true, true));
-        this.$emit('mounted');
     }
 };
 </script>

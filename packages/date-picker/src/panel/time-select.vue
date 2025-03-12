@@ -1,13 +1,13 @@
 <template>
     <transition name="el-zoom-in-top" @before-enter="handleMenuEnter" @after-leave="$emit('dodestroy')">
-        <div ref="popper" v-show="visible" :style="{ width: width + 'px' }" :class="popperClass" class="el-picker-panel time-select el-popper">
+        <div v-show="visible" ref="popper" :style="{ width: width + 'px' }" :class="popperClass" class="el-picker-panel time-select el-popper">
             <el-scrollbar noresize wrap-class="el-picker-panel__content">
                 <div
-                    class="time-select-item"
                     v-for="item in items"
+                    :key="item.value"
+                    class="time-select-item"
                     :class="{ selected: value === item.value, disabled: item.disabled, default: item.value === defaultValue }"
                     :disabled="item.disabled"
-                    :key="item.value"
                     @click="handleClick(item)"
                 >
                     {{ item.value }}
@@ -51,7 +51,7 @@ const compareTime = function (time1, time2) {
 };
 
 const formatTime = function (time) {
-    return (time.hours < 10 ? '0' + time.hours : time.hours) + ':' + (time.minutes < 10 ? '0' + time.minutes : time.minutes);
+    return `${time.hours < 10 ? `0${time.hours}` : time.hours}:${time.minutes < 10 ? `0${time.minutes}` : time.minutes}`;
 };
 
 const nextTime = function (time, step) {
@@ -67,13 +67,51 @@ const nextTime = function (time, step) {
     next.hours += stepValue.hours;
 
     next.hours += Math.floor(next.minutes / 60);
-    next.minutes = next.minutes % 60;
+    next.minutes %= 60;
 
     return formatTime(next);
 };
 
 export default {
     components: { ElScrollbar },
+
+    data() {
+        return {
+            popperClass: '',
+            start: '09:00',
+            end: '18:00',
+            step: '00:30',
+            value: '',
+            defaultValue: '',
+            visible: false,
+            minTime: '',
+            maxTime: '',
+            width: 0
+        };
+    },
+
+    computed: {
+        items() {
+            const { start } = this;
+            const { end } = this;
+            const { step } = this;
+
+            const result = [];
+
+            if (start && end && step) {
+                let current = start;
+                while (compareTime(current, end) <= 0) {
+                    result.push({
+                        value: current,
+                        disabled: compareTime(current, this.minTime || '-1:-1') <= 0 || compareTime(current, this.maxTime || '100:100') >= 0
+                    });
+                    current = nextTime(current, step);
+                }
+            }
+
+            return result;
+        }
+    },
 
     watch: {
         value(val) {
@@ -106,8 +144,8 @@ export default {
         },
 
         scrollDown(step) {
-            const items = this.items;
-            const length = items.length;
+            const { items } = this;
+            const { length } = items;
             let total = items.length;
             let index = items.map(item => item.value).indexOf(this.value);
             while (total--) {
@@ -129,52 +167,13 @@ export default {
         },
 
         handleKeydown(event) {
-            const keyCode = event.keyCode;
+            const { keyCode } = event;
             if (keyCode === 38 || keyCode === 40) {
                 const mapping = { 40: 1, 38: -1 };
                 const offset = mapping[keyCode.toString()];
                 this.scrollDown(offset);
                 event.stopPropagation();
-                return;
             }
-        }
-    },
-
-    data() {
-        return {
-            popperClass: '',
-            start: '09:00',
-            end: '18:00',
-            step: '00:30',
-            value: '',
-            defaultValue: '',
-            visible: false,
-            minTime: '',
-            maxTime: '',
-            width: 0
-        };
-    },
-
-    computed: {
-        items() {
-            const start = this.start;
-            const end = this.end;
-            const step = this.step;
-
-            const result = [];
-
-            if (start && end && step) {
-                let current = start;
-                while (compareTime(current, end) <= 0) {
-                    result.push({
-                        value: current,
-                        disabled: compareTime(current, this.minTime || '-1:-1') <= 0 || compareTime(current, this.maxTime || '100:100') >= 0
-                    });
-                    current = nextTime(current, step);
-                }
-            }
-
-            return result;
         }
     }
 };

@@ -1,6 +1,6 @@
 <template>
     <aside class="el-aside" :style="{ width }">
-        <slot></slot>
+        <slot />
     </aside>
 </template>
 

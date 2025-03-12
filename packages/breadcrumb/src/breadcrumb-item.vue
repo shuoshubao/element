@@ -1,9 +1,9 @@
 <template>
     <span class="el-breadcrumb__item">
-        <span :class="['el-breadcrumb__inner', to ? 'is-link' : '']" ref="link" role="link">
-            <slot></slot>
+        <span ref="link" :class="['el-breadcrumb__inner', to ? 'is-link' : '']" role="link">
+            <slot />
         </span>
-        <i v-if="separatorClass" class="el-breadcrumb__separator" :class="separatorClass"></i>
+        <i v-if="separatorClass" class="el-breadcrumb__separator" :class="separatorClass" />
         <span v-else class="el-breadcrumb__separator" role="presentation">{{ separator }}</span>
     </span>
 </template>
@@ -11,6 +11,8 @@
 <script>
 export default {
     name: 'ElBreadcrumbItem',
+
+    inject: ['elBreadcrumb'],
     props: {
         to: {},
         replace: Boolean
@@ -22,12 +24,10 @@ export default {
         };
     },
 
-    inject: ['elBreadcrumb'],
-
     mounted() {
         this.separator = this.elBreadcrumb.separator;
         this.separatorClass = this.elBreadcrumb.separatorClass;
-        const link = this.$refs.link;
+        const { link } = this.$refs;
         link.setAttribute('role', 'link');
         link.addEventListener('click', _ => {
             const { to, $router } = this;

@@ -34,7 +34,7 @@ export default function upload(option) {
     }
 
     const xhr = new XMLHttpRequest();
-    const action = option.action;
+    const { action } = option;
 
     if (xhr.upload) {
         xhr.upload.onprogress = function progress(e) {
@@ -75,7 +75,7 @@ export default function upload(option) {
 
     const headers = option.headers || {};
 
-    for (let item in headers) {
+    for (const item in headers) {
         if (headers.hasOwnProperty(item) && headers[item] !== null) {
             xhr.setRequestHeader(item, headers[item]);
         }

@@ -21,25 +21,25 @@
                 'is-checked': model === label
             }"
         >
-            <span class="el-radio__inner"></span>
+            <span class="el-radio__inner" />
             <input
                 ref="radio"
+                v-model="model"
                 class="el-radio__original"
                 :value="label"
                 type="radio"
                 aria-hidden="true"
-                v-model="model"
-                @focus="focus = true"
-                @blur="focus = false"
-                @change="handleChange"
                 :name="name"
                 :disabled="isDisabled"
                 tabindex="-1"
                 autocomplete="off"
+                @focus="focus = true"
+                @blur="focus = false"
+                @change="handleChange"
             />
         </span>
         <span class="el-radio__label" @keydown.stop>
-            <slot></slot>
+            <slot />
             <template v-if="!$slots.default">{{ label }}</template>
         </span>
     </label>

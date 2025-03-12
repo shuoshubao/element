@@ -2,7 +2,7 @@
     <el-popover v-bind="$attrs" v-model="visible" trigger="click">
         <div class="el-popconfirm">
             <p class="el-popconfirm__main">
-                <i v-if="!hideIcon" :class="icon" class="el-popconfirm__icon" :style="{ color: iconColor }"></i>
+                <i v-if="!hideIcon" :class="icon" class="el-popconfirm__icon" :style="{ color: iconColor }" />
                 {{ title }}
             </p>
             <div class="el-popconfirm__action">
@@ -14,7 +14,7 @@
                 </el-button>
             </div>
         </div>
-        <slot name="reference" slot="reference"></slot>
+        <slot slot="reference" name="reference" />
     </el-popover>
 </template>
 
@@ -25,6 +25,10 @@ import { t } from 'element-ui/src/locale/index';
 
 export default {
     name: 'ElPopconfirm',
+    components: {
+        ElPopover,
+        ElButton
+    },
     props: {
         title: {
             type: String
@@ -55,10 +59,6 @@ export default {
             type: Boolean,
             default: false
         }
-    },
-    components: {
-        ElPopover,
-        ElButton
     },
     data() {
         return {

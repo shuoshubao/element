@@ -14,14 +14,14 @@
         aria-valuemin="0"
         aria-valuemax="100"
     >
-        <div class="el-progress-bar" v-if="type === 'line'">
+        <div v-if="type === 'line'" class="el-progress-bar">
             <div class="el-progress-bar__outer" :style="{ height: strokeWidth + 'px', backgroundColor: defineBackColor }">
                 <div class="el-progress-bar__inner" :style="barStyle">
-                    <div class="el-progress-bar__innerText" :style="{ color: textColor }" v-if="showText && textInside">{{ content }}</div>
+                    <div v-if="showText && textInside" class="el-progress-bar__innerText" :style="{ color: textColor }">{{ content }}</div>
                 </div>
             </div>
         </div>
-        <div class="el-progress-circle" :style="{ height: width + 'px', width: width + 'px' }" v-else>
+        <div v-else class="el-progress-circle" :style="{ height: width + 'px', width: width + 'px' }">
             <svg viewBox="0 0 100 100">
                 <path
                     class="el-progress-circle__track"
@@ -30,7 +30,7 @@
                     :stroke-width="relativeStrokeWidth"
                     fill="none"
                     :style="trailPathStyle"
-                ></path>
+                />
                 <path
                     class="el-progress-circle__path"
                     :d="trackPath"
@@ -39,12 +39,12 @@
                     :stroke-linecap="strokeLinecap"
                     :stroke-width="percentage ? relativeStrokeWidth : 0"
                     :style="circlePathStyle"
-                ></path>
+                />
             </svg>
         </div>
-        <div class="el-progress__text" v-if="showText && !textInside" :style="{ fontSize: progressTextSize + 'px', color: textColor }">
+        <div v-if="showText && !textInside" class="el-progress__text" :style="{ fontSize: progressTextSize + 'px', color: textColor }">
             <template v-if="!status">{{ content }}</template>
-            <i v-else :class="iconClass"></i>
+            <i v-else :class="iconClass" />
         </div>
     </div>
 </template>
@@ -105,7 +105,7 @@ export default {
     computed: {
         barStyle() {
             const style = {};
-            style.width = this.percentage + '%';
+            style.width = `${this.percentage}%`;
             style.backgroundColor = this.getCurrentColor(this.percentage);
             return style;
         },
@@ -115,12 +115,11 @@ export default {
         radius() {
             if (this.type === 'circle' || this.type === 'dashboard') {
                 return parseInt(50 - parseFloat(this.relativeStrokeWidth) / 2, 10);
-            } else {
-                return 0;
             }
+            return 0;
         },
         trackPath() {
-            const radius = this.radius;
+            const { radius } = this;
             const isDashboard = this.type === 'dashboard';
             return `
           M 50 50
@@ -179,9 +178,8 @@ export default {
             }
             if (this.type === 'line') {
                 return this.status === 'success' ? 'el-icon-circle-check' : 'el-icon-circle-close';
-            } else {
-                return this.status === 'success' ? 'el-icon-check' : 'el-icon-close';
             }
+            return this.status === 'success' ? 'el-icon-check' : 'el-icon-close';
         },
         progressTextSize() {
             return this.type === 'line' ? 12 + this.strokeWidth * 0.4 : this.width * 0.111111 + 2;
@@ -189,20 +187,19 @@ export default {
         content() {
             if (typeof this.format === 'function') {
                 return this.format(this.percentage) || '';
-            } else {
-                return `${this.percentage}%`;
             }
+            return `${this.percentage}%`;
         }
     },
     methods: {
         getCurrentColor(percentage) {
             if (typeof this.color === 'function') {
                 return this.color(percentage);
-            } else if (typeof this.color === 'string') {
-                return this.color;
-            } else {
-                return this.getLevelColor(percentage);
             }
+            if (typeof this.color === 'string') {
+                return this.color;
+            }
+            return this.getLevelColor(percentage);
         },
         getLevelColor(percentage) {
             const colorArray = this.getColorArray().sort((a, b) => a.percentage - b.percentage);
@@ -215,7 +212,7 @@ export default {
             return colorArray[colorArray.length - 1].color;
         },
         getColorArray() {
-            const color = this.color;
+            const { color } = this;
             const span = 100 / color.length;
             return color.map((seriesColor, index) => {
                 if (typeof seriesColor === 'string') {

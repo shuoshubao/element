@@ -92,7 +92,7 @@ export default {
                         id={this.tooltipId}
                         aria-hidden={this.disabled || !this.showPopper ? 'true' : 'false'}
                         v-show={!this.disabled && this.showPopper}
-                        class={['el-tooltip__popper', 'is-' + this.effect, this.popperClass]}
+                        class={['el-tooltip__popper', `is-${this.effect}`, this.popperClass]}
                     >
                         {this.$slots.content || this.content}
                     </div>
@@ -174,9 +174,8 @@ export default {
         addTooltipClass(prev) {
             if (!prev) {
                 return 'el-tooltip';
-            } else {
-                return 'el-tooltip ' + prev.replace('el-tooltip', '');
             }
+            return `el-tooltip ${prev.replace('el-tooltip', '')}`;
         },
 
         handleShowPopper() {

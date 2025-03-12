@@ -4,7 +4,7 @@
             <div class="el-calendar__title">
                 {{ i18nDate }}
             </div>
-            <div class="el-calendar__button-group" v-if="validatedRange.length === 0">
+            <div v-if="validatedRange.length === 0" class="el-calendar__button-group">
                 <el-button-group>
                     <el-button type="plain" size="mini" @click="selectDate('prev-month')">
                         {{ t('el.datepicker.prevMonth') }}
@@ -18,11 +18,11 @@
                 </el-button-group>
             </div>
         </div>
-        <div class="el-calendar__body" v-if="validatedRange.length === 0" key="no-range">
-            <date-table :date="date" :selected-day="realSelectedDay" :first-day-of-week="realFirstDayOfWeek" @pick="pickDay" />
+        <div v-if="validatedRange.length === 0" key="no-range" class="el-calendar__body">
+            <DateTable :date="date" :selected-day="realSelectedDay" :first-day-of-week="realFirstDayOfWeek" @pick="pickDay" />
         </div>
-        <div v-else class="el-calendar__body" key="has-range">
-            <date-table
+        <div v-else key="has-range" class="el-calendar__body">
+            <DateTable
                 v-for="(range, index) in validatedRange"
                 :key="index"
                 :date="range[0]"
@@ -51,12 +51,18 @@ const oneDay = 86400000;
 export default {
     name: 'ElCalendar',
 
-    mixins: [Locale],
-
     components: {
         DateTable,
         ElButton,
         ElButtonGroup
+    },
+
+    mixins: [Locale],
+
+    provide() {
+        return {
+            elCalendar: this
+        };
     },
 
     props: {
@@ -66,9 +72,8 @@ export default {
             validator(range) {
                 if (Array.isArray(range)) {
                     return range.length === 2 && range.every(item => typeof item === 'string' || typeof item === 'number' || item instanceof Date);
-                } else {
-                    return true;
                 }
+                return true;
             }
         },
         firstDayOfWeek: {
@@ -77,51 +82,11 @@ export default {
         }
     },
 
-    provide() {
+    data() {
         return {
-            elCalendar: this
+            selectedDay: '',
+            now: new Date()
         };
-    },
-
-    methods: {
-        pickDay(day) {
-            this.realSelectedDay = day;
-        },
-
-        selectDate(type) {
-            if (validTypes.indexOf(type) === -1) {
-                throw new Error(`invalid type ${type}`);
-            }
-            let day = '';
-            if (type === 'prev-month') {
-                day = `${this.prevMonthDatePrefix}-01`;
-            } else if (type === 'next-month') {
-                day = `${this.nextMonthDatePrefix}-01`;
-            } else {
-                day = this.formatedToday;
-            }
-
-            if (day === this.formatedDate) return;
-            this.pickDay(day);
-        },
-
-        toDate(val) {
-            if (!val) {
-                throw new Error('invalid val');
-            }
-            return val instanceof Date ? val : new Date(val);
-        },
-
-        rangeValidator(date, isStart) {
-            const firstDayOfWeek = this.realFirstDayOfWeek;
-            const expected = isStart ? firstDayOfWeek : firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
-            const message = `${isStart ? 'start' : 'end'} of range should be ${weekDays[expected]}.`;
-            if (date.getDay() !== expected) {
-                console.warn('[ElementCalendar]', message, 'Invalid range will be ignored.');
-                return false;
-            }
-            return true;
-        }
     },
 
     computed: {
@@ -147,7 +112,7 @@ export default {
         i18nDate() {
             const year = this.date.getFullYear();
             const month = this.date.getMonth() + 1;
-            return `${year} ${this.t('el.datepicker.year')} ${this.t('el.datepicker.month' + month)}`;
+            return `${year} ${this.t('el.datepicker.year')} ${this.t(`el.datepicker.month${month}`)}`;
         },
 
         formatedToday() {
@@ -171,18 +136,18 @@ export default {
                 if (this.realSelectedDay) {
                     const d = this.selectedDay.split('-');
                     return new Date(d[0], d[1] - 1, d[2]);
-                } else if (this.validatedRange.length) {
+                }
+                if (this.validatedRange.length) {
                     return this.validatedRange[0][0];
                 }
                 return this.now;
-            } else {
-                return this.toDate(this.value);
             }
+            return this.toDate(this.value);
         },
 
         // if range is valid, we get a two-digit array
         validatedRange() {
-            let range = this.range;
+            let { range } = this;
             if (!range) return [];
             range = range.reduce((prev, val, index) => {
                 const date = this.toDate(val);
@@ -239,11 +204,45 @@ export default {
         }
     },
 
-    data() {
-        return {
-            selectedDay: '',
-            now: new Date()
-        };
+    methods: {
+        pickDay(day) {
+            this.realSelectedDay = day;
+        },
+
+        selectDate(type) {
+            if (validTypes.indexOf(type) === -1) {
+                throw new Error(`invalid type ${type}`);
+            }
+            let day = '';
+            if (type === 'prev-month') {
+                day = `${this.prevMonthDatePrefix}-01`;
+            } else if (type === 'next-month') {
+                day = `${this.nextMonthDatePrefix}-01`;
+            } else {
+                day = this.formatedToday;
+            }
+
+            if (day === this.formatedDate) return;
+            this.pickDay(day);
+        },
+
+        toDate(val) {
+            if (!val) {
+                throw new Error('invalid val');
+            }
+            return val instanceof Date ? val : new Date(val);
+        },
+
+        rangeValidator(date, isStart) {
+            const firstDayOfWeek = this.realFirstDayOfWeek;
+            const expected = isStart ? firstDayOfWeek : firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+            const message = `${isStart ? 'start' : 'end'} of range should be ${weekDays[expected]}.`;
+            if (date.getDay() !== expected) {
+                console.warn('[ElementCalendar]', message, 'Invalid range will be ignored.');
+                return false;
+            }
+            return true;
+        }
     }
 };
 </script>

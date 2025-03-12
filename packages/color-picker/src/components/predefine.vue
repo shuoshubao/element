@@ -2,13 +2,13 @@
     <div class="el-color-predefine">
         <div class="el-color-predefine__colors">
             <div
-                class="el-color-predefine__color-selector"
-                :class="{ selected: item.selected, 'is-alpha': item._alpha < 100 }"
                 v-for="(item, index) in rgbaColors"
                 :key="colors[index]"
+                class="el-color-predefine__color-selector"
+                :class="{ selected: item.selected, 'is-alpha': item._alpha < 100 }"
                 @click="handleSelect(index)"
             >
-                <div :style="{ 'background-color': item.value }"></div>
+                <div :style="{ 'background-color': item.value }" />
             </div>
         </div>
     </div>
@@ -27,6 +27,22 @@ export default {
             rgbaColors: this.parseColors(this.colors, this.color)
         };
     },
+    watch: {
+        '$parent.currentColor': function (val) {
+            const color = new Color();
+            color.fromString(val);
+
+            this.rgbaColors.forEach(item => {
+                item.selected = color.compare(item);
+            });
+        },
+        colors(newVal) {
+            this.rgbaColors = this.parseColors(newVal, this.color);
+        },
+        color(newVal) {
+            this.rgbaColors = this.parseColors(this.colors, newVal);
+        }
+    },
     methods: {
         handleSelect(index) {
             this.color.fromString(this.colors[index]);
@@ -40,22 +56,6 @@ export default {
                 c.selected = c.value === color.value;
                 return c;
             });
-        }
-    },
-    watch: {
-        '$parent.currentColor'(val) {
-            const color = new Color();
-            color.fromString(val);
-
-            this.rgbaColors.forEach(item => {
-                item.selected = color.compare(item);
-            });
-        },
-        colors(newVal) {
-            this.rgbaColors = this.parseColors(newVal, this.color);
-        },
-        color(newVal) {
-            this.rgbaColors = this.parseColors(this.colors, newVal);
         }
     }
 };

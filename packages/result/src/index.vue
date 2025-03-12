@@ -16,7 +16,7 @@
             </slot>
         </div>
         <div v-if="$slots.extra" class="el-result__extra">
-            <slot name="extra"></slot>
+            <slot name="extra" />
         </div>
     </div>
 </template>
@@ -58,7 +58,7 @@ export default {
     },
     computed: {
         iconElement() {
-            const icon = this.icon;
+            const { icon } = this;
             return icon && IconMap[icon] ? IconMap[icon] : 'icon-info';
         }
     }

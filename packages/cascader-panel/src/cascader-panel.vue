@@ -1,6 +1,6 @@
 <template>
     <div :class="['el-cascader-panel', border && 'is-bordered']" @keydown="handleKeyDown">
-        <cascader-menu ref="menu" v-for="(menu, index) in menus" :index="index" :key="index" :nodes="menu"></cascader-menu>
+        <CascaderMenu v-for="(menu, index) in menus" ref="menu" :key="index" :index="index" :nodes="menu" />
     </div>
 </template>
 
@@ -70,6 +70,12 @@ export default {
         CascaderMenu
     },
 
+    provide() {
+        return {
+            panel: this
+        };
+    },
+
     props: {
         value: {},
         options: Array,
@@ -79,12 +85,6 @@ export default {
             default: true
         },
         renderLabel: Function
-    },
-
-    provide() {
-        return {
-            panel: this
-        };
     },
 
     data() {
@@ -125,7 +125,7 @@ export default {
             this.checkStrictly && this.calculateCheckedNodePaths();
         },
         options: {
-            handler: function () {
+            handler() {
                 this.initStore();
             },
             immediate: true,
@@ -248,7 +248,6 @@ export default {
                     this.$emit('close');
                     break;
                 default:
-                    return;
             }
         },
         handleExpand(node, silent) {
@@ -349,9 +348,8 @@ export default {
             if (multiple) {
                 const nodes = this.getFlattedNodes(leafOnly);
                 return nodes.filter(node => node.checked);
-            } else {
-                return this.isEmptyValue(checkedValue) ? [] : [this.getNodeByValue(checkedValue)];
             }
+            return this.isEmptyValue(checkedValue) ? [] : [this.getNodeByValue(checkedValue)];
         },
         clearCheckedNodes() {
             const { config, leafOnly } = this;

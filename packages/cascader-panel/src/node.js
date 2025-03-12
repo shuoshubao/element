@@ -57,7 +57,7 @@ export default class Node {
 
     calculatePathNodes() {
         const nodes = [this];
-        let parent = this.parent;
+        let { parent } = this;
 
         while (parent) {
             nodes.unshift(parent);

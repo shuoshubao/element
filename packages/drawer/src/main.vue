@@ -1,28 +1,28 @@
 <template>
     <transition name="el-drawer-fade" @after-enter="afterEnter" @after-leave="afterLeave">
-        <div class="el-drawer__wrapper" tabindex="-1" v-show="visible">
-            <div class="el-drawer__container" :class="visible && 'el-drawer__open'" @click.self="handleWrapperClick" role="document" tabindex="-1">
+        <div v-show="visible" class="el-drawer__wrapper" tabindex="-1">
+            <div class="el-drawer__container" :class="visible && 'el-drawer__open'" role="document" tabindex="-1" @click.self="handleWrapperClick">
                 <div
+                    ref="drawer"
                     aria-modal="true"
                     aria-labelledby="el-drawer__title"
                     :aria-label="title"
                     class="el-drawer"
                     :class="[direction, customClass]"
                     :style="isHorizontal ? `width: ${drawerSize}` : `height: ${drawerSize}`"
-                    ref="drawer"
                     role="dialog"
                     tabindex="-1"
                 >
-                    <header class="el-drawer__header" id="el-drawer__title" v-if="withHeader">
+                    <header v-if="withHeader" id="el-drawer__title" class="el-drawer__header">
                         <slot name="title">
                             <span role="heading" :title="title">{{ title }}</span>
                         </slot>
-                        <button :aria-label="`close ${title || 'drawer'}`" class="el-drawer__close-btn" type="button" v-if="showClose" @click="closeDrawer">
-                            <i class="el-dialog__close el-icon el-icon-close"></i>
+                        <button v-if="showClose" :aria-label="`close ${title || 'drawer'}`" class="el-drawer__close-btn" type="button" @click="closeDrawer">
+                            <i class="el-dialog__close el-icon el-icon-close" />
                         </button>
                     </header>
-                    <section class="el-drawer__body" v-if="rendered">
-                        <slot></slot>
+                    <section v-if="rendered" class="el-drawer__body">
+                        <slot />
                     </section>
                 </div>
             </div>
@@ -96,6 +96,12 @@ export default {
             default: true
         }
     },
+    data() {
+        return {
+            closed: false,
+            prevActiveElement: null
+        };
+    },
     computed: {
         isHorizontal() {
             return this.direction === 'rtl' || this.direction === 'ltr';
@@ -103,12 +109,6 @@ export default {
         drawerSize() {
             return typeof this.size === 'number' ? `${this.size}px` : this.size;
         }
-    },
-    data() {
-        return {
-            closed: false,
-            prevActiveElement: null
-        };
     },
     watch: {
         visible(val) {
@@ -132,6 +132,21 @@ export default {
                     }
                 });
             }
+        }
+    },
+    mounted() {
+        if (this.visible) {
+            this.rendered = true;
+            this.open();
+            if (this.appendToBody) {
+                document.body.appendChild(this.$el);
+            }
+        }
+    },
+    destroyed() {
+        // if appendToBody is true, remove DOM node after destroy
+        if (this.appendToBody && this.$el && this.$el.parentNode) {
+            this.$el.parentNode.removeChild(this.$el);
         }
     },
     methods: {
@@ -168,21 +183,6 @@ export default {
             // pressing `ESC` will call this method, and also close the drawer.
             // This method also calls `beforeClose` if there was one.
             this.closeDrawer();
-        }
-    },
-    mounted() {
-        if (this.visible) {
-            this.rendered = true;
-            this.open();
-            if (this.appendToBody) {
-                document.body.appendChild(this.$el);
-            }
-        }
-    },
-    destroyed() {
-        // if appendToBody is true, remove DOM node after destroy
-        if (this.appendToBody && this.$el && this.$el.parentNode) {
-            this.$el.parentNode.removeChild(this.$el);
         }
     }
 };

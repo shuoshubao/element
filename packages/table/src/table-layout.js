@@ -26,7 +26,7 @@ class TableLayout {
         this.fixedBodyHeight = null; // Table Height - Table Header Height - Scroll Bar Height
         this.gutterWidth = scrollbarWidth();
 
-        for (let name in options) {
+        for (const name in options) {
             if (options.hasOwnProperty(name)) {
                 this[name] = options[name];
             }
@@ -41,9 +41,9 @@ class TableLayout {
     }
 
     updateScrollY() {
-        const height = this.height;
+        const { height } = this;
         if (height === null) return false;
-        const bodyWrapper = this.table.bodyWrapper;
+        const { bodyWrapper } = this.table;
         if (this.table.$el && bodyWrapper) {
             const body = bodyWrapper.querySelector('.el-table__body');
             const prevScrollY = this.scrollY;
@@ -63,7 +63,7 @@ class TableLayout {
         if (!el && (value || value === 0)) return Vue.nextTick(() => this.setHeight(value, prop));
 
         if (typeof value === 'number') {
-            el.style[prop] = value + 'px';
+            el.style[prop] = `${value}px`;
             this.updateElsHeight();
         } else if (typeof value === 'string') {
             el.style[prop] = value;
@@ -77,7 +77,7 @@ class TableLayout {
 
     getFlattenColumns() {
         const flattenColumns = [];
-        const columns = this.table.columns;
+        const { columns } = this.table;
         columns.forEach(column => {
             if (column.isColumnGroup) {
                 flattenColumns.push.apply(flattenColumns, column.columns);
@@ -131,12 +131,12 @@ class TableLayout {
 
     updateColumnsWidth() {
         if (Vue.prototype.$isServer) return;
-        const fit = this.fit;
+        const { fit } = this;
         const bodyWidth = this.table.$el.clientWidth;
         let bodyMinWidth = 0;
 
         const flattenColumns = this.getFlattenColumns();
-        let flexColumns = flattenColumns.filter(column => typeof column.width !== 'number');
+        const flexColumns = flattenColumns.filter(column => typeof column.width !== 'number');
 
         flattenColumns.forEach(column => {
             // Clean those columns whose width changed from flex to unflex
@@ -175,7 +175,7 @@ class TableLayout {
             } else {
                 // HAVE HORIZONTAL SCROLL BAR
                 this.scrollX = true;
-                flexColumns.forEach(function (column) {
+                flexColumns.forEach(column => {
                     column.realWidth = column.minWidth;
                 });
             }
@@ -197,21 +197,21 @@ class TableLayout {
             this.bodyWidth = bodyMinWidth;
         }
 
-        const fixedColumns = this.store.states.fixedColumns;
+        const { fixedColumns } = this.store.states;
 
         if (fixedColumns.length > 0) {
             let fixedWidth = 0;
-            fixedColumns.forEach(function (column) {
+            fixedColumns.forEach(column => {
                 fixedWidth += column.realWidth || column.width;
             });
 
             this.fixedWidth = fixedWidth;
         }
 
-        const rightFixedColumns = this.store.states.rightFixedColumns;
+        const { rightFixedColumns } = this.store.states;
         if (rightFixedColumns.length > 0) {
             let rightFixedWidth = 0;
-            rightFixedColumns.forEach(function (column) {
+            rightFixedColumns.forEach(column => {
                 rightFixedWidth += column.realWidth || column.width;
             });
 
@@ -233,7 +233,7 @@ class TableLayout {
     }
 
     notifyObservers(event) {
-        const observers = this.observers;
+        const { observers } = this;
         observers.forEach(observer => {
             switch (event) {
                 case 'columns':

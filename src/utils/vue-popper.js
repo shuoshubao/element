@@ -113,7 +113,7 @@ export default {
         },
 
         updatePopper() {
-            const popperJS = this.popperJS;
+            const { popperJS } = this;
             if (popperJS) {
                 popperJS.update();
                 if (popperJS._popper) {
@@ -138,14 +138,14 @@ export default {
 
         resetTransformOrigin() {
             if (!this.transformOrigin) return;
-            let placementMap = {
+            const placementMap = {
                 top: 'bottom',
                 bottom: 'top',
                 left: 'right',
                 right: 'left'
             };
-            let placement = this.popperJS._popper.getAttribute('x-placement').split('-')[0];
-            let origin = placementMap[placement];
+            const placement = this.popperJS._popper.getAttribute('x-placement').split('-')[0];
+            const origin = placementMap[placement];
             this.popperJS._popper.style.transformOrigin =
                 typeof this.transformOrigin === 'string'
                     ? this.transformOrigin
@@ -162,7 +162,7 @@ export default {
 
             this.appended = true;
 
-            for (let item in element.attributes) {
+            for (const item in element.attributes) {
                 if (/^_v-/.test(element.attributes[item].name)) {
                     hash = element.attributes[item].name;
                     break;

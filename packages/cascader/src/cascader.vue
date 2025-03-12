@@ -1,8 +1,8 @@
 <template>
     <div
         ref="reference"
-        :class="['el-cascader', realSize && `el-cascader--${realSize}`, { 'is-disabled': isDisabled }]"
         v-clickoutside="() => toggleDropDownVisible(false)"
+        :class="['el-cascader', realSize && `el-cascader--${realSize}`, { 'is-disabled': isDisabled }]"
         @mouseenter="inputHover = true"
         @mouseleave="inputHover = false"
         @click="() => toggleDropDownVisible(readonly ? undefined : true)"
@@ -22,13 +22,13 @@
             @input="handleInput"
         >
             <template slot="suffix">
-                <i v-if="clearBtnVisible" key="clear" class="el-input__icon el-icon-circle-close" @click.stop="handleClear"></i>
+                <i v-if="clearBtnVisible" key="clear" class="el-input__icon el-icon-circle-close" @click.stop="handleClear" />
                 <i
                     v-else
                     key="arrow-down"
                     :class="['el-input__icon', 'el-icon-arrow-down', dropDownVisible && 'is-reverse']"
                     @click.stop="toggleDropDownVisible()"
-                ></i>
+                />
             </template>
         </el-input>
 
@@ -60,8 +60,8 @@
         <transition name="el-zoom-in-top" @after-leave="handleDropdownLeave">
             <div v-show="dropDownVisible" ref="popper" :class="['el-popper', 'el-cascader__dropdown', popperClass]">
                 <el-cascader-panel
-                    ref="panel"
                     v-show="!filtering"
+                    ref="panel"
                     v-model="checkedValue"
                     :options="options"
                     :props="config"
@@ -69,11 +69,11 @@
                     :render-label="$scopedSlots.default"
                     @expand-change="handleExpandChange"
                     @close="toggleDropDownVisible(false)"
-                ></el-cascader-panel>
+                />
                 <el-scrollbar
-                    ref="suggestionPanel"
                     v-if="filterable"
                     v-show="filtering"
+                    ref="suggestionPanel"
                     tag="ul"
                     class="el-cascader__suggestion-panel"
                     view-class="el-cascader__suggestion-list"
@@ -88,7 +88,7 @@
                             @click="handleSuggestionClick(index)"
                         >
                             <span>{{ item.text }}</span>
-                            <i v-if="item.checked" class="el-icon-check"></i>
+                            <i v-if="item.checked" class="el-icon-check" />
                         </li>
                     </template>
                     <slot v-else name="empty">
@@ -167,6 +167,13 @@ export default {
 
     directives: { Clickoutside },
 
+    components: {
+        ElInput,
+        ElTag,
+        ElScrollbar,
+        ElCascaderPanel
+    },
+
     mixins: [PopperMixin, Emitter, Locale, Migrating],
 
     inject: {
@@ -176,13 +183,6 @@ export default {
         elFormItem: {
             default: ''
         }
-    },
-
-    components: {
-        ElInput,
-        ElTag,
-        ElScrollbar,
-        ElCascaderPanel
     },
 
     props: {
@@ -310,7 +310,7 @@ export default {
             }
         },
         options: {
-            handler: function () {
+            handler() {
                 this.$nextTick(this.computePresentContent);
             },
             deep: true
@@ -620,12 +620,12 @@ export default {
 
             if (suggestionPanel && (suggestionPanelEl = suggestionPanel.$el)) {
                 const suggestionList = suggestionPanelEl.querySelector('.el-cascader__suggestion-list');
-                suggestionList.style.minWidth = inputInner.offsetWidth + 'px';
+                suggestionList.style.minWidth = `${inputInner.offsetWidth}px`;
             }
 
             if (tags) {
                 const offsetHeight = Math.round(tags.getBoundingClientRect().height);
-                const height = Math.max(offsetHeight + 6, inputInitialHeight) + 'px';
+                const height = `${Math.max(offsetHeight + 6, inputInitialHeight)}px`;
                 inputInner.style.height = height;
                 if (this.dropDownVisible) {
                     this.updatePopper();

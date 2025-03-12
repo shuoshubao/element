@@ -17,6 +17,11 @@ export default {
             }
         }
     },
+    computed: {
+        tagSize() {
+            return this.size || (this.$ELEMENT || {}).size;
+        }
+    },
     methods: {
         handleClose(event) {
             event.stopPropagation();
@@ -24,11 +29,6 @@ export default {
         },
         handleClick(event) {
             this.$emit('click', event);
-        }
-    },
-    computed: {
-        tagSize() {
-            return this.size || (this.$ELEMENT || {}).size;
         }
     },
     render(h) {

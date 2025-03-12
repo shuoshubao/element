@@ -13,13 +13,13 @@
             sizeClass ? 'el-form-item--' + sizeClass : ''
         ]"
     >
-        <label-wrap :is-auto-width="labelStyle && labelStyle.width === 'auto'" :update-all="form.labelWidth === 'auto'">
-            <label :for="labelFor" class="el-form-item__label" :style="labelStyle" v-if="label || $slots.label">
+        <LabelWrap :is-auto-width="labelStyle && labelStyle.width === 'auto'" :update-all="form.labelWidth === 'auto'">
+            <label v-if="label || $slots.label" :for="labelFor" class="el-form-item__label" :style="labelStyle">
                 <slot name="label">{{ label + form.labelSuffix }}</slot>
             </label>
-        </label-wrap>
+        </LabelWrap>
         <div class="el-form-item__content" :style="contentStyle">
-            <slot></slot>
+            <slot />
             <transition name="el-zoom-in-top">
                 <slot v-if="validateState === 'error' && showMessage && form.showMessage" name="error" :error="validateMessage">
                     <div
@@ -47,6 +47,10 @@ export default {
     name: 'ElFormItem',
 
     componentName: 'ElFormItem',
+    components: {
+        // use this component to calculate auto width
+        LabelWrap
+    },
 
     mixins: [emitter],
 
@@ -80,26 +84,15 @@ export default {
         },
         size: String
     },
-    components: {
-        // use this component to calculate auto width
-        LabelWrap
-    },
-    watch: {
-        error: {
-            immediate: true,
-            handler(value) {
-                this.validateMessage = value;
-                this.validateState = value ? 'error' : '';
-            }
-        },
-        validateStatus(value) {
-            this.validateState = value;
-        },
-        rules(value) {
-            if ((!value || value.length === 0) && this.required === undefined) {
-                this.clearValidate();
-            }
-        }
+    data() {
+        return {
+            validateState: '',
+            validateMessage: '',
+            validateDisabled: false,
+            validator: {},
+            isNested: false,
+            computedLabelWidth: ''
+        };
     },
     computed: {
         labelFor() {
@@ -116,7 +109,7 @@ export default {
         },
         contentStyle() {
             const ret = {};
-            const label = this.label;
+            const { label } = this;
             if (this.form.labelPosition === 'top' || this.form.inline) return ret;
             if (!label && !this.labelWidth && this.isNested) return ret;
             const labelWidth = this.labelWidth || this.form.labelWidth;
@@ -144,7 +137,7 @@ export default {
             return parent;
         },
         fieldValue() {
-            const model = this.form.model;
+            const { model } = this.form;
             if (!model || !this.prop) {
                 return;
             }
@@ -157,7 +150,7 @@ export default {
             return getPropByPath(model, path, true).v;
         },
         isRequired() {
-            let rules = this.getRules();
+            const rules = this.getRules();
             let isRequired = false;
 
             if (rules && rules.length) {
@@ -181,15 +174,40 @@ export default {
             return this.elFormItemSize || (this.$ELEMENT || {}).size;
         }
     },
-    data() {
-        return {
-            validateState: '',
-            validateMessage: '',
-            validateDisabled: false,
-            validator: {},
-            isNested: false,
-            computedLabelWidth: ''
-        };
+    watch: {
+        error: {
+            immediate: true,
+            handler(value) {
+                this.validateMessage = value;
+                this.validateState = value ? 'error' : '';
+            }
+        },
+        validateStatus(value) {
+            this.validateState = value;
+        },
+        rules(value) {
+            if ((!value || value.length === 0) && this.required === undefined) {
+                this.clearValidate();
+            }
+        }
+    },
+    mounted() {
+        if (this.prop) {
+            this.dispatch('ElForm', 'el.form.addField', [this]);
+
+            let initialValue = this.fieldValue;
+            if (Array.isArray(initialValue)) {
+                initialValue = [].concat(initialValue);
+            }
+            Object.defineProperty(this, 'initialValue', {
+                value: initialValue
+            });
+
+            this.addValidateEvents();
+        }
+    },
+    beforeDestroy() {
+        this.dispatch('ElForm', 'el.form.removeField', [this]);
     },
     methods: {
         validate(trigger, callback = noop) {
@@ -232,14 +250,14 @@ export default {
             this.validateState = '';
             this.validateMessage = '';
 
-            let model = this.form.model;
-            let value = this.fieldValue;
+            const { model } = this.form;
+            const value = this.fieldValue;
             let path = this.prop;
             if (path.indexOf(':') !== -1) {
                 path = path.replace(/:/, '.');
             }
 
-            let prop = getPropByPath(model, path, true);
+            const prop = getPropByPath(model, path, true);
 
             this.validateDisabled = true;
             if (Array.isArray(value)) {
@@ -273,9 +291,8 @@ export default {
                     if (!rule.trigger || trigger === '') return true;
                     if (Array.isArray(rule.trigger)) {
                         return rule.trigger.indexOf(trigger) > -1;
-                    } else {
-                        return rule.trigger === trigger;
                     }
+                    return rule.trigger === trigger;
                 })
                 .map(rule => objectAssign({}, rule));
         },
@@ -304,24 +321,6 @@ export default {
         removeValidateEvents() {
             this.$off();
         }
-    },
-    mounted() {
-        if (this.prop) {
-            this.dispatch('ElForm', 'el.form.addField', [this]);
-
-            let initialValue = this.fieldValue;
-            if (Array.isArray(initialValue)) {
-                initialValue = [].concat(initialValue);
-            }
-            Object.defineProperty(this, 'initialValue', {
-                value: initialValue
-            });
-
-            this.addValidateEvents();
-        }
-    },
-    beforeDestroy() {
-        this.dispatch('ElForm', 'el.form.removeField', [this]);
     }
 };
 </script>

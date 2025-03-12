@@ -8,31 +8,31 @@
     >
         <input
             v-if="trueLabel || falseLabel"
+            v-model="model"
             class="el-checkbox-button__original"
             type="checkbox"
             :name="name"
             :disabled="isDisabled"
             :true-value="trueLabel"
             :false-value="falseLabel"
-            v-model="model"
             @change="handleChange"
             @focus="focus = true"
             @blur="focus = false"
         />
         <input
             v-else
+            v-model="model"
             class="el-checkbox-button__original"
             type="checkbox"
             :name="name"
             :disabled="isDisabled"
             :value="label"
-            v-model="model"
             @change="handleChange"
             @focus="focus = true"
             @blur="focus = false"
         />
 
-        <span class="el-checkbox-button__inner" v-if="$slots.default || label" :style="isChecked ? activeStyle : null">
+        <span v-if="$slots.default || label" class="el-checkbox-button__inner" :style="isChecked ? activeStyle : null">
             <slot>{{ label }}</slot>
         </span>
     </label>
@@ -55,14 +55,6 @@ export default {
         }
     },
 
-    data() {
-        return {
-            selfModel: false,
-            focus: false,
-            isLimitExceeded: false
-        };
-    },
-
     props: {
         value: {},
         label: {},
@@ -71,6 +63,14 @@ export default {
         name: String,
         trueLabel: [String, Number],
         falseLabel: [String, Number]
+    },
+
+    data() {
+        return {
+            selfModel: false,
+            focus: false,
+            isLimitExceeded: false
+        };
     },
     computed: {
         model: {
@@ -97,9 +97,11 @@ export default {
         isChecked() {
             if ({}.toString.call(this.model) === '[object Boolean]') {
                 return this.model;
-            } else if (Array.isArray(this.model)) {
+            }
+            if (Array.isArray(this.model)) {
                 return this.model.indexOf(this.label) > -1;
-            } else if (this.model !== null && this.model !== undefined) {
+            }
+            if (this.model !== null && this.model !== undefined) {
                 return this.model === this.trueLabel;
             }
         },
@@ -125,7 +127,7 @@ export default {
                 backgroundColor: this._checkboxGroup.fill || '',
                 borderColor: this._checkboxGroup.fill || '',
                 color: this._checkboxGroup.textColor || '',
-                'box-shadow': '-1px 0 0 0 ' + this._checkboxGroup.fill
+                'box-shadow': `-1px 0 0 0 ${this._checkboxGroup.fill}`
             };
         },
 
@@ -148,6 +150,10 @@ export default {
                 ? this._checkboxGroup.disabled || this.disabled || (this.elForm || {}).disabled || this.isLimitDisabled
                 : this.disabled || (this.elForm || {}).disabled;
         }
+    },
+
+    created() {
+        this.checked && this.addToStore();
     },
     methods: {
         addToStore() {
@@ -172,10 +178,6 @@ export default {
                 }
             });
         }
-    },
-
-    created() {
-        this.checked && this.addToStore();
     }
 };
 </script>

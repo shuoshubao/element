@@ -2,34 +2,34 @@
     <div class="el-collapse-item" :class="{ 'is-active': isActive, 'is-disabled': disabled }">
         <div role="tab" :aria-expanded="isActive" :aria-controls="`el-collapse-content-${id}`" :aria-describedby="`el-collapse-content-${id}`">
             <div
-                class="el-collapse-item__header"
-                @click="handleHeaderClick"
-                role="button"
                 :id="`el-collapse-head-${id}`"
+                class="el-collapse-item__header"
+                role="button"
                 :tabindex="disabled ? undefined : 0"
-                @keyup.space.enter.stop="handleEnterClick"
                 :class="{
                     focusing: focusing,
                     'is-active': isActive
                 }"
+                @click="handleHeaderClick"
+                @keyup.space.enter.stop="handleEnterClick"
                 @focus="handleFocus"
                 @blur="focusing = false"
             >
                 <slot name="title">{{ title }}</slot>
-                <i class="el-collapse-item__arrow el-icon-arrow-right" :class="{ 'is-active': isActive }"></i>
+                <i class="el-collapse-item__arrow el-icon-arrow-right" :class="{ 'is-active': isActive }" />
             </div>
         </div>
         <el-collapse-transition>
             <div
-                class="el-collapse-item__wrap"
                 v-show="isActive"
+                :id="`el-collapse-content-${id}`"
+                class="el-collapse-item__wrap"
                 role="tabpanel"
                 :aria-hidden="!isActive"
                 :aria-labelledby="`el-collapse-head-${id}`"
-                :id="`el-collapse-content-${id}`"
             >
                 <div class="el-collapse-item__content">
-                    <slot></slot>
+                    <slot />
                 </div>
             </div>
         </el-collapse-transition>
@@ -46,22 +46,9 @@ export default {
 
     componentName: 'ElCollapseItem',
 
-    mixins: [Emitter],
-
     components: { ElCollapseTransition },
 
-    data() {
-        return {
-            contentWrapStyle: {
-                height: 'auto',
-                display: 'block'
-            },
-            contentHeight: 0,
-            focusing: false,
-            isClick: false,
-            id: generateId()
-        };
-    },
+    mixins: [Emitter],
 
     inject: ['collapse'],
 
@@ -74,6 +61,19 @@ export default {
             }
         },
         disabled: Boolean
+    },
+
+    data() {
+        return {
+            contentWrapStyle: {
+                height: 'auto',
+                display: 'block'
+            },
+            contentHeight: 0,
+            focusing: false,
+            isClick: false,
+            id: generateId()
+        };
     },
 
     computed: {

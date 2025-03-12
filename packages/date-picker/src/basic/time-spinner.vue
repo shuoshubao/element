@@ -2,96 +2,96 @@
     <div class="el-time-spinner" :class="{ 'has-seconds': showSeconds }">
         <template v-if="!arrowControl">
             <el-scrollbar
-                @mouseenter.native="emitSelectRange('hours')"
-                @mousemove.native="adjustCurrentSpinner('hours')"
                 class="el-time-spinner__wrapper"
                 wrap-style="max-height: inherit;"
+                ref="hours"
                 view-class="el-time-spinner__list"
                 noresize
                 tag="ul"
-                ref="hours"
+                @mouseenter.native="emitSelectRange('hours')"
+                @mousemove.native="adjustCurrentSpinner('hours')"
             >
                 <li
-                    @click="handleClick('hours', { value: hour, disabled: disabled })"
                     v-for="(disabled, hour) in hoursList"
-                    class="el-time-spinner__item"
                     :key="hour"
+                    class="el-time-spinner__item"
                     :class="{ active: hour === hours, disabled: disabled }"
+                    @click="handleClick('hours', { value: hour, disabled: disabled })"
                 >
                     {{ ('0' + (amPmMode ? hour % 12 || 12 : hour)).slice(-2) }}{{ amPm(hour) }}
                 </li>
             </el-scrollbar>
             <el-scrollbar
-                @mouseenter.native="emitSelectRange('minutes')"
-                @mousemove.native="adjustCurrentSpinner('minutes')"
                 class="el-time-spinner__wrapper"
                 wrap-style="max-height: inherit;"
+                ref="minutes"
                 view-class="el-time-spinner__list"
                 noresize
                 tag="ul"
-                ref="minutes"
+                @mouseenter.native="emitSelectRange('minutes')"
+                @mousemove.native="adjustCurrentSpinner('minutes')"
             >
                 <li
-                    @click="handleClick('minutes', { value: key, disabled: false })"
                     v-for="(enabled, key) in minutesList"
                     :key="key"
                     class="el-time-spinner__item"
                     :class="{ active: key === minutes, disabled: !enabled }"
+                    @click="handleClick('minutes', { value: key, disabled: false })"
                 >
                     {{ ('0' + key).slice(-2) }}
                 </li>
             </el-scrollbar>
             <el-scrollbar
                 v-show="showSeconds"
-                @mouseenter.native="emitSelectRange('seconds')"
-                @mousemove.native="adjustCurrentSpinner('seconds')"
                 class="el-time-spinner__wrapper"
                 wrap-style="max-height: inherit;"
+                ref="seconds"
                 view-class="el-time-spinner__list"
                 noresize
                 tag="ul"
-                ref="seconds"
+                @mouseenter.native="emitSelectRange('seconds')"
+                @mousemove.native="adjustCurrentSpinner('seconds')"
             >
                 <li
-                    @click="handleClick('seconds', { value: key, disabled: false })"
                     v-for="(second, key) in 60"
+                    :key="key"
                     class="el-time-spinner__item"
                     :class="{ active: key === seconds }"
-                    :key="key"
+                    @click="handleClick('seconds', { value: key, disabled: false })"
                 >
                     {{ ('0' + key).slice(-2) }}
                 </li>
             </el-scrollbar>
         </template>
         <template v-if="arrowControl">
-            <div @mouseenter="emitSelectRange('hours')" class="el-time-spinner__wrapper is-arrow">
-                <i v-repeat-click="decrease" class="el-time-spinner__arrow el-icon-arrow-up"></i>
-                <i v-repeat-click="increase" class="el-time-spinner__arrow el-icon-arrow-down"></i>
-                <ul class="el-time-spinner__list" ref="hours">
+            <div class="el-time-spinner__wrapper is-arrow" @mouseenter="emitSelectRange('hours')">
+                <i v-repeat-click="decrease" class="el-time-spinner__arrow el-icon-arrow-up" />
+                <i v-repeat-click="increase" class="el-time-spinner__arrow el-icon-arrow-down" />
+                <ul ref="hours" class="el-time-spinner__list">
                     <li
-                        class="el-time-spinner__item"
-                        :class="{ active: hour === hours, disabled: hoursList[hour] }"
                         v-for="(hour, key) in arrowHourList"
                         :key="key"
+                        class="el-time-spinner__item"
+                        :class="{ active: hour === hours, disabled: hoursList[hour] }"
                     >
                         {{ hour === undefined ? '' : ('0' + (amPmMode ? hour % 12 || 12 : hour)).slice(-2) + amPm(hour) }}
                     </li>
                 </ul>
             </div>
-            <div @mouseenter="emitSelectRange('minutes')" class="el-time-spinner__wrapper is-arrow">
-                <i v-repeat-click="decrease" class="el-time-spinner__arrow el-icon-arrow-up"></i>
-                <i v-repeat-click="increase" class="el-time-spinner__arrow el-icon-arrow-down"></i>
-                <ul class="el-time-spinner__list" ref="minutes">
-                    <li class="el-time-spinner__item" :class="{ active: minute === minutes }" v-for="(minute, key) in arrowMinuteList" :key="key">
+            <div class="el-time-spinner__wrapper is-arrow" @mouseenter="emitSelectRange('minutes')">
+                <i v-repeat-click="decrease" class="el-time-spinner__arrow el-icon-arrow-up" />
+                <i v-repeat-click="increase" class="el-time-spinner__arrow el-icon-arrow-down" />
+                <ul ref="minutes" class="el-time-spinner__list">
+                    <li v-for="(minute, key) in arrowMinuteList" :key="key" class="el-time-spinner__item" :class="{ active: minute === minutes }">
                         {{ minute === undefined ? '' : ('0' + minute).slice(-2) }}
                     </li>
                 </ul>
             </div>
-            <div @mouseenter="emitSelectRange('seconds')" class="el-time-spinner__wrapper is-arrow" v-if="showSeconds">
-                <i v-repeat-click="decrease" class="el-time-spinner__arrow el-icon-arrow-up"></i>
-                <i v-repeat-click="increase" class="el-time-spinner__arrow el-icon-arrow-down"></i>
-                <ul class="el-time-spinner__list" ref="seconds">
-                    <li v-for="(second, key) in arrowSecondList" class="el-time-spinner__item" :class="{ active: second === seconds }" :key="key">
+            <div v-if="showSeconds" class="el-time-spinner__wrapper is-arrow" @mouseenter="emitSelectRange('seconds')">
+                <i v-repeat-click="decrease" class="el-time-spinner__arrow el-icon-arrow-up" />
+                <i v-repeat-click="increase" class="el-time-spinner__arrow el-icon-arrow-down" />
+                <ul ref="seconds" class="el-time-spinner__list">
+                    <li v-for="(second, key) in arrowSecondList" :key="key" class="el-time-spinner__item" :class="{ active: second === seconds }">
                         {{ second === undefined ? '' : ('0' + second).slice(-2) }}
                     </li>
                 </ul>
@@ -126,6 +126,13 @@ export default {
         }
     },
 
+    data() {
+        return {
+            selectableRange: [],
+            currentScrollbar: null
+        };
+    },
+
     computed: {
         hours() {
             return this.date.getHours();
@@ -143,24 +150,17 @@ export default {
             return getRangeMinutes(this.selectableRange, this.hours);
         },
         arrowHourList() {
-            const hours = this.hours;
+            const { hours } = this;
             return [hours > 0 ? hours - 1 : undefined, hours, hours < 23 ? hours + 1 : undefined];
         },
         arrowMinuteList() {
-            const minutes = this.minutes;
+            const { minutes } = this;
             return [minutes > 0 ? minutes - 1 : undefined, minutes, minutes < 59 ? minutes + 1 : undefined];
         },
         arrowSecondList() {
-            const seconds = this.seconds;
+            const { seconds } = this;
             return [seconds > 0 ? seconds - 1 : undefined, seconds, seconds < 59 ? seconds + 1 : undefined];
         }
-    },
-
-    data() {
-        return {
-            selectableRange: [],
-            currentScrollbar: null
-        };
     },
 
     mounted() {
@@ -261,13 +261,13 @@ export default {
             }
 
             const label = this.currentScrollbar;
-            const hoursList = this.hoursList;
+            const { hoursList } = this;
             let now = this[label];
 
             if (this.currentScrollbar === 'hours') {
                 let total = Math.abs(step);
                 step = step > 0 ? 1 : -1;
-                let length = hoursList.length;
+                let { length } = hoursList;
                 while (length-- && total) {
                     now = (now + step + hoursList.length) % hoursList.length;
                     if (hoursList[now]) {
@@ -285,9 +285,9 @@ export default {
             this.$nextTick(() => this.emitSelectRange(this.currentScrollbar));
         },
         amPm(hour) {
-            let shouldShowAmPm = this.amPmMode.toLowerCase() === 'a';
+            const shouldShowAmPm = this.amPmMode.toLowerCase() === 'a';
             if (!shouldShowAmPm) return '';
-            let isCapital = this.amPmMode === 'A';
+            const isCapital = this.amPmMode === 'A';
             let content = hour < 12 ? ' am' : ' pm';
             if (isCapital) content = content.toUpperCase();
             return content;

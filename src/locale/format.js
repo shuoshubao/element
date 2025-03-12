@@ -29,14 +29,13 @@ export default function (Vue) {
 
             if (string[index - 1] === '{' && string[index + match.length] === '}') {
                 return i;
-            } else {
-                result = hasOwn(args, i) ? args[i] : null;
-                if (result === null || result === undefined) {
-                    return '';
-                }
-
-                return result;
             }
+            result = hasOwn(args, i) ? args[i] : null;
+            if (result === null || result === undefined) {
+                return '';
+            }
+
+            return result;
         });
     }
 

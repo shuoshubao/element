@@ -1,10 +1,10 @@
 <template>
     <transition name="viewer-fade">
-        <div tabindex="-1" ref="el-image-viewer__wrapper" class="el-image-viewer__wrapper" :style="{ 'z-index': viewerZIndex }">
-            <div class="el-image-viewer__mask" @click.self="handleMaskClick"></div>
+        <div ref="el-image-viewer__wrapper" tabindex="-1" class="el-image-viewer__wrapper" :style="{ 'z-index': viewerZIndex }">
+            <div class="el-image-viewer__mask" @click.self="handleMaskClick" />
             <!-- CLOSE -->
             <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
-                <i class="el-icon-close"></i>
+                <i class="el-icon-close" />
             </span>
             <!-- ARROW -->
             <template v-if="!isSingle">
@@ -18,13 +18,13 @@
             <!-- ACTIONS -->
             <div class="el-image-viewer__btn el-image-viewer__actions">
                 <div class="el-image-viewer__actions__inner">
-                    <i class="el-icon-zoom-out" @click="handleActions('zoomOut')"></i>
-                    <i class="el-icon-zoom-in" @click="handleActions('zoomIn')"></i>
-                    <i class="el-image-viewer__actions__divider"></i>
-                    <i :class="mode.icon" @click="toggleMode"></i>
-                    <i class="el-image-viewer__actions__divider"></i>
-                    <i class="el-icon-refresh-left" @click="handleActions('anticlocelise')"></i>
-                    <i class="el-icon-refresh-right" @click="handleActions('clocelise')"></i>
+                    <i class="el-icon-zoom-out" @click="handleActions('zoomOut')" />
+                    <i class="el-icon-zoom-in" @click="handleActions('zoomIn')" />
+                    <i class="el-image-viewer__actions__divider" />
+                    <i :class="mode.icon" @click="toggleMode" />
+                    <i class="el-image-viewer__actions__divider" />
+                    <i class="el-icon-refresh-left" @click="handleActions('anticlocelise')" />
+                    <i class="el-icon-refresh-right" @click="handleActions('clocelise')" />
                 </div>
             </div>
             <!-- CANVAS -->
@@ -33,8 +33,8 @@
                     v-for="(url, i) in urlList"
                     v-if="i === index"
                     ref="img"
-                    class="el-image-viewer__img"
                     :key="url"
+                    class="el-image-viewer__img"
                     :src="currentImg"
                     :style="imgStyle"
                     @load="handleImgLoad"
@@ -65,7 +65,7 @@ const Mode = {
 const mousewheelEventName = isFirefox() ? 'DOMMouseScroll' : 'mousewheel';
 
 export default {
-    name: 'elImageViewer',
+    name: 'ElImageViewer',
 
     props: {
         urlList: {
@@ -147,7 +147,7 @@ export default {
     },
     watch: {
         index: {
-            handler: function (val) {
+            handler(val) {
                 this.reset();
                 this.onSwitch(val);
             }
@@ -161,6 +161,21 @@ export default {
             });
         }
     },
+    mounted() {
+        this.deviceSupportInstall();
+        if (this.appendToBody) {
+            document.body.appendChild(this.$el);
+        }
+        // add tabindex then wrapper can be focusable via Javascript
+        // focus wrapper so arrow key can't cause inner scroll behavior underneath
+        this.$refs['el-image-viewer__wrapper'].focus();
+    },
+    destroyed() {
+        // if appendToBody is true, remove DOM node after destroy
+        if (this.appendToBody && this.$el && this.$el.parentNode) {
+            this.$el.parentNode.removeChild(this.$el);
+        }
+    },
     methods: {
         hide() {
             this.deviceSupportUninstall();
@@ -169,7 +184,7 @@ export default {
         deviceSupportInstall() {
             this._keyDownHandler = e => {
                 e.stopPropagation();
-                const keyCode = e.keyCode;
+                const { keyCode } = e;
                 switch (keyCode) {
                     // ESC
                     case 27:
@@ -304,21 +319,6 @@ export default {
                     break;
             }
             transform.enableTransition = enableTransition;
-        }
-    },
-    mounted() {
-        this.deviceSupportInstall();
-        if (this.appendToBody) {
-            document.body.appendChild(this.$el);
-        }
-        // add tabindex then wrapper can be focusable via Javascript
-        // focus wrapper so arrow key can't cause inner scroll behavior underneath
-        this.$refs['el-image-viewer__wrapper'].focus();
-    },
-    destroyed() {
-        // if appendToBody is true, remove DOM node after destroy
-        if (this.appendToBody && this.$el && this.$el.parentNode) {
-            this.$el.parentNode.removeChild(this.$el);
         }
     }
 };

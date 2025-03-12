@@ -18,9 +18,9 @@
         ]"
         @mouseleave="handleMouseLeave($event)"
     >
-        <div class="hidden-columns" ref="hiddenColumns"><slot></slot></div>
-        <div v-if="showHeader" v-mousewheel="handleHeaderFooterMousewheel" class="el-table__header-wrapper" ref="headerWrapper">
-            <table-header
+        <div ref="hiddenColumns" class="hidden-columns"><slot /></div>
+        <div v-if="showHeader" ref="headerWrapper" v-mousewheel="handleHeaderFooterMousewheel" class="el-table__header-wrapper">
+            <TableHeader
                 ref="tableHeader"
                 :store="store"
                 :border="border"
@@ -28,15 +28,15 @@
                 :style="{
                     width: layout.bodyWidth ? layout.bodyWidth + 'px' : ''
                 }"
-            ></table-header>
+            />
         </div>
         <div
-            class="el-table__body-wrapper"
             ref="bodyWrapper"
+            class="el-table__body-wrapper"
             :class="[layout.scrollX ? `is-scrolling-${scrollPosition}` : 'is-scrolling-none']"
             :style="[bodyHeight]"
         >
-            <table-body
+            <TableBody
                 :context="context"
                 :store="store"
                 :stripe="stripe"
@@ -46,24 +46,24 @@
                 :style="{
                     width: bodyWidth
                 }"
-            ></table-body>
-            <div v-if="!data || data.length === 0" class="el-table__empty-block" ref="emptyBlock" :style="emptyBlockStyle">
+            />
+            <div v-if="!data || data.length === 0" ref="emptyBlock" class="el-table__empty-block" :style="emptyBlockStyle">
                 <span class="el-table__empty-text">
                     <slot name="empty">{{ emptyText || t('el.table.emptyText') }}</slot>
                 </span>
             </div>
-            <div v-if="$slots.append" class="el-table__append-wrapper" ref="appendWrapper">
-                <slot name="append"></slot>
+            <div v-if="$slots.append" ref="appendWrapper" class="el-table__append-wrapper">
+                <slot name="append" />
             </div>
         </div>
         <div
             v-if="showSummary"
             v-show="data && data.length > 0"
+            ref="footerWrapper"
             v-mousewheel="handleHeaderFooterMousewheel"
             class="el-table__footer-wrapper"
-            ref="footerWrapper"
         >
-            <table-footer
+            <TableFooter
                 :store="store"
                 :border="border"
                 :sum-text="sumText || t('el.table.sumText')"
@@ -72,13 +72,13 @@
                 :style="{
                     width: layout.bodyWidth ? layout.bodyWidth + 'px' : ''
                 }"
-            ></table-footer>
+            />
         </div>
         <div
             v-if="fixedColumns.length > 0"
+            ref="fixedWrapper"
             v-mousewheel="handleFixedMousewheel"
             class="el-table__fixed"
-            ref="fixedWrapper"
             :style="[
                 {
                     width: layout.fixedWidth ? layout.fixedWidth + 'px' : ''
@@ -86,8 +86,8 @@
                 fixedHeight
             ]"
         >
-            <div v-if="showHeader" class="el-table__fixed-header-wrapper" ref="fixedHeaderWrapper">
-                <table-header
+            <div v-if="showHeader" ref="fixedHeaderWrapper" class="el-table__fixed-header-wrapper">
+                <TableHeader
                     ref="fixedTableHeader"
                     fixed="left"
                     :border="border"
@@ -95,11 +95,11 @@
                     :style="{
                         width: bodyWidth
                     }"
-                ></table-header>
+                />
             </div>
             <div
-                class="el-table__fixed-body-wrapper"
                 ref="fixedBodyWrapper"
+                class="el-table__fixed-body-wrapper"
                 :style="[
                     {
                         top: layout.headerHeight + 'px'
@@ -107,7 +107,7 @@
                     fixedBodyHeight
                 ]"
             >
-                <table-body
+                <TableBody
                     fixed="left"
                     :store="store"
                     :stripe="stripe"
@@ -117,11 +117,11 @@
                     :style="{
                         width: bodyWidth
                     }"
-                ></table-body>
-                <div v-if="$slots.append" class="el-table__append-gutter" :style="{ height: layout.appendHeight + 'px' }"></div>
+                />
+                <div v-if="$slots.append" class="el-table__append-gutter" :style="{ height: layout.appendHeight + 'px' }" />
             </div>
-            <div v-if="showSummary" v-show="data && data.length > 0" class="el-table__fixed-footer-wrapper" ref="fixedFooterWrapper">
-                <table-footer
+            <div v-if="showSummary" v-show="data && data.length > 0" ref="fixedFooterWrapper" class="el-table__fixed-footer-wrapper">
+                <TableFooter
                     fixed="left"
                     :border="border"
                     :sum-text="sumText || t('el.table.sumText')"
@@ -130,14 +130,14 @@
                     :style="{
                         width: bodyWidth
                     }"
-                ></table-footer>
+                />
             </div>
         </div>
         <div
             v-if="rightFixedColumns.length > 0"
+            ref="rightFixedWrapper"
             v-mousewheel="handleFixedMousewheel"
             class="el-table__fixed-right"
-            ref="rightFixedWrapper"
             :style="[
                 {
                     width: layout.rightFixedWidth ? layout.rightFixedWidth + 'px' : '',
@@ -146,8 +146,8 @@
                 fixedHeight
             ]"
         >
-            <div v-if="showHeader" class="el-table__fixed-header-wrapper" ref="rightFixedHeaderWrapper">
-                <table-header
+            <div v-if="showHeader" ref="rightFixedHeaderWrapper" class="el-table__fixed-header-wrapper">
+                <TableHeader
                     ref="rightFixedTableHeader"
                     fixed="right"
                     :border="border"
@@ -155,11 +155,11 @@
                     :style="{
                         width: bodyWidth
                     }"
-                ></table-header>
+                />
             </div>
             <div
-                class="el-table__fixed-body-wrapper"
                 ref="rightFixedBodyWrapper"
+                class="el-table__fixed-body-wrapper"
                 :style="[
                     {
                         top: layout.headerHeight + 'px'
@@ -167,7 +167,7 @@
                     fixedBodyHeight
                 ]"
             >
-                <table-body
+                <TableBody
                     fixed="right"
                     :store="store"
                     :stripe="stripe"
@@ -177,11 +177,11 @@
                     :style="{
                         width: bodyWidth
                     }"
-                ></table-body>
-                <div v-if="$slots.append" class="el-table__append-gutter" :style="{ height: layout.appendHeight + 'px' }"></div>
+                />
+                <div v-if="$slots.append" class="el-table__append-gutter" :style="{ height: layout.appendHeight + 'px' }" />
             </div>
-            <div v-if="showSummary" v-show="data && data.length > 0" class="el-table__fixed-footer-wrapper" ref="rightFixedFooterWrapper">
-                <table-footer
+            <div v-if="showSummary" v-show="data && data.length > 0" ref="rightFixedFooterWrapper" class="el-table__fixed-footer-wrapper">
+                <TableFooter
                     fixed="right"
                     :border="border"
                     :sum-text="sumText || t('el.table.sumText')"
@@ -190,19 +190,19 @@
                     :style="{
                         width: bodyWidth
                     }"
-                ></table-footer>
+                />
             </div>
         </div>
         <div
             v-if="rightFixedColumns.length > 0"
-            class="el-table__fixed-right-patch"
             ref="rightFixedPatch"
+            class="el-table__fixed-right-patch"
             :style="{
                 width: layout.scrollY ? layout.gutterWidth + 'px' : '0',
                 height: layout.headerHeight + 'px'
             }"
-        ></div>
-        <div class="el-table__column-resize-proxy" ref="resizeProxy" v-show="resizeProxyVisible"></div>
+        />
+        <div v-show="resizeProxyVisible" ref="resizeProxy" class="el-table__column-resize-proxy" />
     </div>
 </template>
 
@@ -225,16 +225,23 @@ let tableIdSeed = 1;
 export default {
     name: 'ElTable',
 
-    mixins: [Locale, Migrating],
-
     directives: {
         Mousewheel
     },
 
+    components: {
+        TableHeader,
+        TableFooter,
+        TableBody,
+        ElCheckbox
+    },
+
+    mixins: [Locale, Migrating],
+
     props: {
         data: {
             type: Array,
-            default: function () {
+            default() {
                 return [];
             }
         },
@@ -333,13 +340,6 @@ export default {
         load: Function
     },
 
-    components: {
-        TableHeader,
-        TableFooter,
-        TableBody,
-        ElCheckbox
-    },
-
     methods: {
         getMigratingConfig() {
             return {
@@ -388,7 +388,7 @@ export default {
         },
 
         handleFixedMousewheel(event, data) {
-            const bodyWrapper = this.bodyWrapper;
+            const { bodyWrapper } = this;
             if (Math.abs(data.spinY) > 0) {
                 const currentScrollTop = bodyWrapper.scrollTop;
                 if (data.pixelY < 0 && currentScrollTop !== 0) {
@@ -433,7 +433,7 @@ export default {
         }),
 
         onScroll(evt) {
-            let raf = window.requestAnimationFrame;
+            const raf = window.requestAnimationFrame;
             if (!raf) {
                 this.throttleSyncPostion();
             } else {
@@ -509,20 +509,21 @@ export default {
 
         bodyWidth() {
             const { bodyWidth, scrollY, gutterWidth } = this.layout;
-            return bodyWidth ? bodyWidth - (scrollY ? gutterWidth : 0) + 'px' : '';
+            return bodyWidth ? `${bodyWidth - (scrollY ? gutterWidth : 0)}px` : '';
         },
 
         bodyHeight() {
             const { headerHeight = 0, bodyHeight, footerHeight = 0 } = this.layout;
             if (this.height) {
                 return {
-                    height: bodyHeight ? bodyHeight + 'px' : ''
+                    height: bodyHeight ? `${bodyHeight}px` : ''
                 };
-            } else if (this.maxHeight) {
+            }
+            if (this.maxHeight) {
                 const maxHeight = parseHeight(this.maxHeight);
                 if (typeof maxHeight === 'number') {
                     return {
-                        'max-height': maxHeight - footerHeight - (this.showHeader ? headerHeight : 0) + 'px'
+                        'max-height': `${maxHeight - footerHeight - (this.showHeader ? headerHeight : 0)}px`
                     };
                 }
             }
@@ -532,9 +533,10 @@ export default {
         fixedBodyHeight() {
             if (this.height) {
                 return {
-                    height: this.layout.fixedBodyHeight ? this.layout.fixedBodyHeight + 'px' : ''
+                    height: this.layout.fixedBodyHeight ? `${this.layout.fixedBodyHeight}px` : ''
                 };
-            } else if (this.maxHeight) {
+            }
+            if (this.maxHeight) {
                 let maxHeight = parseHeight(this.maxHeight);
                 if (typeof maxHeight === 'number') {
                     maxHeight = this.layout.scrollX ? maxHeight - this.layout.gutterWidth : maxHeight;
@@ -543,7 +545,7 @@ export default {
                     }
                     maxHeight -= this.layout.footerHeight;
                     return {
-                        'max-height': maxHeight + 'px'
+                        'max-height': `${maxHeight}px`
                     };
                 }
             }
@@ -558,18 +560,17 @@ export default {
                     };
                 }
                 return {
-                    bottom: this.layout.scrollX && this.data.length ? this.layout.gutterWidth + 'px' : ''
-                };
-            } else {
-                if (this.showSummary) {
-                    return {
-                        height: this.layout.tableHeight ? this.layout.tableHeight + 'px' : ''
-                    };
-                }
-                return {
-                    height: this.layout.viewportHeight ? this.layout.viewportHeight + 'px' : ''
+                    bottom: this.layout.scrollX && this.data.length ? `${this.layout.gutterWidth}px` : ''
                 };
             }
+            if (this.showSummary) {
+                return {
+                    height: this.layout.tableHeight ? `${this.layout.tableHeight}px` : ''
+                };
+            }
+            return {
+                height: this.layout.viewportHeight ? `${this.layout.viewportHeight}px` : ''
+            };
         },
 
         emptyBlockStyle() {
@@ -634,7 +635,7 @@ export default {
     },
 
     created() {
-        this.tableId = 'el-table_' + tableIdSeed++;
+        this.tableId = `el-table_${tableIdSeed++}`;
         this.debouncedUpdateLayout = debounce(50, () => this.doLayout());
     },
 

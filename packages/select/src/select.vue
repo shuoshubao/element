@@ -1,14 +1,14 @@
 <template>
-    <div class="el-select" :class="[selectSize ? 'el-select--' + selectSize : '']" @click.stop="toggleMenu" v-clickoutside="handleClose">
-        <div class="el-select__tags" v-if="multiple" ref="tags" :style="{ 'max-width': inputWidth - 32 + 'px', width: '100%' }">
+    <div v-clickoutside="handleClose" class="el-select" :class="[selectSize ? 'el-select--' + selectSize : '']" @click.stop="toggleMenu">
+        <div v-if="multiple" ref="tags" class="el-select__tags" :style="{ 'max-width': inputWidth - 32 + 'px', width: '100%' }">
             <span v-if="collapseTags && selected.length">
                 <el-tag
                     :closable="!selectDisabled"
                     :size="collapseTagSize"
                     :hit="selected[0].hitState"
                     type="info"
-                    @close="deleteTag($event, selected[0])"
                     disable-transitions
+                    @close="deleteTag($event, selected[0])"
                 >
                     <span class="el-select__tags-text">{{ selected[0].currentLabel }}</span>
                 </el-tag>
@@ -16,7 +16,7 @@
                     <span class="el-select__tags-text">+ {{ selected.length - 1 }}</span>
                 </el-tag>
             </span>
-            <transition-group @after-leave="resetInputHeight" v-if="!collapseTags">
+            <transition-group v-if="!collapseTags" @after-leave="resetInputHeight">
                 <el-tag
                     v-for="item in selected"
                     :key="getValueKey(item)"
@@ -24,8 +24,8 @@
                     :size="collapseTagSize"
                     :hit="item.hitState"
                     type="info"
-                    @close="deleteTag($event, item)"
                     disable-transitions
+                    @close="deleteTag($event, item)"
                 >
                     <span class="el-select__tags-text">{{ item.currentLabel }}</span>
                 </el-tag>
@@ -40,9 +40,13 @@
                 @focus="handleFocus"
                 @blur="softFocus = false"
                 @keyup="managePlaceholder"
+                v-model="query"
                 @keydown="resetInputState"
+                v-if="filterable"
                 @keydown.down.prevent="handleNavigate('next')"
+                :style="{ 'flex-grow': '1', width: inputLength / (inputWidth - 32) + '%', 'max-width': inputWidth - 42 + 'px' }"
                 @keydown.up.prevent="handleNavigate('prev')"
+                ref="input"
                 @keydown.enter.prevent="selectOption"
                 @keydown.esc.stop.prevent="visible = false"
                 @keydown.delete="deletePrevTag"
@@ -50,20 +54,16 @@
                 @compositionstart="handleComposition"
                 @compositionupdate="handleComposition"
                 @compositionend="handleComposition"
-                v-model="query"
                 @input="debouncedQueryChange"
-                v-if="filterable"
-                :style="{ 'flex-grow': '1', width: inputLength / (inputWidth - 32) + '%', 'max-width': inputWidth - 42 + 'px' }"
-                ref="input"
             />
         </div>
         <el-input
+            :id="id"
             ref="reference"
             v-model="selectedLabel"
             type="text"
             :placeholder="currentPlaceholder"
             :name="name"
-            :id="id"
             :autocomplete="autoComplete || autocomplete"
             :size="selectSize"
             :disabled="selectDisabled"
@@ -85,30 +85,30 @@
             @mouseenter.native="inputHovering = true"
             @mouseleave.native="inputHovering = false"
         >
-            <template slot="prefix" v-if="$slots.prefix">
-                <slot name="prefix"></slot>
+            <template v-if="$slots.prefix" slot="prefix">
+                <slot name="prefix" />
             </template>
             <template slot="suffix">
-                <i v-show="!showClose" :class="['el-select__caret', 'el-input__icon', 'el-icon-' + iconClass]"></i>
-                <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close" @click="handleClearClick"></i>
+                <i v-show="!showClose" :class="['el-select__caret', 'el-input__icon', 'el-icon-' + iconClass]" />
+                <i v-if="showClose" class="el-select__caret el-input__icon el-icon-circle-close" @click="handleClearClick" />
             </template>
         </el-input>
         <transition name="el-zoom-in-top" @before-enter="handleMenuEnter" @after-leave="doDestroy">
-            <el-select-menu ref="popper" :append-to-body="popperAppendToBody" v-show="visible && emptyText !== false">
+            <el-select-menu v-show="visible && emptyText !== false" ref="popper" :append-to-body="popperAppendToBody">
                 <el-scrollbar
+                    v-show="options.length > 0 && !loading"
+                    ref="scrollbar"
                     tag="ul"
                     wrap-class="el-select-dropdown__wrap"
                     view-class="el-select-dropdown__list"
-                    ref="scrollbar"
                     :class="{ 'is-empty': !allowCreate && query && filteredOptionsCount === 0 }"
-                    v-show="options.length > 0 && !loading"
                 >
-                    <el-option :value="query" created v-if="showNewOption"></el-option>
-                    <slot></slot>
+                    <el-option v-if="showNewOption" :value="query" created />
+                    <slot />
                 </el-scrollbar>
                 <template v-if="emptyText && (!allowCreate || loading || (allowCreate && options.length === 0))">
-                    <slot name="empty" v-if="$slots.empty"></slot>
-                    <p class="el-select-dropdown__empty" v-else>
+                    <slot v-if="$slots.empty" name="empty" />
+                    <p v-else class="el-select-dropdown__empty">
                         {{ emptyText }}
                     </p>
                 </template>
@@ -156,77 +156,6 @@ export default {
             select: this
         };
     },
-
-    computed: {
-        _elFormItemSize() {
-            return (this.elFormItem || {}).elFormItemSize;
-        },
-
-        readonly() {
-            return !this.filterable || this.multiple || (!isIE() && !isEdge() && !this.visible);
-        },
-
-        showClose() {
-            let hasValue = this.multiple
-                ? Array.isArray(this.value) && this.value.length > 0
-                : this.value !== undefined && this.value !== null && this.value !== '';
-            let criteria = this.clearable && !this.selectDisabled && this.inputHovering && hasValue;
-            return criteria;
-        },
-
-        iconClass() {
-            return this.remote && this.filterable ? '' : this.visible ? 'arrow-up is-reverse' : 'arrow-up';
-        },
-
-        debounce() {
-            return this.remote ? 300 : 0;
-        },
-
-        emptyText() {
-            if (this.loading) {
-                return this.loadingText || this.t('el.select.loading');
-            } else {
-                if (this.remote && this.query === '' && this.options.length === 0) return false;
-                if (this.filterable && this.query && this.options.length > 0 && this.filteredOptionsCount === 0) {
-                    return this.noMatchText || this.t('el.select.noMatch');
-                }
-                if (this.options.length === 0) {
-                    return this.noDataText || this.t('el.select.noData');
-                }
-            }
-            return null;
-        },
-
-        showNewOption() {
-            let hasExistingOption = this.options.filter(option => !option.created).some(option => option.currentLabel === this.query);
-            return this.filterable && this.allowCreate && this.query !== '' && !hasExistingOption;
-        },
-
-        selectSize() {
-            return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
-        },
-
-        selectDisabled() {
-            return this.disabled || (this.elForm || {}).disabled;
-        },
-
-        collapseTagSize() {
-            return ['small', 'mini'].indexOf(this.selectSize) > -1 ? 'mini' : 'small';
-        },
-        propPlaceholder() {
-            return typeof this.placeholder !== 'undefined' ? this.placeholder : this.t('el.select.placeholder');
-        }
-    },
-
-    components: {
-        ElInput,
-        ElSelectMenu,
-        ElOption,
-        ElTag,
-        ElScrollbar
-    },
-
-    directives: { Clickoutside },
 
     props: {
         name: String,
@@ -309,6 +238,76 @@ export default {
             isSilentBlur: false
         };
     },
+
+    computed: {
+        _elFormItemSize() {
+            return (this.elFormItem || {}).elFormItemSize;
+        },
+
+        readonly() {
+            return !this.filterable || this.multiple || (!isIE() && !isEdge() && !this.visible);
+        },
+
+        showClose() {
+            const hasValue = this.multiple
+                ? Array.isArray(this.value) && this.value.length > 0
+                : this.value !== undefined && this.value !== null && this.value !== '';
+            return this.clearable && !this.selectDisabled && this.inputHovering && hasValue;
+        },
+
+        iconClass() {
+            return this.remote && this.filterable ? '' : this.visible ? 'arrow-up is-reverse' : 'arrow-up';
+        },
+
+        debounce() {
+            return this.remote ? 300 : 0;
+        },
+
+        emptyText() {
+            if (this.loading) {
+                return this.loadingText || this.t('el.select.loading');
+            }
+            if (this.remote && this.query === '' && this.options.length === 0) return false;
+            if (this.filterable && this.query && this.options.length > 0 && this.filteredOptionsCount === 0) {
+                return this.noMatchText || this.t('el.select.noMatch');
+            }
+            if (this.options.length === 0) {
+                return this.noDataText || this.t('el.select.noData');
+            }
+
+            return null;
+        },
+
+        showNewOption() {
+            const hasExistingOption = this.options.filter(option => !option.created).some(option => option.currentLabel === this.query);
+            return this.filterable && this.allowCreate && this.query !== '' && !hasExistingOption;
+        },
+
+        selectSize() {
+            return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
+        },
+
+        selectDisabled() {
+            return this.disabled || (this.elForm || {}).disabled;
+        },
+
+        collapseTagSize() {
+            return ['small', 'mini'].indexOf(this.selectSize) > -1 ? 'mini' : 'small';
+        },
+        propPlaceholder() {
+            return typeof this.placeholder !== 'undefined' ? this.placeholder : this.t('el.select.placeholder');
+        }
+    },
+
+    components: {
+        ElInput,
+        ElSelectMenu,
+        ElOption,
+        ElTag,
+        ElScrollbar
+    },
+
+    directives: { Clickoutside },
 
     watch: {
         selectDisabled() {
@@ -405,7 +404,7 @@ export default {
             if (this.multiple) {
                 this.resetInputHeight();
             }
-            let inputs = this.$el.querySelectorAll('input');
+            const inputs = this.$el.querySelectorAll('input');
             if ([].indexOf.call(inputs, document.activeElement) === -1) {
                 this.setSelected();
             }
@@ -413,6 +412,58 @@ export default {
                 this.checkDefaultFirstOption();
             }
         }
+    },
+
+    created() {
+        this.cachedPlaceHolder = this.currentPlaceholder = this.propPlaceholder;
+        if (this.multiple && !Array.isArray(this.value)) {
+            this.$emit('input', []);
+        }
+        if (!this.multiple && Array.isArray(this.value)) {
+            this.$emit('input', '');
+        }
+
+        this.debouncedOnInputChange = debounce(this.debounce, () => {
+            this.onInputChange();
+        });
+
+        this.debouncedQueryChange = debounce(this.debounce, e => {
+            this.handleQueryChange(e.target.value);
+        });
+
+        this.$on('handleOptionClick', this.handleOptionSelect);
+        this.$on('setSelected', this.setSelected);
+    },
+
+    mounted() {
+        if (this.multiple && Array.isArray(this.value) && this.value.length > 0) {
+            this.currentPlaceholder = '';
+        }
+        addResizeListener(this.$el, this.handleResize);
+
+        const { reference } = this.$refs;
+        if (reference && reference.$el) {
+            const sizeMap = {
+                medium: 36,
+                small: 32,
+                mini: 28
+            };
+            const input = reference.$el.querySelector('input');
+            this.initialInputHeight = input.getBoundingClientRect().height || sizeMap[this.selectSize];
+        }
+        if (this.remote && this.multiple) {
+            this.resetInputHeight();
+        }
+        this.$nextTick(() => {
+            if (reference && reference.$el) {
+                this.inputWidth = reference.$el.getBoundingClientRect().width;
+            }
+        });
+        this.setSelected();
+    },
+
+    beforeDestroy() {
+        if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize);
     },
 
     methods: {
@@ -503,8 +554,8 @@ export default {
             }
             if (option) return option;
             const label = !isObject && !isNull && !isUndefined ? String(value) : '';
-            let newOption = {
-                value: value,
+            const newOption = {
+                value,
                 currentLabel: label
             };
             if (this.multiple) {
@@ -515,7 +566,7 @@ export default {
 
         setSelected() {
             if (!this.multiple) {
-                let option = this.getOption(this.value);
+                const option = this.getOption(this.value);
                 if (option.created) {
                     this.createdLabel = option.currentLabel;
                     this.createdSelected = true;
@@ -527,7 +578,7 @@ export default {
                 if (this.filterable) this.query = this.selectedLabel;
                 return;
             }
-            let result = [];
+            const result = [];
             if (Array.isArray(this.value)) {
                 this.value.forEach(value => {
                     result.push(this.getOption(value));
@@ -620,13 +671,13 @@ export default {
             if (this.collapseTags && !this.filterable) return;
             this.$nextTick(() => {
                 if (!this.$refs.reference) return;
-                let inputChildNodes = this.$refs.reference.$el.childNodes;
-                let input = [].filter.call(inputChildNodes, item => item.tagName === 'INPUT')[0];
-                const tags = this.$refs.tags;
+                const inputChildNodes = this.$refs.reference.$el.childNodes;
+                const input = [].filter.call(inputChildNodes, item => item.tagName === 'INPUT')[0];
+                const { tags } = this.$refs;
                 const tagsHeight = tags ? Math.round(tags.getBoundingClientRect().height) : 0;
                 const sizeInMap = this.initialInputHeight || 40;
                 input.style.height =
-                    this.selected.length === 0 ? sizeInMap + 'px' : Math.max(tags ? tagsHeight + (tagsHeight > sizeInMap ? 6 : 0) : 0, sizeInMap) + 'px';
+                    this.selected.length === 0 ? `${sizeInMap}px` : `${Math.max(tags ? tagsHeight + (tagsHeight > sizeInMap ? 6 : 0) : 0, sizeInMap)}px`;
                 if (this.visible && this.emptyText !== false) {
                     this.broadcast('ElSelectDropdown', 'updatePopper');
                 }
@@ -692,18 +743,17 @@ export default {
             const isObject = Object.prototype.toString.call(value).toLowerCase() === '[object object]';
             if (!isObject) {
                 return arr.indexOf(value);
-            } else {
-                const valueKey = this.valueKey;
-                let index = -1;
-                arr.some((item, i) => {
-                    if (getValueByPath(item, valueKey) === getValueByPath(value, valueKey)) {
-                        index = i;
-                        return true;
-                    }
-                    return false;
-                });
-                return index;
             }
+            const { valueKey } = this;
+            let index = -1;
+            arr.some((item, i) => {
+                if (getValueByPath(item, valueKey) === getValueByPath(value, valueKey)) {
+                    index = i;
+                    return true;
+                }
+                return false;
+            });
+            return index;
         },
 
         toggleMenu() {
@@ -739,7 +789,7 @@ export default {
         },
 
         deleteTag(event, tag) {
-            let index = this.selected.indexOf(tag);
+            const index = this.selected.indexOf(tag);
             if (index > -1 && !this.selectDisabled) {
                 const value = this.value.slice();
                 value.splice(index, 1);
@@ -807,62 +857,9 @@ export default {
         getValueKey(item) {
             if (Object.prototype.toString.call(item.value).toLowerCase() !== '[object object]') {
                 return item.value;
-            } else {
-                return getValueByPath(item.value, this.valueKey);
             }
+            return getValueByPath(item.value, this.valueKey);
         }
-    },
-
-    created() {
-        this.cachedPlaceHolder = this.currentPlaceholder = this.propPlaceholder;
-        if (this.multiple && !Array.isArray(this.value)) {
-            this.$emit('input', []);
-        }
-        if (!this.multiple && Array.isArray(this.value)) {
-            this.$emit('input', '');
-        }
-
-        this.debouncedOnInputChange = debounce(this.debounce, () => {
-            this.onInputChange();
-        });
-
-        this.debouncedQueryChange = debounce(this.debounce, e => {
-            this.handleQueryChange(e.target.value);
-        });
-
-        this.$on('handleOptionClick', this.handleOptionSelect);
-        this.$on('setSelected', this.setSelected);
-    },
-
-    mounted() {
-        if (this.multiple && Array.isArray(this.value) && this.value.length > 0) {
-            this.currentPlaceholder = '';
-        }
-        addResizeListener(this.$el, this.handleResize);
-
-        const reference = this.$refs.reference;
-        if (reference && reference.$el) {
-            const sizeMap = {
-                medium: 36,
-                small: 32,
-                mini: 28
-            };
-            const input = reference.$el.querySelector('input');
-            this.initialInputHeight = input.getBoundingClientRect().height || sizeMap[this.selectSize];
-        }
-        if (this.remote && this.multiple) {
-            this.resetInputHeight();
-        }
-        this.$nextTick(() => {
-            if (reference && reference.$el) {
-                this.inputWidth = reference.$el.getBoundingClientRect().width;
-            }
-        });
-        this.setSelected();
-    },
-
-    beforeDestroy() {
-        if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize);
     }
 };
 </script>

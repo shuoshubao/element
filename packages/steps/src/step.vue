@@ -12,23 +12,23 @@
         <!-- icon & line -->
         <div class="el-step__head" :class="`is-${currentStatus}`">
             <div class="el-step__line" :style="isLast ? '' : { marginRight: $parent.stepOffset + 'px' }">
-                <i class="el-step__line-inner" :style="lineStyle"></i>
+                <i class="el-step__line-inner" :style="lineStyle" />
             </div>
 
             <div class="el-step__icon" :class="`is-${icon ? 'icon' : 'text'}`">
                 <slot v-if="currentStatus !== 'success' && currentStatus !== 'error'" name="icon">
-                    <i v-if="icon" class="el-step__icon-inner" :class="[icon]"></i>
-                    <div class="el-step__icon-inner" v-if="!icon && !isSimple">{{ index + 1 }}</div>
+                    <i v-if="icon" class="el-step__icon-inner" :class="[icon]" />
+                    <div v-if="!icon && !isSimple" class="el-step__icon-inner">{{ index + 1 }}</div>
                 </slot>
-                <i v-else :class="['el-icon-' + (currentStatus === 'success' ? 'check' : 'close')]" class="el-step__icon-inner is-status"></i>
+                <i v-else :class="['el-icon-' + (currentStatus === 'success' ? 'check' : 'close')]" class="el-step__icon-inner is-status" />
             </div>
         </div>
         <!-- title & description -->
         <div class="el-step__main">
-            <div class="el-step__title" ref="title" :class="['is-' + currentStatus]">
+            <div ref="title" class="el-step__title" :class="['is-' + currentStatus]">
                 <slot name="title">{{ title }}</slot>
             </div>
-            <div v-if="isSimple" class="el-step__arrow"></div>
+            <div v-if="isSimple" class="el-step__arrow" />
             <div v-else class="el-step__description" :class="['is-' + currentStatus]">
                 <slot name="description">{{ description }}</slot>
             </div>
@@ -53,18 +53,6 @@ export default {
             lineStyle: {},
             internalStatus: ''
         };
-    },
-
-    beforeCreate() {
-        this.$parent.steps.push(this);
-    },
-
-    beforeDestroy() {
-        const steps = this.$parent.steps;
-        const index = steps.indexOf(this);
-        if (index >= 0) {
-            steps.splice(index, 1);
-        }
     },
 
     computed: {
@@ -98,22 +86,49 @@ export default {
             } = this;
             return isSimple ? '' : space;
         },
-        style: function () {
+        style() {
             const style = {};
             const parent = this.$parent;
             const len = parent.steps.length;
 
-            const space = typeof this.space === 'number' ? this.space + 'px' : this.space ? this.space : 100 / (len - (this.isCenter ? 0 : 1)) + '%';
+            const space = typeof this.space === 'number' ? `${this.space}px` : this.space ? this.space : `${100 / (len - (this.isCenter ? 0 : 1))}%`;
             style.flexBasis = space;
             if (this.isVertical) return style;
             if (this.isLast) {
-                style.maxWidth = 100 / this.stepsCount + '%';
+                style.maxWidth = `${100 / this.stepsCount}%`;
             } else {
-                style.marginRight = -this.$parent.stepOffset + 'px';
+                style.marginRight = `${-this.$parent.stepOffset}px`;
             }
 
             return style;
         }
+    },
+
+    beforeCreate() {
+        this.$parent.steps.push(this);
+    },
+
+    beforeDestroy() {
+        const { steps } = this.$parent;
+        const index = steps.indexOf(this);
+        if (index >= 0) {
+            steps.splice(index, 1);
+        }
+    },
+
+    mounted() {
+        const unwatch = this.$watch('index', val => {
+            this.$watch('$parent.active', this.updateStatus, { immediate: true });
+            this.$watch(
+                '$parent.processStatus',
+                () => {
+                    const activeIndex = this.$parent.active;
+                    this.updateStatus(activeIndex);
+                },
+                { immediate: true }
+            );
+            unwatch();
+        });
     },
 
     methods: {
@@ -135,34 +150,19 @@ export default {
             let step = 100;
             const style = {};
 
-            style.transitionDelay = 150 * this.index + 'ms';
+            style.transitionDelay = `${150 * this.index}ms`;
             if (status === this.$parent.processStatus) {
                 step = this.currentStatus !== 'error' ? 0 : 0;
             } else if (status === 'wait') {
                 step = 0;
-                style.transitionDelay = -150 * this.index + 'ms';
+                style.transitionDelay = `${-150 * this.index}ms`;
             }
 
             style.borderWidth = step && !this.isSimple ? '1px' : 0;
-            this.$parent.direction === 'vertical' ? (style.height = step + '%') : (style.width = step + '%');
+            this.$parent.direction === 'vertical' ? (style.height = `${step}%`) : (style.width = `${step}%`);
 
             this.lineStyle = style;
         }
-    },
-
-    mounted() {
-        const unwatch = this.$watch('index', val => {
-            this.$watch('$parent.active', this.updateStatus, { immediate: true });
-            this.$watch(
-                '$parent.processStatus',
-                () => {
-                    const activeIndex = this.$parent.active;
-                    this.updateStatus(activeIndex);
-                },
-                { immediate: true }
-            );
-            unwatch();
-        });
     }
 };
 </script>

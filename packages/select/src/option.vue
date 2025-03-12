@@ -1,14 +1,14 @@
 <template>
     <li
-        @mouseenter="hoverItem"
-        @click.stop="selectOptionClick"
-        class="el-select-dropdown__item"
         v-show="visible"
+        class="el-select-dropdown__item"
         :class="{
             selected: itemSelected,
             'is-disabled': disabled || groupDisabled || limitReached,
             hover: hover
         }"
+        @mouseenter="hoverItem"
+        @click.stop="selectOptionClick"
     >
         <slot>
             <span>{{ currentLabel }}</span>
@@ -21,9 +21,8 @@ import Emitter from 'element-ui/src/mixins/emitter';
 import { escapeRegexpString, getValueByPath } from 'element-ui/src/utils/util';
 
 export default {
-    mixins: [Emitter],
-
     name: 'ElOption',
+    mixins: [Emitter],
 
     componentName: 'ElOption',
 
@@ -67,17 +66,15 @@ export default {
         itemSelected() {
             if (!this.select.multiple) {
                 return this.isEqual(this.value, this.select.value);
-            } else {
-                return this.contains(this.select.value, this.value);
             }
+            return this.contains(this.select.value, this.value);
         },
 
         limitReached() {
             if (this.select.multiple) {
                 return !this.itemSelected && (this.select.value || []).length >= this.select.multipleLimit && this.select.multipleLimit > 0;
-            } else {
-                return false;
             }
+            return false;
         }
     },
 
@@ -96,28 +93,49 @@ export default {
         }
     },
 
+    created() {
+        this.select.options.push(this);
+        this.select.cachedOptions.push(this);
+        this.select.optionsCount++;
+        this.select.filteredOptionsCount++;
+
+        this.$on('queryChange', this.queryChange);
+        this.$on('handleGroupDisabled', this.handleGroupDisabled);
+    },
+
+    beforeDestroy() {
+        const { selected, multiple } = this.select;
+        const selectedOptions = multiple ? selected : [selected];
+        const index = this.select.cachedOptions.indexOf(this);
+        const selectedIndex = selectedOptions.indexOf(this);
+
+        // if option is not selected, remove it from cache
+        if (index > -1 && selectedIndex < 0) {
+            this.select.cachedOptions.splice(index, 1);
+        }
+        this.select.onOptionDestroy(this.select.options.indexOf(this));
+    },
+
     methods: {
         isEqual(a, b) {
             if (!this.isObject) {
                 return a === b;
-            } else {
-                const valueKey = this.select.valueKey;
-                return getValueByPath(a, valueKey) === getValueByPath(b, valueKey);
             }
+            const { valueKey } = this.select;
+            return getValueByPath(a, valueKey) === getValueByPath(b, valueKey);
         },
 
         contains(arr = [], target) {
             if (!this.isObject) {
                 return arr && arr.indexOf(target) > -1;
-            } else {
-                const valueKey = this.select.valueKey;
-                return (
-                    arr &&
-                    arr.some(item => {
-                        return getValueByPath(item, valueKey) === getValueByPath(target, valueKey);
-                    })
-                );
             }
+            const { valueKey } = this.select;
+            return (
+                arr &&
+                arr.some(item => {
+                    return getValueByPath(item, valueKey) === getValueByPath(target, valueKey);
+                })
+            );
         },
 
         handleGroupDisabled(val) {
@@ -142,29 +160,6 @@ export default {
                 this.select.filteredOptionsCount--;
             }
         }
-    },
-
-    created() {
-        this.select.options.push(this);
-        this.select.cachedOptions.push(this);
-        this.select.optionsCount++;
-        this.select.filteredOptionsCount++;
-
-        this.$on('queryChange', this.queryChange);
-        this.$on('handleGroupDisabled', this.handleGroupDisabled);
-    },
-
-    beforeDestroy() {
-        const { selected, multiple } = this.select;
-        let selectedOptions = multiple ? selected : [selected];
-        let index = this.select.cachedOptions.indexOf(this);
-        let selectedIndex = selectedOptions.indexOf(this);
-
-        // if option is not selected, remove it from cache
-        if (index > -1 && selectedIndex < 0) {
-            this.select.cachedOptions.splice(index, 1);
-        }
-        this.select.onOptionDestroy(this.select.options.indexOf(this));
     }
 };
 </script>

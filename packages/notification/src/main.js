@@ -3,17 +3,18 @@ import { PopupManager } from 'element-ui/src/utils/popup/index';
 import { isVNode } from 'element-ui/src/utils/vdom';
 import Vue from 'vue';
 import Main from './main.vue';
+
 const NotificationConstructor = Vue.extend(Main);
 
 let instance;
-let instances = [];
+const instances = [];
 let seed = 1;
 
 const Notification = function (options) {
     if (Vue.prototype.$isServer) return;
     options = merge({}, options);
     const userOnClose = options.onClose;
-    const id = 'notification_' + seed++;
+    const id = `notification_${seed++}`;
     const position = options.position || 'top-right';
 
     options.onClose = function () {
@@ -77,11 +78,11 @@ Notification.close = function (id, userOnClose) {
     instances.splice(index, 1);
 
     if (len <= 1) return;
-    const position = instance.position;
+    const { position } = instance;
     const removedHeight = instance.dom.offsetHeight;
     for (let i = index; i < len - 1; i++) {
         if (instances[i].position === position) {
-            instances[i].dom.style[instance.verticalProperty] = parseInt(instances[i].dom.style[instance.verticalProperty], 10) - removedHeight - 16 + 'px';
+            instances[i].dom.style[instance.verticalProperty] = `${parseInt(instances[i].dom.style[instance.verticalProperty], 10) - removedHeight - 16}px`;
         }
     }
 };

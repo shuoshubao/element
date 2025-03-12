@@ -1,4 +1,5 @@
 import Vue from 'vue';
+
 let isDragging = false;
 
 export default function (element, options) {
@@ -20,7 +21,7 @@ export default function (element, options) {
             options.end(event);
         }
     };
-    element.addEventListener('mousedown', function (event) {
+    element.addEventListener('mousedown', event => {
         if (isDragging) return;
         document.onselectstart = function () {
             return false;

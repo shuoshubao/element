@@ -2,21 +2,21 @@
     <span>
         <transition :name="transition" @after-enter="handleAfterEnter" @after-leave="handleAfterLeave">
             <div
+                v-show="!disabled && showPopper"
+                :id="tooltipId"
+                ref="popper"
                 class="el-popover el-popper"
                 :class="[popperClass, content && 'el-popover--plain']"
-                ref="popper"
-                v-show="!disabled && showPopper"
                 :style="{ width: width + 'px' }"
                 role="tooltip"
-                :id="tooltipId"
                 :aria-hidden="disabled || !showPopper ? 'true' : 'false'"
             >
-                <div class="el-popover__title" v-if="title" v-text="title"></div>
+                <div v-if="title" class="el-popover__title" v-text="title" />
                 <slot>{{ content }}</slot>
             </div>
         </transition>
-        <span class="el-popover__reference-wrapper" ref="wrapper">
-            <slot name="reference"></slot>
+        <span ref="wrapper" class="el-popover__reference-wrapper">
+            <slot name="reference" />
         </span>
     </span>
 </template>
@@ -141,6 +141,21 @@ export default {
         this.cleanup();
     },
 
+    destroyed() {
+        const { reference } = this;
+
+        off(reference, 'click', this.doToggle);
+        off(reference, 'mouseup', this.doClose);
+        off(reference, 'mousedown', this.doShow);
+        off(reference, 'focusin', this.doShow);
+        off(reference, 'focusout', this.doClose);
+        off(reference, 'mousedown', this.doShow);
+        off(reference, 'mouseup', this.doClose);
+        off(reference, 'mouseleave', this.handleMouseLeave);
+        off(reference, 'mouseenter', this.handleMouseEnter);
+        off(document, 'click', this.handleDocumentClick);
+    },
+
     methods: {
         doToggle() {
             this.showPopper = !this.showPopper;
@@ -210,21 +225,6 @@ export default {
                 clearTimeout(this._timer);
             }
         }
-    },
-
-    destroyed() {
-        const reference = this.reference;
-
-        off(reference, 'click', this.doToggle);
-        off(reference, 'mouseup', this.doClose);
-        off(reference, 'mousedown', this.doShow);
-        off(reference, 'focusin', this.doShow);
-        off(reference, 'focusout', this.doClose);
-        off(reference, 'mousedown', this.doShow);
-        off(reference, 'mouseup', this.doClose);
-        off(reference, 'mouseleave', this.handleMouseLeave);
-        off(reference, 'mouseenter', this.handleMouseEnter);
-        off(document, 'click', this.handleDocumentClick);
     }
 };
 </script>

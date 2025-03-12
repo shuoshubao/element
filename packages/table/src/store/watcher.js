@@ -6,7 +6,7 @@ import current from './current';
 import tree from './tree';
 
 const sortData = (data, states) => {
-    const sortingColumn = states.sortingColumn;
+    const { sortingColumn } = states;
     if (!sortingColumn || typeof sortingColumn.sortable === 'string') {
         return data;
     }
@@ -26,6 +26,7 @@ const doFlattenColumns = columns => {
 };
 
 export default Vue.extend({
+    mixins: [expand, current, tree],
     data() {
         return {
             states: {
@@ -72,18 +73,16 @@ export default Vue.extend({
         };
     },
 
-    mixins: [expand, current, tree],
-
     methods: {
         // 检查 rowKey 是否存在
         assertRowKey() {
-            const rowKey = this.states.rowKey;
+            const { rowKey } = this.states;
             if (!rowKey) throw new Error('[ElTable] prop row-key is required');
         },
 
         // 更新列
         updateColumns() {
-            const states = this.states;
+            const { states } = this;
             const _columns = states._columns || [];
             states.fixedColumns = _columns.filter(column => column.fixed === true || column.fixed === 'left');
             states.rightFixedColumns = _columns.filter(column => column.fixed === 'right');
@@ -123,7 +122,7 @@ export default Vue.extend({
         },
 
         clearSelection() {
-            const states = this.states;
+            const { states } = this;
             states.isAllSelected = false;
             const oldSelection = states.selection;
             if (oldSelection.length) {
@@ -133,14 +132,14 @@ export default Vue.extend({
         },
 
         cleanSelection() {
-            const states = this.states;
+            const { states } = this;
             const { data, rowKey, selection } = states;
             let deleted;
             if (rowKey) {
                 deleted = [];
                 const selectedMap = getKeysMap(selection, rowKey);
                 const dataMap = getKeysMap(data, rowKey);
-                for (let key in selectedMap) {
+                for (const key in selectedMap) {
                     if (selectedMap.hasOwnProperty(key) && !dataMap[key]) {
                         deleted.push(selectedMap[key].row);
                     }
@@ -168,7 +167,7 @@ export default Vue.extend({
         },
 
         _toggleAllSelection() {
-            const states = this.states;
+            const { states } = this;
             const { data = [], selection } = states;
             // when only some rows are selected (but not all), select or deselect all of them
             // depending on the value of selectOnIndeterminate
@@ -195,7 +194,7 @@ export default Vue.extend({
         },
 
         updateSelectionByRowKey() {
-            const states = this.states;
+            const { states } = this;
             const { selection, rowKey, data } = states;
             const selectedMap = getKeysMap(selection, rowKey);
             data.forEach(row => {
@@ -208,7 +207,7 @@ export default Vue.extend({
         },
 
         updateAllSelected() {
-            const states = this.states;
+            const { states } = this;
             const { selection, rowKey, selectable } = states;
             // data 为 null 时，解构时的默认值会被忽略
             const data = states.data || [];
@@ -224,9 +223,8 @@ export default Vue.extend({
             const isSelected = function (row) {
                 if (selectedMap) {
                     return !!selectedMap[getRowIdentity(row, rowKey)];
-                } else {
-                    return selection.indexOf(row) !== -1;
                 }
+                return selection.indexOf(row) !== -1;
             };
             let isAllSelected = true;
             let selectedCount = 0;
@@ -252,7 +250,7 @@ export default Vue.extend({
             if (!Array.isArray(columns)) {
                 columns = [columns];
             }
-            const states = this.states;
+            const { states } = this;
             const filters = {};
             columns.forEach(col => {
                 states.filters[col.id] = values;
@@ -272,7 +270,7 @@ export default Vue.extend({
         },
 
         execFilter() {
-            const states = this.states;
+            const { states } = this;
             const { _data, filters } = states;
             let data = _data;
 
@@ -291,7 +289,7 @@ export default Vue.extend({
         },
 
         execSort() {
-            const states = this.states;
+            const { states } = this;
             states.data = sortData(states.filteredData, states);
         },
 
@@ -304,7 +302,7 @@ export default Vue.extend({
         },
 
         clearFilter(columnKeys) {
-            const states = this.states;
+            const { states } = this;
             const { tableHeader, fixedTableHeader, rightFixedTableHeader } = this.table.$refs;
 
             let panels = {};
@@ -350,7 +348,7 @@ export default Vue.extend({
         },
 
         clearSort() {
-            const states = this.states;
+            const { states } = this;
             if (!states.sortingColumn) return;
 
             this.updateSort(null, null, null);

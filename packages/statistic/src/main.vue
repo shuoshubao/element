@@ -1,6 +1,6 @@
 <template>
     <div class="el-statistic">
-        <div class="head" v-if="title || $slots.title">
+        <div v-if="title || $slots.title" class="head">
             <slot name="title">
                 <span class="title">
                     {{ title }}
@@ -8,7 +8,7 @@
             </slot>
         </div>
         <div class="con">
-            <span class="prefix" v-if="prefix || $slots.prefix">
+            <span v-if="prefix || $slots.prefix" class="prefix">
                 <slot name="prefix">
                     {{ prefix }}
                 </slot>
@@ -16,7 +16,7 @@
             <span class="number" :style="valueStyle">
                 <slot name="formatter">{{ disposeValue }}</slot>
             </span>
-            <span class="suffix" v-if="suffix || $slots.suffix">
+            <span v-if="suffix || $slots.suffix" class="suffix">
                 <slot name="suffix">
                     {{ suffix }}
                 </slot>
@@ -30,13 +30,6 @@ import { chain, isNumber, multiply, padStart, reduce } from 'lodash';
 
 export default {
     name: 'ElStatistic',
-    data() {
-        return {
-            disposeValue: '',
-            timeTask: null,
-            REFRESH_INTERVAL: 1000 / 30
-        };
-    },
     props: {
         decimalSeparator: {
             type: String,
@@ -72,7 +65,7 @@ export default {
         },
         valueStyle: {
             type: Object,
-            default: function () {
+            default() {
                 return {};
             }
         },
@@ -85,11 +78,15 @@ export default {
             default: 1000
         }
     },
-    created() {
-        this.branch();
+    data() {
+        return {
+            disposeValue: '',
+            timeTask: null,
+            REFRESH_INTERVAL: 1000 / 30
+        };
     },
     watch: {
-        value: function () {
+        value() {
             this.branch();
         },
         groupSeparator() {
@@ -99,9 +96,12 @@ export default {
             this.dispose();
         }
     },
+    created() {
+        this.branch();
+    },
     methods: {
         branch() {
-            let { timeIndices, countDown, dispose } = this;
+            const { timeIndices, countDown, dispose } = this;
             if (timeIndices) {
                 countDown(this.value.valueOf() || this.value);
             } else {
@@ -124,7 +124,7 @@ export default {
             if (groupSeparator) {
                 integer = this.magnification(integer, rate, groupSeparator);
             }
-            let result = `${integer}${decimal ? this.decimalSeparator + decimal : ''}`;
+            const result = `${integer}${decimal ? this.decimalSeparator + decimal : ''}`;
             this.disposeValue = result;
             return result;
         },
@@ -142,8 +142,8 @@ export default {
             }
             return this.disposeValue;
         },
-        formatTimeStr: function (time) {
-            let { format } = this;
+        formatTimeStr(time) {
+            const { format } = this;
             const escapeRegex = /\[[^\]]*]/g;
             const keepList = (format.match(escapeRegex) || []).map(str => str.slice(1, -1));
             const timeUnits = [
@@ -155,12 +155,12 @@ export default {
                 ['s', 1000], // seconds
                 ['S', 1] // million seconds
             ];
-            let formatText = reduce(
+            const formatText = reduce(
                 timeUnits,
                 (con, item) => {
                     const name = item[0];
                     return con.replace(new RegExp(`${name}+`, 'g'), match => {
-                        let sum = chain(time).divide(item[1]).floor(0).value();
+                        const sum = chain(time).divide(item[1]).floor(0).value();
                         time -= multiply(sum, item[1]);
                         return padStart(String(sum), String(match).length, 0);
                     });
@@ -187,11 +187,11 @@ export default {
             return result;
         },
         countDown(timeVlaue) {
-            let { REFRESH_INTERVAL, timeTask, diffDate, formatTimeStr, stopTime, suspend } = this;
+            const { REFRESH_INTERVAL, timeTask, diffDate, formatTimeStr, stopTime, suspend } = this;
             if (timeTask) return;
-            let than = this;
+            const than = this;
             this.timeTask = setInterval(() => {
-                let diffTiem = diffDate(timeVlaue, Date.now());
+                const diffTiem = diffDate(timeVlaue, Date.now());
                 than.disposeValue = formatTimeStr(diffTiem);
                 stopTime(diffTiem);
             }, REFRESH_INTERVAL);

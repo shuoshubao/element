@@ -39,7 +39,7 @@ export default {
     },
 
     render(h) {
-        let gutter = scrollbarWidth();
+        const gutter = scrollbarWidth();
         let style = this.wrapStyle;
 
         if (gutter) {
@@ -90,22 +90,23 @@ export default {
 
     methods: {
         handleScroll() {
-            const wrap = this.wrap;
+            const { wrap } = this;
 
             this.moveY = (wrap.scrollTop * 100) / wrap.clientHeight;
             this.moveX = (wrap.scrollLeft * 100) / wrap.clientWidth;
         },
 
         update() {
-            let heightPercentage, widthPercentage;
-            const wrap = this.wrap;
+            let heightPercentage;
+            let widthPercentage;
+            const { wrap } = this;
             if (!wrap) return;
 
             heightPercentage = (wrap.clientHeight * 100) / wrap.scrollHeight;
             widthPercentage = (wrap.clientWidth * 100) / wrap.scrollWidth;
 
-            this.sizeHeight = heightPercentage < 100 ? heightPercentage + '%' : '';
-            this.sizeWidth = widthPercentage < 100 ? widthPercentage + '%' : '';
+            this.sizeHeight = heightPercentage < 100 ? `${heightPercentage}%` : '';
+            this.sizeWidth = widthPercentage < 100 ? `${widthPercentage}%` : '';
         }
     },
 

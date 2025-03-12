@@ -1,21 +1,21 @@
 <template>
     <div class="el-color-alpha-slider" :class="{ 'is-vertical': vertical }">
         <div
-            class="el-color-alpha-slider__bar"
-            @click="handleClick"
             ref="bar"
+            class="el-color-alpha-slider__bar"
             :style="{
                 background: background
             }"
-        ></div>
+            @click="handleClick"
+        />
         <div
-            class="el-color-alpha-slider__thumb"
             ref="thumb"
+            class="el-color-alpha-slider__thumb"
             :style="{
                 left: thumbLeft + 'px',
                 top: thumbTop + 'px'
             }"
-        ></div>
+        />
     </div>
 </template>
 
@@ -23,7 +23,7 @@
 import draggable from '../draggable';
 
 export default {
-    name: 'el-color-alpha-slider',
+    name: 'ElColorAlphaSlider',
 
     props: {
         color: {
@@ -32,20 +32,45 @@ export default {
         vertical: Boolean
     },
 
+    data() {
+        return {
+            thumbLeft: 0,
+            thumbTop: 0,
+            background: null
+        };
+    },
+
     watch: {
-        'color._alpha'() {
+        'color._alpha': function () {
             this.update();
         },
 
-        'color.value'() {
+        'color.value': function () {
             this.update();
         }
     },
 
+    mounted() {
+        const { bar, thumb } = this.$refs;
+
+        const dragConfig = {
+            drag: event => {
+                this.handleDrag(event);
+            },
+            end: event => {
+                this.handleDrag(event);
+            }
+        };
+
+        draggable(bar, dragConfig);
+        draggable(thumb, dragConfig);
+        this.update();
+    },
+
     methods: {
         handleClick(event) {
-            const thumb = this.$refs.thumb;
-            const target = event.target;
+            const { thumb } = this.$refs;
+            const { target } = event;
 
             if (target !== thumb) {
                 this.handleDrag(event);
@@ -77,7 +102,7 @@ export default {
             const alpha = this.color._alpha;
 
             if (!el) return 0;
-            const thumb = this.$refs.thumb;
+            const { thumb } = this.$refs;
             return Math.round((alpha * (el.offsetWidth - thumb.offsetWidth / 2)) / 100);
         },
 
@@ -87,7 +112,7 @@ export default {
             const alpha = this.color._alpha;
 
             if (!el) return 0;
-            const thumb = this.$refs.thumb;
+            const { thumb } = this.$refs;
             return Math.round((alpha * (el.offsetHeight - thumb.offsetHeight / 2)) / 100);
         },
 
@@ -104,31 +129,6 @@ export default {
             this.thumbTop = this.getThumbTop();
             this.background = this.getBackground();
         }
-    },
-
-    data() {
-        return {
-            thumbLeft: 0,
-            thumbTop: 0,
-            background: null
-        };
-    },
-
-    mounted() {
-        const { bar, thumb } = this.$refs;
-
-        const dragConfig = {
-            drag: event => {
-                this.handleDrag(event);
-            },
-            end: event => {
-                this.handleDrag(event);
-            }
-        };
-
-        draggable(bar, dragConfig);
-        draggable(thumb, dragConfig);
-        this.update();
     }
 };
 </script>

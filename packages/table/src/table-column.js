@@ -92,11 +92,11 @@ export default {
         },
 
         realAlign() {
-            return this.align ? 'is-' + this.align : null;
+            return this.align ? `is-${this.align}` : null;
         },
 
         realHeaderAlign() {
-            return this.headerAlign ? 'is-' + this.headerAlign : this.realAlign;
+            return this.headerAlign ? `is-${this.headerAlign}` : this.realAlign;
         }
     },
 
@@ -132,10 +132,10 @@ export default {
 
         setColumnForcedProps(column) {
             // 对于特定类型的 column，某些属性不允许设置
-            const type = column.type;
+            const { type } = column;
             const source = cellForced[type] || {};
             Object.keys(source).forEach(prop => {
-                let value = source[prop];
+                const value = source[prop];
                 if (value !== undefined) {
                     column[prop] = prop === 'className' ? `${column[prop]} ${value}` : value;
                 }
@@ -181,7 +181,7 @@ export default {
                     };
                     if (column.showOverflowTooltip) {
                         props.class += ' el-tooltip';
-                        props.style = { width: (data.column.realWidth || data.column.width) - 1 + 'px' };
+                        props.style = { width: `${(data.column.realWidth || data.column.width) - 1}px` };
                     }
                     return (
                         <div {...props}>
@@ -265,14 +265,14 @@ export default {
     created() {
         const parent = this.columnOrTableParent;
         this.isSubColumn = this.owner !== parent;
-        this.columnId = (parent.tableId || parent.columnId) + '_column_' + columnIdSeed++;
+        this.columnId = `${parent.tableId || parent.columnId}_column_${columnIdSeed++}`;
 
         const type = this.type || 'default';
         const sortable = this.sortable === '' ? true : this.sortable;
         const defaults = {
             ...cellStarts[type],
             id: this.columnId,
-            type: type,
+            type,
             property: this.prop || this.property,
             align: this.realAlign,
             headerAlign: this.realHeaderAlign,
@@ -284,7 +284,7 @@ export default {
             isColumnGroup: false,
             filterOpened: false,
             // sort 相关属性
-            sortable: sortable,
+            sortable,
             // index 列
             index: this.index
         };
@@ -309,7 +309,7 @@ export default {
     },
 
     mounted() {
-        const owner = this.owner;
+        const { owner } = this;
         const parent = this.columnOrTableParent;
         const children = this.isSubColumn ? parent.$el.children : parent.$refs.hiddenColumns.children;
         const columnIndex = this.getColumnElIndex(children, this.$el);

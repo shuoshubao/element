@@ -7,14 +7,14 @@ import CascaderNode from './cascader-node.vue';
 export default {
     name: 'ElCascaderMenu',
 
-    mixins: [Locale],
-
-    inject: ['panel'],
-
     components: {
         ElScrollbar,
         CascaderNode
     },
+
+    mixins: [Locale],
+
+    inject: ['panel'],
 
     props: {
         nodes: {

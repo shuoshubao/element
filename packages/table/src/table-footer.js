@@ -22,7 +22,7 @@ export default {
                 values.forEach(value => {
                     if (!isNaN(value)) {
                         notNumber = false;
-                        let decimal = ('' + value).split('.')[1];
+                        const decimal = `${value}`.split('.')[1];
                         precisions.push(decimal ? decimal.length : 0);
                     }
                 });
@@ -32,9 +32,8 @@ export default {
                         const value = Number(curr);
                         if (!isNaN(value)) {
                             return parseFloat((prev + curr).toFixed(Math.min(precision, 20)));
-                        } else {
-                            return prev;
                         }
+                        return prev;
                     }, 0);
                 } else {
                     sums[index] = '';
@@ -112,18 +111,19 @@ export default {
         isCellHidden(index, columns, column) {
             if (this.fixed === true || this.fixed === 'left') {
                 return index >= this.leftFixedLeafCount;
-            } else if (this.fixed === 'right') {
+            }
+            if (this.fixed === 'right') {
                 let before = 0;
                 for (let i = 0; i < index; i++) {
                     before += columns[i].colSpan;
                 }
                 return before < this.columnsCount - this.rightFixedLeafCount;
-            } else if (!this.fixed && column.fixed) {
+            }
+            if (!this.fixed && column.fixed) {
                 // hide cell when footer instance is not fixed and column is fixed
                 return true;
-            } else {
-                return index < this.leftFixedCount || index >= this.columnsCount - this.rightFixedCount;
             }
+            return index < this.leftFixedCount || index >= this.columnsCount - this.rightFixedCount;
         },
 
         getRowClasses(column, cellIndex) {

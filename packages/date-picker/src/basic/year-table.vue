@@ -1,5 +1,5 @@
 <template>
-    <table @click="handleYearTableClick" class="el-year-table">
+    <table class="el-year-table" @click="handleYearTableClick">
         <tbody>
             <tr>
                 <td class="available" :class="getCellStyle(startYear + 0)">
@@ -36,8 +36,8 @@
                 <td class="available" :class="getCellStyle(startYear + 9)">
                     <a class="cell">{{ startYear + 9 }}</a>
                 </td>
-                <td></td>
-                <td></td>
+                <td />
+                <td />
             </tr>
         </tbody>
     </table>
@@ -88,7 +88,7 @@ export default {
         },
 
         handleYearTableClick(event) {
-            const target = event.target;
+            const { target } = event;
             if (target.tagName === 'A') {
                 if (hasClass(target.parentNode, 'disabled')) return;
                 const year = target.textContent || target.innerText;

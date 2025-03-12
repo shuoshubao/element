@@ -2,25 +2,25 @@
     <transition name="dialog-fade" @after-enter="afterEnter" @after-leave="afterLeave">
         <div v-show="visible" class="el-dialog__wrapper" @click.self="handleWrapperClick">
             <div
-                role="dialog"
                 :key="key"
+                ref="dialog"
+                role="dialog"
                 aria-modal="true"
                 :aria-label="title || 'dialog'"
                 :class="['el-dialog', { 'is-fullscreen': fullscreen, 'el-dialog--center': center }, customClass]"
-                ref="dialog"
                 :style="style"
             >
                 <div class="el-dialog__header">
                     <slot name="title">
                         <span class="el-dialog__title">{{ title }}</span>
                     </slot>
-                    <button type="button" class="el-dialog__headerbtn" aria-label="Close" v-if="showClose" @click="handleClose">
-                        <i class="el-dialog__close el-icon el-icon-close"></i>
+                    <button v-if="showClose" type="button" class="el-dialog__headerbtn" aria-label="Close" @click="handleClose">
+                        <i class="el-dialog__close el-icon el-icon-close" />
                     </button>
                 </div>
-                <div class="el-dialog__body" v-if="rendered"><slot></slot></div>
-                <div class="el-dialog__footer" v-if="$slots.footer">
-                    <slot name="footer"></slot>
+                <div v-if="rendered" class="el-dialog__body"><slot /></div>
+                <div v-if="$slots.footer" class="el-dialog__footer">
+                    <slot name="footer" />
                 </div>
             </div>
         </div>
@@ -107,6 +107,19 @@ export default {
         };
     },
 
+    computed: {
+        style() {
+            const style = {};
+            if (!this.fullscreen) {
+                style.marginTop = this.top;
+                if (this.width) {
+                    style.width = this.width;
+                }
+            }
+            return style;
+        }
+    },
+
     watch: {
         visible(val) {
             if (val) {
@@ -131,16 +144,20 @@ export default {
         }
     },
 
-    computed: {
-        style() {
-            let style = {};
-            if (!this.fullscreen) {
-                style.marginTop = this.top;
-                if (this.width) {
-                    style.width = this.width;
-                }
+    mounted() {
+        if (this.visible) {
+            this.rendered = true;
+            this.open();
+            if (this.appendToBody) {
+                document.body.appendChild(this.$el);
             }
-            return style;
+        }
+    },
+
+    destroyed() {
+        // if appendToBody is true, remove DOM node after destroy
+        if (this.appendToBody && this.$el && this.$el.parentNode) {
+            this.$el.parentNode.removeChild(this.$el);
         }
     },
 
@@ -179,23 +196,6 @@ export default {
         },
         afterLeave() {
             this.$emit('closed');
-        }
-    },
-
-    mounted() {
-        if (this.visible) {
-            this.rendered = true;
-            this.open();
-            if (this.appendToBody) {
-                document.body.appendChild(this.$el);
-            }
-        }
-    },
-
-    destroyed() {
-        // if appendToBody is true, remove DOM node after destroy
-        if (this.appendToBody && this.$el && this.$el.parentNode) {
-            this.$el.parentNode.removeChild(this.$el);
         }
     }
 };

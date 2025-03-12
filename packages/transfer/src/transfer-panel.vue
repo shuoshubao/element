@@ -1,7 +1,7 @@
 <template>
     <div class="el-transfer-panel">
         <p class="el-transfer-panel__header">
-            <el-checkbox v-model="allChecked" @change="handleAllCheckedChange" :indeterminate="isIndeterminate">
+            <el-checkbox v-model="allChecked" :indeterminate="isIndeterminate" @change="handleAllCheckedChange">
                 {{ title }}
                 <span>{{ checkedSummary }}</span>
             </el-checkbox>
@@ -9,37 +9,37 @@
 
         <div :class="['el-transfer-panel__body', hasFooter ? 'is-with-footer' : '']">
             <el-input
-                class="el-transfer-panel__filter"
+                v-if="filterable"
                 v-model="query"
+                class="el-transfer-panel__filter"
                 size="small"
                 :placeholder="placeholder"
                 @mouseenter.native="inputHover = true"
                 @mouseleave.native="inputHover = false"
-                v-if="filterable"
             >
-                <i slot="prefix" :class="['el-input__icon', 'el-icon-' + inputIcon]" @click="clearQuery"></i>
+                <i slot="prefix" :class="['el-input__icon', 'el-icon-' + inputIcon]" @click="clearQuery" />
             </el-input>
             <el-checkbox-group
-                v-model="checked"
                 v-show="!hasNoMatch && data.length > 0"
+                v-model="checked"
                 :class="{ 'is-filterable': filterable }"
                 class="el-transfer-panel__list"
             >
                 <el-checkbox
+                    v-for="item in filteredData"
+                    :key="item[keyProp]"
                     class="el-transfer-panel__item"
                     :label="item[keyProp]"
                     :disabled="item[disabledProp]"
-                    :key="item[keyProp]"
-                    v-for="item in filteredData"
                 >
-                    <option-content :option="item"></option-content>
+                    <OptionContent :option="item" />
                 </el-checkbox>
             </el-checkbox-group>
-            <p class="el-transfer-panel__empty" v-show="hasNoMatch">{{ t('el.transfer.noMatch') }}</p>
-            <p class="el-transfer-panel__empty" v-show="data.length === 0 && !hasNoMatch">{{ t('el.transfer.noData') }}</p>
+            <p v-show="hasNoMatch" class="el-transfer-panel__empty">{{ t('el.transfer.noMatch') }}</p>
+            <p v-show="data.length === 0 && !hasNoMatch" class="el-transfer-panel__empty">{{ t('el.transfer.noData') }}</p>
         </div>
-        <p class="el-transfer-panel__footer" v-if="hasFooter">
-            <slot></slot>
+        <p v-if="hasFooter" class="el-transfer-panel__footer">
+            <slot />
         </p>
     </div>
 </template>
@@ -51,11 +51,7 @@ import ElInput from 'element-ui/packages/input/index';
 import Locale from 'element-ui/src/mixins/locale';
 
 export default {
-    mixins: [Locale],
-
     name: 'ElTransferPanel',
-
-    componentName: 'ElTransferPanel',
 
     components: {
         ElCheckboxGroup,
@@ -69,11 +65,11 @@ export default {
                 const getParent = vm => {
                     if (vm.$options.componentName === 'ElTransferPanel') {
                         return vm;
-                    } else if (vm.$parent) {
-                        return getParent(vm.$parent);
-                    } else {
-                        return vm;
                     }
+                    if (vm.$parent) {
+                        return getParent(vm.$parent);
+                    }
+                    return vm;
                 };
                 const panel = getParent(this);
                 const transfer = panel.$parent || panel;
@@ -87,6 +83,9 @@ export default {
             }
         }
     },
+    mixins: [Locale],
+
+    componentName: 'ElTransferPanel',
 
     props: {
         data: {
@@ -113,6 +112,63 @@ export default {
             inputHover: false,
             checkChangeByUser: true
         };
+    },
+
+    computed: {
+        filteredData() {
+            return this.data.filter(item => {
+                if (typeof this.filterMethod === 'function') {
+                    return this.filterMethod(this.query, item);
+                }
+                const label = item[this.labelProp] || item[this.keyProp].toString();
+                return label.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
+            });
+        },
+
+        checkableData() {
+            return this.filteredData.filter(item => !item[this.disabledProp]);
+        },
+
+        checkedSummary() {
+            const checkedLength = this.checked.length;
+            const dataLength = this.data.length;
+            const { noChecked, hasChecked } = this.format;
+            if (noChecked && hasChecked) {
+                return checkedLength > 0
+                    ? hasChecked.replace(/\${checked}/g, checkedLength).replace(/\${total}/g, dataLength)
+                    : noChecked.replace(/\${total}/g, dataLength);
+            }
+            return `${checkedLength}/${dataLength}`;
+        },
+
+        isIndeterminate() {
+            const checkedLength = this.checked.length;
+            return checkedLength > 0 && checkedLength < this.checkableData.length;
+        },
+
+        hasNoMatch() {
+            return this.query.length > 0 && this.filteredData.length === 0;
+        },
+
+        inputIcon() {
+            return this.query.length > 0 && this.inputHover ? 'circle-close' : 'search';
+        },
+
+        labelProp() {
+            return this.props.label || 'label';
+        },
+
+        keyProp() {
+            return this.props.key || 'key';
+        },
+
+        disabledProp() {
+            return this.props.disabled || 'disabled';
+        },
+
+        hasFooter() {
+            return !!this.$slots.default;
+        }
     },
 
     watch: {
@@ -157,65 +213,6 @@ export default {
                 this.checkChangeByUser = false;
                 this.checked = checked;
             }
-        }
-    },
-
-    computed: {
-        filteredData() {
-            return this.data.filter(item => {
-                if (typeof this.filterMethod === 'function') {
-                    return this.filterMethod(this.query, item);
-                } else {
-                    const label = item[this.labelProp] || item[this.keyProp].toString();
-                    return label.toLowerCase().indexOf(this.query.toLowerCase()) > -1;
-                }
-            });
-        },
-
-        checkableData() {
-            return this.filteredData.filter(item => !item[this.disabledProp]);
-        },
-
-        checkedSummary() {
-            const checkedLength = this.checked.length;
-            const dataLength = this.data.length;
-            const { noChecked, hasChecked } = this.format;
-            if (noChecked && hasChecked) {
-                return checkedLength > 0
-                    ? hasChecked.replace(/\${checked}/g, checkedLength).replace(/\${total}/g, dataLength)
-                    : noChecked.replace(/\${total}/g, dataLength);
-            } else {
-                return `${checkedLength}/${dataLength}`;
-            }
-        },
-
-        isIndeterminate() {
-            const checkedLength = this.checked.length;
-            return checkedLength > 0 && checkedLength < this.checkableData.length;
-        },
-
-        hasNoMatch() {
-            return this.query.length > 0 && this.filteredData.length === 0;
-        },
-
-        inputIcon() {
-            return this.query.length > 0 && this.inputHover ? 'circle-close' : 'search';
-        },
-
-        labelProp() {
-            return this.props.label || 'label';
-        },
-
-        keyProp() {
-            return this.props.key || 'key';
-        },
-
-        disabledProp() {
-            return this.props.disabled || 'disabled';
-        },
-
-        hasFooter() {
-            return !!this.$slots.default;
         }
     },
 

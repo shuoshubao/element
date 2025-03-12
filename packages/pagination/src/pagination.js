@@ -67,11 +67,11 @@ export default {
     },
 
     render(h) {
-        const layout = this.layout;
+        const { layout } = this;
         if (!layout) return null;
         if (this.hideOnSinglePage && (!this.internalPageCount || this.internalPageCount === 1)) return null;
 
-        let template = (
+        const template = (
             <div
                 class={[
                     'el-pagination',
@@ -224,7 +224,7 @@ export default {
             },
 
             watch: {
-                '$parent.internalCurrentPage'() {
+                '$parent.internalCurrentPage': function () {
                     this.userInput = null;
                 }
             },
@@ -347,7 +347,8 @@ export default {
         internalPageCount() {
             if (typeof this.total === 'number') {
                 return Math.max(1, Math.ceil(this.total / this.internalPageSize));
-            } else if (typeof this.pageCount === 'number') {
+            }
+            if (typeof this.pageCount === 'number') {
                 return Math.max(1, this.pageCount);
             }
             return null;

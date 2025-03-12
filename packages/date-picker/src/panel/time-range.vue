@@ -5,35 +5,35 @@
                 <div class="el-time-range-picker__cell">
                     <div class="el-time-range-picker__header">{{ t('el.datepicker.startTime') }}</div>
                     <div :class="{ 'has-seconds': showSeconds, 'is-arrow': arrowControl }" class="el-time-range-picker__body el-time-panel__content">
-                        <time-spinner
+                        <TimeSpinner
                             ref="minSpinner"
                             :show-seconds="showSeconds"
                             :am-pm-mode="amPmMode"
-                            @change="handleMinChange"
                             :arrow-control="arrowControl"
-                            @select-range="setMinSelectionRange"
                             :date="minDate"
-                        ></time-spinner>
+                            @change="handleMinChange"
+                            @select-range="setMinSelectionRange"
+                        />
                     </div>
                 </div>
                 <div class="el-time-range-picker__cell">
                     <div class="el-time-range-picker__header">{{ t('el.datepicker.endTime') }}</div>
                     <div :class="{ 'has-seconds': showSeconds, 'is-arrow': arrowControl }" class="el-time-range-picker__body el-time-panel__content">
-                        <time-spinner
+                        <TimeSpinner
                             ref="maxSpinner"
                             :show-seconds="showSeconds"
                             :am-pm-mode="amPmMode"
-                            @change="handleMaxChange"
                             :arrow-control="arrowControl"
-                            @select-range="setMaxSelectionRange"
                             :date="maxDate"
-                        ></time-spinner>
+                            @change="handleMaxChange"
+                            @select-range="setMaxSelectionRange"
+                        />
                     </div>
                 </div>
             </div>
             <div class="el-time-panel__footer">
                 <button type="button" class="el-time-panel__btn cancel" @click="handleCancel()">{{ t('el.datepicker.cancel') }}</button>
-                <button type="button" class="el-time-panel__btn confirm" @click="handleConfirm()" :disabled="btnDisabled">
+                <button type="button" class="el-time-panel__btn confirm" :disabled="btnDisabled" @click="handleConfirm()">
                     {{ t('el.datepicker.confirm') }}
                 </button>
             </div>
@@ -63,9 +63,23 @@ const advanceTime = function (date, amount) {
 };
 
 export default {
+    components: { TimeSpinner },
     mixins: [Locale],
 
-    components: { TimeSpinner },
+    data() {
+        return {
+            popperClass: '',
+            minDate: new Date(),
+            maxDate: new Date(),
+            value: [],
+            oldValue: [new Date(), new Date()],
+            defaultValue: null,
+            format: 'HH:mm:ss',
+            visible: false,
+            selectionRange: [0, 2],
+            arrowControl: false
+        };
+    },
 
     computed: {
         showSeconds() {
@@ -88,21 +102,6 @@ export default {
             if ((this.format || '').indexOf('a') !== -1) return 'a';
             return '';
         }
-    },
-
-    data() {
-        return {
-            popperClass: '',
-            minDate: new Date(),
-            maxDate: new Date(),
-            value: [],
-            oldValue: [new Date(), new Date()],
-            defaultValue: null,
-            format: 'HH:mm:ss',
-            visible: false,
-            selectionRange: [0, 2],
-            arrowControl: false
-        };
     },
 
     watch: {
@@ -206,7 +205,7 @@ export default {
         },
 
         handleKeydown(event) {
-            const keyCode = event.keyCode;
+            const { keyCode } = event;
             const mapping = { 38: -1, 40: 1, 37: -1, 39: 1 };
 
             // Left or Right
@@ -222,7 +221,6 @@ export default {
                 const step = mapping[keyCode];
                 this.spinner.scrollDown(step);
                 event.preventDefault();
-                return;
             }
         }
     }

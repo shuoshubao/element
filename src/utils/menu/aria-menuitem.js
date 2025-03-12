@@ -9,7 +9,7 @@ const MenuItem = function (domNode) {
 
 MenuItem.prototype.init = function () {
     this.domNode.setAttribute('tabindex', '0');
-    let menuChild = this.domNode.querySelector('.el-menu');
+    const menuChild = this.domNode.querySelector('.el-menu');
     if (menuChild) {
         this.submenu = new SubMenu(this, menuChild);
     }
@@ -17,7 +17,7 @@ MenuItem.prototype.init = function () {
 };
 
 MenuItem.prototype.addListeners = function () {
-    const keys = Utils.keys;
+    const { keys } = Utils;
     this.domNode.addEventListener('keydown', event => {
         let prevDef = false;
         switch (event.keyCode) {

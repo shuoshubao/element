@@ -1,7 +1,7 @@
 <template>
     <transition name="el-zoom-in-top" @after-leave="doDestroy">
-        <ul class="el-dropdown-menu el-popper" :class="[size && `el-dropdown-menu--${size}`]" v-show="showPopper">
-            <slot></slot>
+        <ul v-show="showPopper" class="el-dropdown-menu el-popper" :class="[size && `el-dropdown-menu--${size}`]">
+            <slot />
         </ul>
     </transition>
 </template>
@@ -15,6 +15,8 @@ export default {
     componentName: 'ElDropdownMenu',
 
     mixins: [Popper],
+
+    inject: ['dropdown'],
 
     props: {
         visibleArrow: {
@@ -33,7 +35,14 @@ export default {
         };
     },
 
-    inject: ['dropdown'],
+    watch: {
+        'dropdown.placement': {
+            immediate: true,
+            handler(val) {
+                this.currentPlacement = val;
+            }
+        }
+    },
 
     created() {
         this.$on('updatePopper', () => {
@@ -50,15 +59,6 @@ export default {
         // compatible with 2.6 new v-slot syntax
         // issue link https://github.com/ElemeFE/element/issues/14345
         this.dropdown.initDomOperation();
-    },
-
-    watch: {
-        'dropdown.placement': {
-            immediate: true,
-            handler(val) {
-                this.currentPlacement = val;
-            }
-        }
     }
 };
 </script>

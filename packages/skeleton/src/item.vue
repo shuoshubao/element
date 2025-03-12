@@ -1,6 +1,6 @@
 <template>
     <div :class="['el-skeleton__item', `el-skeleton__${variant}`]">
-        <img-placeholder v-if="variant === 'image'" />
+        <ImgPlaceholder v-if="variant === 'image'" />
     </div>
 </template>
 
@@ -9,14 +9,14 @@ import ImgPlaceholder from './img-placeholder.vue';
 
 export default {
     name: 'ElSkeletonItem',
+    components: {
+        [ImgPlaceholder.name]: ImgPlaceholder
+    },
     props: {
         variant: {
             type: String,
             default: 'text'
         }
-    },
-    components: {
-        [ImgPlaceholder.name]: ImgPlaceholder
     }
 };
 </script>

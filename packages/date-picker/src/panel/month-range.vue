@@ -11,13 +11,13 @@
             ]"
         >
             <div class="el-picker-panel__body-wrapper">
-                <slot name="sidebar" class="el-picker-panel__sidebar"></slot>
-                <div class="el-picker-panel__sidebar" v-if="shortcuts">
+                <slot name="sidebar" class="el-picker-panel__sidebar" />
+                <div v-if="shortcuts" class="el-picker-panel__sidebar">
                     <button
-                        type="button"
-                        class="el-picker-panel__shortcut"
                         v-for="(shortcut, key) in shortcuts"
                         :key="key"
+                        type="button"
+                        class="el-picker-panel__shortcut"
                         @click="handleShortcutClick(shortcut)"
                     >
                         {{ shortcut.text }}
@@ -26,18 +26,18 @@
                 <div class="el-picker-panel__body">
                     <div class="el-picker-panel__content el-date-range-picker__content is-left">
                         <div class="el-date-range-picker__header">
-                            <button type="button" @click="leftPrevYear" class="el-picker-panel__icon-btn el-icon-d-arrow-left"></button>
+                            <button type="button" class="el-picker-panel__icon-btn el-icon-d-arrow-left" @click="leftPrevYear" />
                             <button
-                                type="button"
                                 v-if="unlinkPanels"
-                                @click="leftNextYear"
+                                type="button"
                                 :disabled="!enableYearArrow"
                                 :class="{ 'is-disabled': !enableYearArrow }"
                                 class="el-picker-panel__icon-btn el-icon-d-arrow-right"
-                            ></button>
+                                @click="leftNextYear"
+                            />
                             <div>{{ leftLabel }}</div>
                         </div>
-                        <month-table
+                        <MonthTable
                             selection-mode="range"
                             :date="leftDate"
                             :default-value="defaultValue"
@@ -47,22 +47,22 @@
                             :disabled-date="disabledDate"
                             @changerange="handleChangeRange"
                             @pick="handleRangePick"
-                        ></month-table>
+                        />
                     </div>
                     <div class="el-picker-panel__content el-date-range-picker__content is-right">
                         <div class="el-date-range-picker__header">
                             <button
-                                type="button"
                                 v-if="unlinkPanels"
-                                @click="rightPrevYear"
+                                type="button"
                                 :disabled="!enableYearArrow"
                                 :class="{ 'is-disabled': !enableYearArrow }"
                                 class="el-picker-panel__icon-btn el-icon-d-arrow-left"
-                            ></button>
-                            <button type="button" @click="rightNextYear" class="el-picker-panel__icon-btn el-icon-d-arrow-right"></button>
+                                @click="rightPrevYear"
+                            />
+                            <button type="button" class="el-picker-panel__icon-btn el-icon-d-arrow-right" @click="rightNextYear" />
                             <div>{{ rightLabel }}</div>
                         </div>
-                        <month-table
+                        <MonthTable
                             selection-mode="range"
                             :date="rightDate"
                             :default-value="defaultValue"
@@ -72,7 +72,7 @@
                             :disabled-date="disabledDate"
                             @changerange="handleChangeRange"
                             @pick="handleRangePick"
-                        ></month-table>
+                        />
                     </div>
                 </div>
             </div>
@@ -91,43 +91,18 @@ import MonthTable from '../basic/month-table.vue';
 const calcDefaultValue = defaultValue => {
     if (Array.isArray(defaultValue)) {
         return [new Date(defaultValue[0]), new Date(defaultValue[1])];
-    } else if (defaultValue) {
-        return [new Date(defaultValue), nextMonth(new Date(defaultValue))];
-    } else {
-        return [new Date(), nextMonth(new Date())];
     }
+    if (defaultValue) {
+        return [new Date(defaultValue), nextMonth(new Date(defaultValue))];
+    }
+    return [new Date(), nextMonth(new Date())];
 };
 
 export default {
-    mixins: [Locale],
-
     directives: { Clickoutside },
 
-    computed: {
-        btnDisabled() {
-            return !(this.minDate && this.maxDate && !this.selecting && this.isValidValue([this.minDate, this.maxDate]));
-        },
-
-        leftLabel() {
-            return this.leftDate.getFullYear() + ' ' + this.t('el.datepicker.year');
-        },
-
-        rightLabel() {
-            return this.rightDate.getFullYear() + ' ' + this.t('el.datepicker.year');
-        },
-
-        leftYear() {
-            return this.leftDate.getFullYear();
-        },
-
-        rightYear() {
-            return this.rightDate.getFullYear() === this.leftDate.getFullYear() ? this.leftDate.getFullYear() + 1 : this.rightDate.getFullYear();
-        },
-
-        enableYearArrow() {
-            return this.unlinkPanels && this.rightYear > this.leftYear + 1;
-        }
-    },
+    components: { MonthTable, ElInput, ElButton },
+    mixins: [Locale],
 
     data() {
         return {
@@ -152,6 +127,32 @@ export default {
             arrowControl: false,
             unlinkPanels: false
         };
+    },
+
+    computed: {
+        btnDisabled() {
+            return !(this.minDate && this.maxDate && !this.selecting && this.isValidValue([this.minDate, this.maxDate]));
+        },
+
+        leftLabel() {
+            return `${this.leftDate.getFullYear()} ${this.t('el.datepicker.year')}`;
+        },
+
+        rightLabel() {
+            return `${this.rightDate.getFullYear()} ${this.t('el.datepicker.year')}`;
+        },
+
+        leftYear() {
+            return this.leftDate.getFullYear();
+        },
+
+        rightYear() {
+            return this.rightDate.getFullYear() === this.leftDate.getFullYear() ? this.leftDate.getFullYear() + 1 : this.rightDate.getFullYear();
+        },
+
+        enableYearArrow() {
+            return this.unlinkPanels && this.rightYear > this.leftYear + 1;
+        }
     },
 
     watch: {
@@ -278,8 +279,6 @@ export default {
             this.minDate = this.value && isDate(this.value[0]) ? new Date(this.value[0]) : null;
             this.maxDate = this.value && isDate(this.value[0]) ? new Date(this.value[1]) : null;
         }
-    },
-
-    components: { MonthTable, ElInput, ElButton }
+    }
 };
 </script>

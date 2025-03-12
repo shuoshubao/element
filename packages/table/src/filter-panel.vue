@@ -1,30 +1,30 @@
 <template>
     <transition name="el-zoom-in-top">
-        <div class="el-table-filter" v-if="multiple" v-clickoutside="handleOutsideClick" v-show="showPopper">
+        <div v-if="multiple" v-show="showPopper" v-clickoutside="handleOutsideClick" class="el-table-filter">
             <div class="el-table-filter__content">
                 <el-scrollbar wrap-class="el-table-filter__wrap">
-                    <el-checkbox-group class="el-table-filter__checkbox-group" v-model="filteredValue">
+                    <el-checkbox-group v-model="filteredValue" class="el-table-filter__checkbox-group">
                         <el-checkbox v-for="filter in filters" :key="filter.value" :label="filter.value">{{ filter.text }}</el-checkbox>
                     </el-checkbox-group>
                 </el-scrollbar>
             </div>
             <div class="el-table-filter__bottom">
-                <button @click="handleConfirm" :class="{ 'is-disabled': filteredValue.length === 0 }" :disabled="filteredValue.length === 0">
+                <button :class="{ 'is-disabled': filteredValue.length === 0 }" :disabled="filteredValue.length === 0" @click="handleConfirm">
                     {{ t('el.table.confirmFilter') }}
                 </button>
                 <button @click="handleReset">{{ t('el.table.resetFilter') }}</button>
             </div>
         </div>
-        <div class="el-table-filter" v-else v-clickoutside="handleOutsideClick" v-show="showPopper">
+        <div v-else v-show="showPopper" v-clickoutside="handleOutsideClick" class="el-table-filter">
             <ul class="el-table-filter__list">
                 <li class="el-table-filter__list-item" :class="{ 'is-active': filterValue === undefined || filterValue === null }" @click="handleSelect(null)">
                     {{ t('el.table.clearFilter') }}
                 </li>
                 <li
-                    class="el-table-filter__list-item"
                     v-for="filter in filters"
-                    :label="filter.value"
                     :key="filter.value"
+                    class="el-table-filter__list-item"
+                    :label="filter.value"
                     :class="{ 'is-active': isActive(filter) }"
                     @click="handleSelect(filter.value)"
                 >
@@ -48,8 +48,6 @@ import Dropdown from './dropdown';
 export default {
     name: 'ElTableFilterPanel',
 
-    mixins: [Popper, Locale],
-
     directives: {
         Clickoutside
     },
@@ -60,53 +58,12 @@ export default {
         ElScrollbar
     },
 
+    mixins: [Popper, Locale],
+
     props: {
         placement: {
             type: String,
             default: 'bottom-end'
-        }
-    },
-
-    methods: {
-        isActive(filter) {
-            return filter.value === this.filterValue;
-        },
-
-        handleOutsideClick() {
-            setTimeout(() => {
-                this.showPopper = false;
-            }, 16);
-        },
-
-        handleConfirm() {
-            this.confirmFilter(this.filteredValue);
-            this.handleOutsideClick();
-        },
-
-        handleReset() {
-            this.filteredValue = [];
-            this.confirmFilter(this.filteredValue);
-            this.handleOutsideClick();
-        },
-
-        handleSelect(filterValue) {
-            this.filterValue = filterValue;
-
-            if (typeof filterValue !== 'undefined' && filterValue !== null) {
-                this.confirmFilter(this.filteredValue);
-            } else {
-                this.confirmFilter([]);
-            }
-
-            this.handleOutsideClick();
-        },
-
-        confirmFilter(filteredValue) {
-            this.table.store.commit('filterChange', {
-                column: this.column,
-                values: filteredValue
-            });
-            this.table.store.updateAllSelected();
         }
     },
 
@@ -159,6 +116,13 @@ export default {
             return true;
         }
     },
+    watch: {
+        showPopper(val) {
+            if (val === true && parseInt(this.popperJS._popper.style.zIndex, 10) < PopupManager.zIndex) {
+                this.popperJS._popper.style.zIndex = PopupManager.nextZIndex();
+            }
+        }
+    },
 
     mounted() {
         this.popperElm = this.$el;
@@ -176,11 +140,47 @@ export default {
             }
         });
     },
-    watch: {
-        showPopper(val) {
-            if (val === true && parseInt(this.popperJS._popper.style.zIndex, 10) < PopupManager.zIndex) {
-                this.popperJS._popper.style.zIndex = PopupManager.nextZIndex();
+
+    methods: {
+        isActive(filter) {
+            return filter.value === this.filterValue;
+        },
+
+        handleOutsideClick() {
+            setTimeout(() => {
+                this.showPopper = false;
+            }, 16);
+        },
+
+        handleConfirm() {
+            this.confirmFilter(this.filteredValue);
+            this.handleOutsideClick();
+        },
+
+        handleReset() {
+            this.filteredValue = [];
+            this.confirmFilter(this.filteredValue);
+            this.handleOutsideClick();
+        },
+
+        handleSelect(filterValue) {
+            this.filterValue = filterValue;
+
+            if (typeof filterValue !== 'undefined' && filterValue !== null) {
+                this.confirmFilter(this.filteredValue);
+            } else {
+                this.confirmFilter([]);
             }
+
+            this.handleOutsideClick();
+        },
+
+        confirmFilter(filteredValue) {
+            this.table.store.commit('filterChange', {
+                column: this.column,
+                values: filteredValue
+            });
+            this.table.store.updateAllSelected();
         }
     }
 };

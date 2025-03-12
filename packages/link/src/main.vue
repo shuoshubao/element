@@ -5,13 +5,13 @@
         v-bind="$attrs"
         @click="handleClick"
     >
-        <i :class="icon" v-if="icon"></i>
+        <i v-if="icon" :class="icon" />
 
         <span v-if="$slots.default" class="el-link--inner">
-            <slot></slot>
+            <slot />
         </span>
 
-        <template v-if="$slots.icon"><slot v-if="$slots.icon" name="icon"></slot></template>
+        <template v-if="$slots.icon"><slot v-if="$slots.icon" name="icon" /></template>
     </a>
 </template>
 

@@ -37,7 +37,7 @@ const reInitChecked = function (node) {
         node.indeterminate = false;
     }
 
-    const parent = node.parent;
+    const { parent } = node;
     if (!parent || parent.level === 0) return;
 
     if (!node.store.checkStrictly) {
@@ -46,15 +46,17 @@ const reInitChecked = function (node) {
 };
 
 const getPropertyFromData = function (node, prop) {
-    const props = node.store.props;
+    const { props } = node.store;
     const data = node.data || {};
     const config = props[prop];
 
     if (typeof config === 'function') {
         return config(data, node);
-    } else if (typeof config === 'string') {
+    }
+    if (typeof config === 'string') {
         return data[config];
-    } else if (typeof config === 'undefined') {
+    }
+    if (typeof config === 'undefined') {
         const dataProp = data[prop];
         return dataProp === undefined ? '' : dataProp;
     }
@@ -74,7 +76,7 @@ export default class Node {
         this.visible = true;
         this.isCurrent = false;
 
-        for (let name in options) {
+        for (const name in options) {
             if (options.hasOwnProperty(name)) {
                 this[name] = options[name];
             }
@@ -90,13 +92,13 @@ export default class Node {
             this.level = this.parent.level + 1;
         }
 
-        const store = this.store;
+        const { store } = this;
         if (!store) {
             throw new Error('[Node]store is required!');
         }
         store.registerNode(this);
 
-        const props = store.props;
+        const { props } = store;
         if (props && typeof props.isLeaf !== 'undefined') {
             const isLeaf = getPropertyFromData(this, 'isLeaf');
             if (typeof isLeaf === 'boolean') {
@@ -117,8 +119,8 @@ export default class Node {
             markNodeData(this, this.data);
         }
         if (!this.data) return;
-        const defaultExpandedKeys = store.defaultExpandedKeys;
-        const key = store.key;
+        const { defaultExpandedKeys } = store;
+        const { key } = store;
         if (key && defaultExpandedKeys && defaultExpandedKeys.indexOf(this.key) !== -1) {
             this.expand(null, store.autoExpandParent);
         }
@@ -170,7 +172,7 @@ export default class Node {
     }
 
     get nextSibling() {
-        const parent = this.parent;
+        const { parent } = this;
         if (parent) {
             const index = parent.childNodes.indexOf(this);
             if (index > -1) {
@@ -181,7 +183,7 @@ export default class Node {
     }
 
     get previousSibling() {
-        const parent = this.parent;
+        const { parent } = this;
         if (parent) {
             const index = parent.childNodes.indexOf(this);
             if (index > -1) {
@@ -209,7 +211,7 @@ export default class Node {
     }
 
     remove() {
-        const parent = this.parent;
+        const { parent } = this;
         if (parent) {
             parent.removeChild(this);
         }
@@ -300,7 +302,7 @@ export default class Node {
     expand(callback, expandParent) {
         const done = () => {
             if (expandParent) {
-                let parent = this.parent;
+                let { parent } = this;
                 while (parent.level > 0) {
                     parent.expanded = true;
                     parent = parent.parent;
@@ -345,7 +347,7 @@ export default class Node {
             this.isLeaf = this.isLeafByUser;
             return;
         }
-        const childNodes = this.childNodes;
+        const { childNodes } = this;
         if (!this.store.lazy || (this.store.lazy === true && this.loaded === true)) {
             this.isLeaf = !childNodes || childNodes.length === 0;
             return;
@@ -360,7 +362,7 @@ export default class Node {
         if (this.store.checkStrictly) return;
 
         if (!(this.shouldLoadData() && !this.store.checkDescendants)) {
-            let { all, allWithoutDisable } = getChildState(this.childNodes);
+            const { all, allWithoutDisable } = getChildState(this.childNodes);
 
             if (!this.isLeaf && !all && allWithoutDisable) {
                 this.checked = false;
@@ -369,7 +371,7 @@ export default class Node {
 
             const handleDescendants = () => {
                 if (deep) {
-                    const childNodes = this.childNodes;
+                    const { childNodes } = this;
                     for (let i = 0, j = childNodes.length; i < j; i++) {
                         const child = childNodes[i];
                         passValue = passValue || value !== false;
@@ -396,12 +398,11 @@ export default class Node {
                     }
                 );
                 return;
-            } else {
-                handleDescendants();
             }
+            handleDescendants();
         }
 
-        const parent = this.parent;
+        const { parent } = this;
         if (!parent || parent.level === 0) return;
 
         if (!recursion) {
@@ -412,10 +413,10 @@ export default class Node {
     getChildren(forceInit = false) {
         // this is data
         if (this.level === 0) return this.data;
-        const data = this.data;
+        const { data } = this;
         if (!data) return null;
 
-        const props = this.store.props;
+        const { props } = this.store;
         let children = 'children';
         if (props) {
             children = props.children || 'children';

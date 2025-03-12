@@ -19,7 +19,7 @@
             </div>
         </template>
         <template v-else>
-            <slot v-bind="$attrs"></slot>
+            <slot v-bind="$attrs" />
         </template>
     </div>
 </template>
@@ -49,6 +49,11 @@ export default {
             default: 0
         }
     },
+    data() {
+        return {
+            uiLoading: this.throttle <= 0 ? this.loading : false
+        };
+    },
     watch: {
         loading: {
             handler(loading) {
@@ -67,11 +72,6 @@ export default {
             },
             immediate: true
         }
-    },
-    data() {
-        return {
-            uiLoading: this.throttle <= 0 ? this.loading : false
-        };
     }
 };
 </script>

@@ -25,9 +25,9 @@ export default {
 
     componentName: 'ElSubmenu',
 
-    mixins: [menuMixin, Emitter, poperMixins],
-
     components: { ElCollapseTransition },
+
+    mixins: [menuMixin, Emitter, poperMixins],
 
     props: {
         index: {
@@ -59,15 +59,6 @@ export default {
             mouseInChild: false
         };
     },
-    watch: {
-        opened(val) {
-            if (this.isMenuPopup) {
-                this.$nextTick(_ => {
-                    this.updatePopper();
-                });
-            }
-        }
-    },
     computed: {
         // popper option
         appendToBody() {
@@ -81,8 +72,8 @@ export default {
         },
         active() {
             let isActive = false;
-            const submenus = this.submenus;
-            const items = this.items;
+            const { submenus } = this;
+            const { items } = this;
 
             Object.keys(items).forEach(index => {
                 if (items[index].active) {
@@ -140,6 +131,35 @@ export default {
             }
             return isFirstLevel;
         }
+    },
+    watch: {
+        opened(val) {
+            if (this.isMenuPopup) {
+                this.$nextTick(_ => {
+                    this.updatePopper();
+                });
+            }
+        }
+    },
+    created() {
+        this.$on('toggle-collapse', this.handleCollapseToggle);
+        this.$on('mouse-enter-child', () => {
+            this.mouseInChild = true;
+            clearTimeout(this.timeout);
+        });
+        this.$on('mouse-leave-child', () => {
+            this.mouseInChild = false;
+            clearTimeout(this.timeout);
+        });
+    },
+    mounted() {
+        this.parentMenu.addSubmenu(this);
+        this.rootMenu.addSubmenu(this);
+        this.initPopper();
+    },
+    beforeDestroy() {
+        this.parentMenu.removeSubmenu(this);
+        this.rootMenu.removeSubmenu(this);
     },
     methods: {
         handleCollapseToggle(value) {
@@ -221,26 +241,6 @@ export default {
             this.popperElm = this.$refs.menu;
             this.updatePlacement();
         }
-    },
-    created() {
-        this.$on('toggle-collapse', this.handleCollapseToggle);
-        this.$on('mouse-enter-child', () => {
-            this.mouseInChild = true;
-            clearTimeout(this.timeout);
-        });
-        this.$on('mouse-leave-child', () => {
-            this.mouseInChild = false;
-            clearTimeout(this.timeout);
-        });
-    },
-    mounted() {
-        this.parentMenu.addSubmenu(this);
-        this.rootMenu.addSubmenu(this);
-        this.initPopper();
-    },
-    beforeDestroy() {
-        this.parentMenu.removeSubmenu(this);
-        this.rootMenu.removeSubmenu(this);
     },
     render(h) {
         const {

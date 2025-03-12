@@ -8,24 +8,24 @@
         @click.prevent="switchValue"
     >
         <input
+            :id="id"
+            ref="input"
             class="el-switch__input"
             type="checkbox"
-            @change="handleChange"
-            ref="input"
-            :id="id"
             :name="name"
             :true-value="activeValue"
             :false-value="inactiveValue"
             :disabled="switchDisabled"
+            @change="handleChange"
             @keydown.enter="switchValue"
         />
-        <span :class="['el-switch__label', 'el-switch__label--left', !checked ? 'is-active' : '']" v-if="inactiveIconClass || inactiveText">
-            <i :class="[inactiveIconClass]" v-if="inactiveIconClass"></i>
+        <span v-if="inactiveIconClass || inactiveText" :class="['el-switch__label', 'el-switch__label--left', !checked ? 'is-active' : '']">
+            <i v-if="inactiveIconClass" :class="[inactiveIconClass]" />
             <span v-if="!inactiveIconClass && inactiveText" :aria-hidden="checked">{{ inactiveText }}</span>
         </span>
-        <span class="el-switch__core" ref="core" :style="{ width: coreWidth + 'px' }"></span>
-        <span :class="['el-switch__label', 'el-switch__label--right', checked ? 'is-active' : '']" v-if="activeIconClass || activeText">
-            <i :class="[activeIconClass]" v-if="activeIconClass"></i>
+        <span ref="core" class="el-switch__core" :style="{ width: coreWidth + 'px' }" />
+        <span v-if="activeIconClass || activeText" :class="['el-switch__label', 'el-switch__label--right', checked ? 'is-active' : '']">
+            <i v-if="activeIconClass" :class="[activeIconClass]" />
             <span v-if="!activeIconClass && activeText" :aria-hidden="!checked">{{ activeText }}</span>
         </span>
     </div>
@@ -98,11 +98,6 @@ export default {
             coreWidth: this.width
         };
     },
-    created() {
-        if (!~[this.activeValue, this.inactiveValue].indexOf(this.value)) {
-            this.$emit('input', this.inactiveValue);
-        }
-    },
     computed: {
         checked() {
             return this.value === this.activeValue;
@@ -122,6 +117,18 @@ export default {
             }
         }
     },
+    created() {
+        if (!~[this.activeValue, this.inactiveValue].indexOf(this.value)) {
+            this.$emit('input', this.inactiveValue);
+        }
+    },
+    mounted() {
+        this.coreWidth = this.width || 40;
+        if (this.activeColor || this.inactiveColor) {
+            this.setBackgroundColor();
+        }
+        this.$refs.input.checked = this.checked;
+    },
     methods: {
         handleChange(event) {
             const val = this.checked ? this.inactiveValue : this.activeValue;
@@ -136,7 +143,7 @@ export default {
             });
         },
         setBackgroundColor() {
-            let newColor = this.checked ? this.activeColor : this.inactiveColor;
+            const newColor = this.checked ? this.activeColor : this.inactiveColor;
             this.$refs.core.style.borderColor = newColor;
             this.$refs.core.style.backgroundColor = newColor;
         },
@@ -157,13 +164,6 @@ export default {
                 }
             };
         }
-    },
-    mounted() {
-        this.coreWidth = this.width || 40;
-        if (this.activeColor || this.inactiveColor) {
-            this.setBackgroundColor();
-        }
-        this.$refs.input.checked = this.checked;
     }
 };
 </script>

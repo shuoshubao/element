@@ -6,7 +6,8 @@ import Picker from '../picker.vue';
 const getPanel = function (type) {
     if (type === 'daterange' || type === 'datetimerange') {
         return DateRangePanel;
-    } else if (type === 'monthrange') {
+    }
+    if (type === 'monthrange') {
         return MonthRangePanel;
     }
     return DatePanel;

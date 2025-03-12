@@ -63,7 +63,7 @@ export default {
     methods: {
         getOptionProps(vnode) {
             if (vnode.componentOptions) {
-                const componentOptions = vnode.componentOptions;
+                const { componentOptions } = vnode;
                 const { propsData = {}, Ctor = {} } = componentOptions;
                 const props = (Ctor.options || {}).props || {};
                 const res = {};
@@ -79,7 +79,7 @@ export default {
             return {};
         },
         getSlots(vnode) {
-            let componentOptions = vnode.componentOptions || {};
+            const componentOptions = vnode.componentOptions || {};
             const children = vnode.children || componentOptions.children || [];
             const slots = {};
             children.forEach(child => {

@@ -1,6 +1,6 @@
 <template>
     <header class="el-header" :style="{ height }">
-        <slot></slot>
+        <slot />
     </header>
 </template>
 

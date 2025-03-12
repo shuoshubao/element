@@ -48,7 +48,7 @@ export default function calcTextareaHeight(targetElement, minRows = 1, maxRows =
         document.body.appendChild(hiddenTextarea);
     }
 
-    let { paddingSize, borderSize, boxSizing, contextStyle } = calculateNodeStyling(targetElement);
+    const { paddingSize, borderSize, boxSizing, contextStyle } = calculateNodeStyling(targetElement);
 
     hiddenTextarea.setAttribute('style', `${contextStyle};${HIDDEN_STYLE}`);
     hiddenTextarea.value = targetElement.value || targetElement.placeholder || '';
@@ -57,13 +57,13 @@ export default function calcTextareaHeight(targetElement, minRows = 1, maxRows =
     const result = {};
 
     if (boxSizing === 'border-box') {
-        height = height + borderSize;
+        height += borderSize;
     } else if (boxSizing === 'content-box') {
-        height = height - paddingSize;
+        height -= paddingSize;
     }
 
     hiddenTextarea.value = '';
-    let singleRowHeight = hiddenTextarea.scrollHeight - paddingSize;
+    const singleRowHeight = hiddenTextarea.scrollHeight - paddingSize;
 
     if (minRows !== null) {
         let minHeight = singleRowHeight * minRows;

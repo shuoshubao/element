@@ -39,7 +39,7 @@ export default {
     computed: {
         avatarClass() {
             const { size, icon, shape } = this;
-            let classList = ['el-avatar'];
+            const classList = ['el-avatar'];
 
             if (size && typeof size === 'string') {
                 classList.push(`el-avatar--${size}`);

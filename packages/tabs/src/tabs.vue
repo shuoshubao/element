@@ -8,6 +8,12 @@ export default {
         TabNav
     },
 
+    provide() {
+        return {
+            rootTabs: this
+        };
+    },
+
     props: {
         type: String,
         activeName: String,
@@ -21,12 +27,6 @@ export default {
         },
         beforeLeave: Function,
         stretch: Boolean
-    },
-
-    provide() {
-        return {
-            rootTabs: this
-        };
     },
 
     data() {
@@ -52,6 +52,22 @@ export default {
                 });
             }
         }
+    },
+
+    created() {
+        if (!this.currentName) {
+            this.setCurrentName('0');
+        }
+
+        this.$on('tab-nav-update', this.calcPaneInstances.bind(null, true));
+    },
+
+    mounted() {
+        this.calcPaneInstances();
+    },
+
+    updated() {
+        this.calcPaneInstances();
     },
 
     methods: {
@@ -113,7 +129,7 @@ export default {
     },
 
     render(h) {
-        let { type, handleTabClick, handleTabRemove, handleTabAdd, currentName, panes, editable, addable, tabPosition, stretch } = this;
+        const { type, handleTabClick, handleTabRemove, handleTabAdd, currentName, panes, editable, addable, tabPosition, stretch } = this;
 
         const newButton =
             editable || addable ? (
@@ -163,22 +179,6 @@ export default {
                 {tabPosition !== 'bottom' ? [header, panels] : [panels, header]}
             </div>
         );
-    },
-
-    created() {
-        if (!this.currentName) {
-            this.setCurrentName('0');
-        }
-
-        this.$on('tab-nav-update', this.calcPaneInstances.bind(null, true));
-    },
-
-    mounted() {
-        this.calcPaneInstances();
-    },
-
-    updated() {
-        this.calcPaneInstances();
     }
 };
 </script>

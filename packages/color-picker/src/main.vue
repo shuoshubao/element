@@ -1,6 +1,6 @@
 <template>
-    <div :class="['el-color-picker', colorDisabled ? 'is-disabled' : '', colorSize ? `el-color-picker--${colorSize}` : '']" v-clickoutside="hide">
-        <div class="el-color-picker__mask" v-if="colorDisabled"></div>
+    <div v-clickoutside="hide" :class="['el-color-picker', colorDisabled ? 'is-disabled' : '', colorSize ? `el-color-picker--${colorSize}` : '']">
+        <div v-if="colorDisabled" class="el-color-picker__mask" />
         <div class="el-color-picker__trigger" @click="handleTrigger">
             <span class="el-color-picker__color" :class="{ 'is-alpha': showAlpha }">
                 <span
@@ -8,21 +8,21 @@
                     :style="{
                         backgroundColor: displayedColor
                     }"
-                ></span>
-                <span class="el-color-picker__empty el-icon-close" v-if="!value && !showPanelColor"></span>
+                />
+                <span v-if="!value && !showPanelColor" class="el-color-picker__empty el-icon-close" />
             </span>
-            <span class="el-color-picker__icon el-icon-arrow-down" v-show="value || showPanelColor"></span>
+            <span v-show="value || showPanelColor" class="el-color-picker__icon el-icon-arrow-down" />
         </div>
-        <picker-dropdown
+        <PickerDropdown
             ref="dropdown"
-            :class="['el-color-picker__panel', popperClass || '']"
             v-model="showPicker"
-            @pick="confirmValue"
-            @clear="clearValue"
+            :class="['el-color-picker__panel', popperClass || '']"
             :color="color"
             :show-alpha="showAlpha"
             :predefine="predefine"
-        ></picker-dropdown>
+            @pick="confirmValue"
+            @clear="clearValue"
+        />
     </div>
 </template>
 
@@ -35,7 +35,22 @@ import Emitter from 'element-ui/src/mixins/emitter';
 export default {
     name: 'ElColorPicker',
 
+    directives: { Clickoutside },
+
+    components: {
+        PickerDropdown
+    },
+
     mixins: [Emitter],
+
+    inject: {
+        elForm: {
+            default: ''
+        },
+        elFormItem: {
+            default: ''
+        }
+    },
 
     props: {
         value: String,
@@ -47,16 +62,18 @@ export default {
         predefine: Array
     },
 
-    inject: {
-        elForm: {
-            default: ''
-        },
-        elFormItem: {
-            default: ''
-        }
-    },
+    data() {
+        const color = new Color({
+            enableAlpha: this.showAlpha,
+            format: this.colorFormat
+        });
 
-    directives: { Clickoutside },
+        return {
+            color,
+            showPicker: false,
+            showPanelColor: false
+        };
+    },
 
     computed: {
         displayedColor() {
@@ -109,13 +126,21 @@ export default {
         }
     },
 
+    mounted() {
+        const { value } = this;
+        if (value) {
+            this.color.fromString(value);
+        }
+        this.popperElm = this.$refs.dropdown.$el;
+    },
+
     methods: {
         handleTrigger() {
             if (this.colorDisabled) return;
             this.showPicker = !this.showPicker;
         },
         confirmValue() {
-            const value = this.color.value;
+            const { value } = this.color;
             this.$emit('input', value);
             this.$emit('change', value);
             this.dispatch('ElFormItem', 'el.form.change', value);
@@ -152,31 +177,6 @@ export default {
             const { r, g, b } = color.toRgb();
             return showAlpha ? `rgba(${r}, ${g}, ${b}, ${color.get('alpha') / 100})` : `rgb(${r}, ${g}, ${b})`;
         }
-    },
-
-    mounted() {
-        const value = this.value;
-        if (value) {
-            this.color.fromString(value);
-        }
-        this.popperElm = this.$refs.dropdown.$el;
-    },
-
-    data() {
-        const color = new Color({
-            enableAlpha: this.showAlpha,
-            format: this.colorFormat
-        });
-
-        return {
-            color,
-            showPicker: false,
-            showPanelColor: false
-        };
-    },
-
-    components: {
-        PickerDropdown
     }
 };
 </script>

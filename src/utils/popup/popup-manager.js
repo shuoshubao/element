@@ -7,7 +7,7 @@ let zIndex;
 
 const getModal = function () {
     if (Vue.prototype.$isServer) return;
-    let modalDom = PopupManager.modalDom;
+    let { modalDom } = PopupManager;
     if (modalDom) {
         hasModal = true;
     } else {
@@ -15,12 +15,12 @@ const getModal = function () {
         modalDom = document.createElement('div');
         PopupManager.modalDom = modalDom;
 
-        modalDom.addEventListener('touchmove', function (event) {
+        modalDom.addEventListener('touchmove', event => {
             event.preventDefault();
             event.stopPropagation();
         });
 
-        modalDom.addEventListener('click', function () {
+        modalDom.addEventListener('click', () => {
             PopupManager.doOnModalClick && PopupManager.doOnModalClick();
         });
     }
@@ -33,30 +33,30 @@ const instances = {};
 const PopupManager = {
     modalFade: true,
 
-    getInstance: function (id) {
+    getInstance(id) {
         return instances[id];
     },
 
-    register: function (id, instance) {
+    register(id, instance) {
         if (id && instance) {
             instances[id] = instance;
         }
     },
 
-    deregister: function (id) {
+    deregister(id) {
         if (id) {
             instances[id] = null;
             delete instances[id];
         }
     },
 
-    nextZIndex: function () {
+    nextZIndex() {
         return PopupManager.zIndex++;
     },
 
     modalStack: [],
 
-    doOnModalClick: function () {
+    doOnModalClick() {
         const topItem = PopupManager.modalStack[PopupManager.modalStack.length - 1];
         if (!topItem) return;
 
@@ -66,12 +66,12 @@ const PopupManager = {
         }
     },
 
-    openModal: function (id, zIndex, dom, modalClass, modalFade) {
+    openModal(id, zIndex, dom, modalClass, modalFade) {
         if (Vue.prototype.$isServer) return;
         if (!id || zIndex === undefined) return;
         this.modalFade = modalFade;
 
-        const modalStack = this.modalStack;
+        const { modalStack } = this;
 
         for (let i = 0, j = modalStack.length; i < j; i++) {
             const item = modalStack[i];
@@ -87,7 +87,7 @@ const PopupManager = {
             addClass(modalDom, 'v-modal-enter');
         }
         if (modalClass) {
-            let classArr = modalClass.trim().split(/\s+/);
+            const classArr = modalClass.trim().split(/\s+/);
             classArr.forEach(item => addClass(modalDom, item));
         }
         setTimeout(() => {
@@ -106,18 +106,18 @@ const PopupManager = {
         modalDom.tabIndex = 0;
         modalDom.style.display = '';
 
-        this.modalStack.push({ id: id, zIndex: zIndex, modalClass: modalClass });
+        this.modalStack.push({ id, zIndex, modalClass });
     },
 
-    closeModal: function (id) {
-        const modalStack = this.modalStack;
+    closeModal(id) {
+        const { modalStack } = this;
         const modalDom = getModal();
 
         if (modalStack.length > 0) {
             const topItem = modalStack[modalStack.length - 1];
             if (topItem.id === id) {
                 if (topItem.modalClass) {
-                    let classArr = topItem.modalClass.trim().split(/\s+/);
+                    const classArr = topItem.modalClass.trim().split(/\s+/);
                     classArr.forEach(item => removeClass(modalDom, item));
                 }
 
@@ -170,15 +170,13 @@ const getTopPopup = function () {
     if (PopupManager.modalStack.length > 0) {
         const topPopup = PopupManager.modalStack[PopupManager.modalStack.length - 1];
         if (!topPopup) return;
-        const instance = PopupManager.getInstance(topPopup.id);
-
-        return instance;
+        return PopupManager.getInstance(topPopup.id);
     }
 };
 
 if (!Vue.prototype.$isServer) {
     // handle `esc` key when the popup is shown
-    window.addEventListener('keydown', function (event) {
+    window.addEventListener('keydown', event => {
         if (event.keyCode === 27) {
             const topPopup = getTopPopup();
 

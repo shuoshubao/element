@@ -1,6 +1,6 @@
 <template>
     <div class="el-transfer">
-        <transfer-panel
+        <TransferPanel
             v-bind="$props"
             ref="leftPanel"
             :data="sourceData"
@@ -9,29 +9,29 @@
             :placeholder="filterPlaceholder || t('el.transfer.filterPlaceholder')"
             @checked-change="onSourceCheckedChange"
         >
-            <slot name="left-footer"></slot>
-        </transfer-panel>
+            <slot name="left-footer" />
+        </TransferPanel>
         <div class="el-transfer__buttons">
             <el-button
                 type="primary"
                 :class="['el-transfer__button', hasButtonTexts ? 'is-with-texts' : '']"
-                @click.native="addToLeft"
                 :disabled="rightChecked.length === 0"
+                @click.native="addToLeft"
             >
-                <i class="el-icon-arrow-left"></i>
+                <i class="el-icon-arrow-left" />
                 <span v-if="buttonTexts[0] !== undefined">{{ buttonTexts[0] }}</span>
             </el-button>
             <el-button
                 type="primary"
                 :class="['el-transfer__button', hasButtonTexts ? 'is-with-texts' : '']"
-                @click.native="addToRight"
                 :disabled="leftChecked.length === 0"
+                @click.native="addToRight"
             >
                 <span v-if="buttonTexts[1] !== undefined">{{ buttonTexts[1] }}</span>
-                <i class="el-icon-arrow-right"></i>
+                <i class="el-icon-arrow-right" />
             </el-button>
         </div>
-        <transfer-panel
+        <TransferPanel
             v-bind="$props"
             ref="rightPanel"
             :data="targetData"
@@ -40,8 +40,8 @@
             :placeholder="filterPlaceholder || t('el.transfer.filterPlaceholder')"
             @checked-change="onTargetCheckedChange"
         >
-            <slot name="right-footer"></slot>
-        </transfer-panel>
+            <slot name="right-footer" />
+        </TransferPanel>
     </div>
 </template>
 
@@ -55,12 +55,12 @@ import TransferPanel from './transfer-panel.vue';
 export default {
     name: 'ElTransfer',
 
-    mixins: [Emitter, Locale, Migrating],
-
     components: {
         TransferPanel,
         ElButton
     },
+
+    mixins: [Emitter, Locale, Migrating],
 
     props: {
         data: {
@@ -137,7 +137,7 @@ export default {
 
     computed: {
         dataObj() {
-            const key = this.props.key;
+            const { key } = this.props;
             return this.data.reduce((o, cur) => (o[cur[key]] = cur) && o, {});
         },
 
@@ -148,15 +148,14 @@ export default {
         targetData() {
             if (this.targetOrder === 'original') {
                 return this.data.filter(item => this.value.indexOf(item[this.props.key]) > -1);
-            } else {
-                return this.value.reduce((arr, cur) => {
-                    const val = this.dataObj[cur];
-                    if (val) {
-                        arr.push(val);
-                    }
-                    return arr;
-                }, []);
             }
+            return this.value.reduce((arr, cur) => {
+                const val = this.dataObj[cur];
+                if (val) {
+                    arr.push(val);
+                }
+                return arr;
+            }, []);
         },
 
         hasButtonTexts() {
@@ -192,7 +191,7 @@ export default {
         },
 
         addToLeft() {
-            let currentValue = this.value.slice();
+            const currentValue = this.value.slice();
             this.rightChecked.forEach(item => {
                 const index = currentValue.indexOf(item);
                 if (index > -1) {
@@ -206,7 +205,7 @@ export default {
         addToRight() {
             let currentValue = this.value.slice();
             const itemsToBeMoved = [];
-            const key = this.props.key;
+            const { key } = this.props;
             this.data.forEach(item => {
                 const itemKey = item[key];
                 if (this.leftChecked.indexOf(itemKey) > -1 && this.value.indexOf(itemKey) === -1) {

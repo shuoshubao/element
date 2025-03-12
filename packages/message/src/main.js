@@ -3,10 +3,11 @@ import { isObject } from 'element-ui/src/utils/types';
 import { isVNode } from 'element-ui/src/utils/vdom';
 import Vue from 'vue';
 import Main from './main.vue';
-let MessageConstructor = Vue.extend(Main);
+
+const MessageConstructor = Vue.extend(Main);
 
 let instance;
-let instances = [];
+const instances = [];
 let seed = 1;
 
 const Message = function (options) {
@@ -17,8 +18,8 @@ const Message = function (options) {
             message: options
         };
     }
-    let userOnClose = options.onClose;
-    let id = 'message_' + seed++;
+    const userOnClose = options.onClose;
+    const id = `message_${seed++}`;
 
     options.onClose = function () {
         Message.close(id, userOnClose);
@@ -60,7 +61,7 @@ const Message = function (options) {
 });
 
 Message.close = function (id, userOnClose) {
-    let len = instances.length;
+    const len = instances.length;
     let index = -1;
     let removedHeight;
     for (let i = 0; i < len; i++) {
@@ -76,8 +77,8 @@ Message.close = function (id, userOnClose) {
     }
     if (len <= 1 || index === -1 || index > instances.length - 1) return;
     for (let i = index; i < len - 1; i++) {
-        let dom = instances[i].$el;
-        dom.style['top'] = parseInt(dom.style['top'], 10) - removedHeight - 16 + 'px';
+        const dom = instances[i].$el;
+        dom.style.top = `${parseInt(dom.style.top, 10) - removedHeight - 16}px`;
     }
 };
 

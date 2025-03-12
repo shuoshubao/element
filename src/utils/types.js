@@ -17,7 +17,7 @@ export function isHtmlElement(node) {
  *    https://github.com/jashkenas/underscore/blob/master/modules/isFunction.js
  */
 let isFunction = functionToCheck => {
-    var getType = {};
+    const getType = {};
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 };
 

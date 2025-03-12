@@ -1,15 +1,15 @@
 <template>
     <transition name="el-zoom-in-top" @after-leave="doDestroy">
-        <div class="el-color-dropdown" v-show="showPopper">
+        <div v-show="showPopper" class="el-color-dropdown">
             <div class="el-color-dropdown__main-wrapper">
-                <hue-slider ref="hue" :color="color" vertical style="float: right"></hue-slider>
-                <sv-panel ref="sl" :color="color"></sv-panel>
+                <HueSlider ref="hue" :color="color" vertical style="float: right" />
+                <SvPanel ref="sl" :color="color" />
             </div>
-            <alpha-slider v-if="showAlpha" ref="alpha" :color="color"></alpha-slider>
-            <predefine v-if="predefine" :color="color" :colors="predefine"></predefine>
+            <AlphaSlider v-if="showAlpha" ref="alpha" :color="color" />
+            <Predefine v-if="predefine" :color="color" :colors="predefine" />
             <div class="el-color-dropdown__btns">
                 <span class="el-color-dropdown__value">
-                    <el-input v-model="customInput" @keyup.native.enter="handleConfirm" @blur="handleConfirm" :validate-event="false" size="mini"></el-input>
+                    <el-input v-model="customInput" :validate-event="false" size="mini" @keyup.native.enter="handleConfirm" @blur="handleConfirm" />
                 </span>
                 <el-button size="mini" type="text" class="el-color-dropdown__link-btn" @click="$emit('clear')">
                     {{ t('el.colorpicker.clear') }}
@@ -33,9 +33,7 @@ import Predefine from './predefine.vue';
 import SvPanel from './sv-panel.vue';
 
 export default {
-    name: 'el-color-picker-dropdown',
-
-    mixins: [Popper, Locale],
+    name: 'ElColorPickerDropdown',
 
     components: {
         SvPanel,
@@ -45,6 +43,8 @@ export default {
         ElButton,
         Predefine
     },
+
+    mixins: [Popper, Locale],
 
     props: {
         color: {
@@ -67,21 +67,6 @@ export default {
         }
     },
 
-    methods: {
-        confirmValue() {
-            this.$emit('pick');
-        },
-
-        handleConfirm() {
-            this.color.fromString(this.customInput);
-        }
-    },
-
-    mounted() {
-        this.$parent.popperElm = this.popperElm = this.$el;
-        this.referenceElm = this.$parent.$el;
-    },
-
     watch: {
         showPopper(val) {
             if (val === true) {
@@ -99,6 +84,21 @@ export default {
             handler(val) {
                 this.customInput = val;
             }
+        }
+    },
+
+    mounted() {
+        this.$parent.popperElm = this.popperElm = this.$el;
+        this.referenceElm = this.$parent.$el;
+    },
+
+    methods: {
+        confirmValue() {
+            this.$emit('pick');
+        },
+
+        handleConfirm() {
+            this.color.fromString(this.customInput);
         }
     }
 };

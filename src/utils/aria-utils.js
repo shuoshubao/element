@@ -11,8 +11,8 @@ aria.Utils = aria.Utils || {};
  *  true if a focusable element is found and focus is set.
  */
 aria.Utils.focusFirstDescendant = function (element) {
-    for (var i = 0; i < element.childNodes.length; i++) {
-        var child = element.childNodes[i];
+    for (let i = 0; i < element.childNodes.length; i++) {
+        const child = element.childNodes[i];
         if (aria.Utils.attemptFocus(child) || aria.Utils.focusFirstDescendant(child)) {
             return true;
         }
@@ -29,8 +29,8 @@ aria.Utils.focusFirstDescendant = function (element) {
  */
 
 aria.Utils.focusLastDescendant = function (element) {
-    for (var i = element.childNodes.length - 1; i >= 0; i--) {
-        var child = element.childNodes[i];
+    for (let i = element.childNodes.length - 1; i >= 0; i--) {
+        const child = element.childNodes[i];
         if (aria.Utils.attemptFocus(child) || aria.Utils.focusLastDescendant(child)) {
             return true;
         }
@@ -100,7 +100,7 @@ aria.Utils.triggerEvent = function (elm, name, ...opts) {
     const evt = document.createEvent(eventName);
 
     evt.initEvent(name, ...opts);
-    elm.dispatchEvent ? elm.dispatchEvent(evt) : elm.fireEvent('on' + name, evt);
+    elm.dispatchEvent ? elm.dispatchEvent(evt) : elm.fireEvent(`on${name}`, evt);
 
     return elm;
 };

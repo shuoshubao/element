@@ -3,7 +3,7 @@ import { debounce } from 'throttle-debounce';
 const isServer = typeof window === 'undefined';
 
 const resizeHandler = function (entries) {
-    for (let entry of entries) {
+    for (const entry of entries) {
         const listeners = entry.target.__resizeListeners__ || [];
         if (listeners.length) {
             listeners.forEach(fn => {

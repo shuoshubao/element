@@ -1,5 +1,5 @@
 <template>
-    <div class="el-autocomplete" v-clickoutside="close" aria-haspopup="listbox" role="combobox" :aria-expanded="suggestionVisible" :aria-owns="id">
+    <div v-clickoutside="close" class="el-autocomplete" aria-haspopup="listbox" role="combobox" :aria-expanded="suggestionVisible" :aria-owns="id">
         <el-input
             ref="input"
             v-bind="[$props, $attrs]"
@@ -13,36 +13,36 @@
             @keydown.enter.native="handleKeyEnter"
             @keydown.native.tab="close"
         >
-            <template slot="prepend" v-if="$slots.prepend">
-                <slot name="prepend"></slot>
+            <template v-if="$slots.prepend" slot="prepend">
+                <slot name="prepend" />
             </template>
-            <template slot="append" v-if="$slots.append">
-                <slot name="append"></slot>
+            <template v-if="$slots.append" slot="append">
+                <slot name="append" />
             </template>
-            <template slot="prefix" v-if="$slots.prefix">
-                <slot name="prefix"></slot>
+            <template v-if="$slots.prefix" slot="prefix">
+                <slot name="prefix" />
             </template>
-            <template slot="suffix" v-if="$slots.suffix">
-                <slot name="suffix"></slot>
+            <template v-if="$slots.suffix" slot="suffix">
+                <slot name="suffix" />
             </template>
         </el-input>
         <el-autocomplete-suggestions
+            :id="id"
+            ref="suggestions"
             visible-arrow
             :class="[popperClass ? popperClass : '']"
             :popper-options="popperOptions"
             :append-to-body="popperAppendToBody"
-            ref="suggestions"
             :placement="placement"
-            :id="id"
         >
             <li
                 v-for="(item, index) in suggestions"
+                :id="`${id}-item-${index}`"
                 :key="index"
                 :class="{ highlighted: highlightedIndex === index }"
-                @click="select(item)"
-                :id="`${id}-item-${index}`"
                 role="option"
                 :aria-selected="highlightedIndex === index"
+                @click="select(item)"
             >
                 <slot :item="item">
                     {{ item[valueKey] }}
@@ -139,8 +139,8 @@ export default {
     },
     computed: {
         suggestionVisible() {
-            const suggestions = this.suggestions;
-            let isValidData = Array.isArray(suggestions) && suggestions.length > 0;
+            const { suggestions } = this;
+            const isValidData = Array.isArray(suggestions) && suggestions.length > 0;
             return (isValidData || this.loading) && this.activated;
         },
         id() {
@@ -149,11 +149,25 @@ export default {
     },
     watch: {
         suggestionVisible(val) {
-            let $input = this.getInput();
+            const $input = this.getInput();
             if ($input) {
                 this.broadcast('ElAutocompleteSuggestions', 'visible', [val, $input.offsetWidth]);
             }
         }
+    },
+    mounted() {
+        this.debouncedGetData = debounce(this.debounce, this.getData);
+        this.$on('item-click', item => {
+            this.select(item);
+        });
+        const $input = this.getInput();
+        $input.setAttribute('role', 'textbox');
+        $input.setAttribute('aria-autocomplete', 'list');
+        $input.setAttribute('aria-controls', 'id');
+        $input.setAttribute('aria-activedescendant', `${this.id}-item-${this.highlightedIndex}`);
+    },
+    beforeDestroy() {
+        this.$refs.suggestions.$destroy();
     },
     methods: {
         getMigratingConfig() {
@@ -246,9 +260,9 @@ export default {
             const suggestion = this.$refs.suggestions.$el.querySelector('.el-autocomplete-suggestion__wrap');
             const suggestionList = suggestion.querySelectorAll('.el-autocomplete-suggestion__list li');
 
-            let highlightItem = suggestionList[index];
-            let scrollTop = suggestion.scrollTop;
-            let offsetTop = highlightItem.offsetTop;
+            const highlightItem = suggestionList[index];
+            const { scrollTop } = suggestion;
+            const { offsetTop } = highlightItem;
 
             if (offsetTop + highlightItem.scrollHeight > scrollTop + suggestion.clientHeight) {
                 suggestion.scrollTop += highlightItem.scrollHeight;
@@ -257,26 +271,12 @@ export default {
                 suggestion.scrollTop -= highlightItem.scrollHeight;
             }
             this.highlightedIndex = index;
-            let $input = this.getInput();
+            const $input = this.getInput();
             $input.setAttribute('aria-activedescendant', `${this.id}-item-${this.highlightedIndex}`);
         },
         getInput() {
             return this.$refs.input.getInput();
         }
-    },
-    mounted() {
-        this.debouncedGetData = debounce(this.debounce, this.getData);
-        this.$on('item-click', item => {
-            this.select(item);
-        });
-        let $input = this.getInput();
-        $input.setAttribute('role', 'textbox');
-        $input.setAttribute('aria-autocomplete', 'list');
-        $input.setAttribute('aria-controls', 'id');
-        $input.setAttribute('aria-activedescendant', `${this.id}-item-${this.highlightedIndex}`);
-    },
-    beforeDestroy() {
-        this.$refs.suggestions.$destroy();
     }
 };
 </script>

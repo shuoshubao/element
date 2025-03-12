@@ -53,6 +53,27 @@ export default {
         }
     },
 
+    updated() {
+        this.update();
+    },
+
+    mounted() {
+        addResizeListener(this.$el, this.update);
+        document.addEventListener('visibilitychange', this.visibilityChangeHandler);
+        window.addEventListener('blur', this.windowBlurHandler);
+        window.addEventListener('focus', this.windowFocusHandler);
+        setTimeout(() => {
+            this.scrollToActiveTab();
+        }, 0);
+    },
+
+    beforeDestroy() {
+        if (this.$el && this.update) removeResizeListener(this.$el, this.update);
+        document.removeEventListener('visibilitychange', this.visibilityChangeHandler);
+        window.removeEventListener('blur', this.windowBlurHandler);
+        window.removeEventListener('focus', this.windowFocusHandler);
+    },
+
     methods: {
         scrollPrev() {
             const containerSize = this.$refs.navScroll[`offset${firstUpperCase(this.sizeName)}`];
@@ -60,7 +81,7 @@ export default {
 
             if (!currentOffset) return;
 
-            let newOffset = currentOffset > containerSize ? currentOffset - containerSize : 0;
+            const newOffset = currentOffset > containerSize ? currentOffset - containerSize : 0;
 
             this.navOffset = newOffset;
         },
@@ -71,16 +92,16 @@ export default {
 
             if (navSize - currentOffset <= containerSize) return;
 
-            let newOffset = navSize - currentOffset > containerSize * 2 ? currentOffset + containerSize : navSize - containerSize;
+            const newOffset = navSize - currentOffset > containerSize * 2 ? currentOffset + containerSize : navSize - containerSize;
 
             this.navOffset = newOffset;
         },
         scrollToActiveTab() {
             if (!this.scrollable) return;
-            const nav = this.$refs.nav;
+            const { nav } = this.$refs;
             const activeTab = this.$el.querySelector('.is-active');
             if (!activeTab) return;
-            const navScroll = this.$refs.navScroll;
+            const { navScroll } = this.$refs;
             const isHorizontal = ['top', 'bottom'].indexOf(this.rootTabs.tabPosition) !== -1;
             const activeTabBounding = activeTab.getBoundingClientRect();
             const navScrollBounding = navScroll.getBoundingClientRect();
@@ -108,7 +129,7 @@ export default {
         },
         update() {
             if (!this.$refs.nav) return;
-            const sizeName = this.sizeName;
+            const { sizeName } = this;
             const navSize = this.$refs.nav[`offset${firstUpperCase(sizeName)}`];
             const containerSize = this.$refs.navScroll[`offset${firstUpperCase(sizeName)}`];
             const currentOffset = this.navOffset;
@@ -129,9 +150,10 @@ export default {
             }
         },
         changeTab(e) {
-            const keyCode = e.keyCode;
+            const { keyCode } = e;
             let nextIndex;
-            let currentIndex, tabList;
+            let currentIndex;
+            let tabList;
             if ([37, 38, 39, 40].indexOf(keyCode) !== -1) {
                 // 左右上下键更换tab
                 tabList = e.currentTarget.querySelectorAll('[role=tab]');
@@ -188,10 +210,6 @@ export default {
         }
     },
 
-    updated() {
-        this.update();
-    },
-
     render(h) {
         const { type, panes, editable, stretch, onTabClick, onTabRemove, navStyle, scrollable, scrollNext, scrollPrev, changeTab, setFocus, removeFocus } =
             this;
@@ -207,7 +225,7 @@ export default {
             : null;
 
         const tabs = this._l(panes, (pane, index) => {
-            let tabName = pane.name || pane.index || index;
+            const tabName = pane.name || pane.index || index;
             const closable = pane.isClosable || editable;
 
             pane.index = `${index}`;
@@ -283,23 +301,6 @@ export default {
                 </div>
             </div>
         );
-    },
-
-    mounted() {
-        addResizeListener(this.$el, this.update);
-        document.addEventListener('visibilitychange', this.visibilityChangeHandler);
-        window.addEventListener('blur', this.windowBlurHandler);
-        window.addEventListener('focus', this.windowFocusHandler);
-        setTimeout(() => {
-            this.scrollToActiveTab();
-        }, 0);
-    },
-
-    beforeDestroy() {
-        if (this.$el && this.update) removeResizeListener(this.$el, this.update);
-        document.removeEventListener('visibilitychange', this.visibilityChangeHandler);
-        window.removeEventListener('blur', this.windowBlurHandler);
-        window.removeEventListener('focus', this.windowFocusHandler);
     }
 };
 </script>

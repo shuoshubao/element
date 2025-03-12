@@ -8,8 +8,8 @@
             role="region"
         >
             <el-scrollbar tag="ul" wrap-class="el-autocomplete-suggestion__wrap" view-class="el-autocomplete-suggestion__list">
-                <li v-if="!parent.hideLoading && parent.loading"><i class="el-icon-loading"></i></li>
-                <slot v-else></slot>
+                <li v-if="!parent.hideLoading && parent.loading"><i class="el-icon-loading" /></li>
+                <slot v-else />
             </el-scrollbar>
         </div>
     </transition>
@@ -26,13 +26,6 @@ export default {
 
     componentName: 'ElAutocompleteSuggestions',
 
-    data() {
-        return {
-            parent: this.$parent,
-            dropdownWidth: ''
-        };
-    },
-
     props: {
         options: {
             default() {
@@ -44,10 +37,11 @@ export default {
         id: String
     },
 
-    methods: {
-        select(item) {
-            this.dispatch('ElAutocomplete', 'item-click', item);
-        }
+    data() {
+        return {
+            parent: this.$parent,
+            dropdownWidth: ''
+        };
     },
 
     updated() {
@@ -66,9 +60,15 @@ export default {
 
     created() {
         this.$on('visible', (val, inputWidth) => {
-            this.dropdownWidth = inputWidth + 'px';
+            this.dropdownWidth = `${inputWidth}px`;
             this.showPopper = val;
         });
+    },
+
+    methods: {
+        select(item) {
+            this.dispatch('ElAutocomplete', 'item-click', item);
+        }
     }
 };
 </script>
