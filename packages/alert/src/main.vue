@@ -8,12 +8,7 @@
                 </span>
                 <p v-if="$slots.default && !description" class="el-alert__description"><slot /></p>
                 <p v-if="description && !$slots.default" class="el-alert__description">{{ description }}</p>
-                <i
-                    v-show="closable"
-                    class="el-alert__closebtn"
-                    :class="{ 'is-customed': closeText !== '', 'el-icon-close': closeText === '' }"
-                    @click="close()"
-                >
+                <i v-if="closable" class="el-alert__closebtn" :class="{ 'is-customed': closeText !== '', 'el-icon-close': closeText === '' }" @click="close()">
                     {{ closeText }}
                 </i>
             </div>

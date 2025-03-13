@@ -1,3 +1,4 @@
+import ImageViewer from 'element-ui/packages/image/src/image-viewer.vue';
 import CollapseTransition from 'element-ui/src/transitions/collapse-transition';
 import Alert from '../packages/alert/index';
 import Aside from '../packages/aside/index';
@@ -155,6 +156,7 @@ export default [
     Link,
     Divider,
     Image,
+    ImageViewer,
     Calendar,
     Backtop,
     PageHeader,

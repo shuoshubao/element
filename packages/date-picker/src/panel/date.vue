@@ -134,16 +134,14 @@
             <div v-show="footerVisible && (currentView === 'date' || currentView === 'month' || currentView === 'year')" class="el-picker-panel__footer">
                 <el-button
                     v-show="selectionMode !== 'dates' && selectionMode !== 'months' && selectionMode !== 'years'"
-                    size="mini"
                     type="text"
+                    size="mini"
                     class="el-picker-panel__link-btn"
                     @click="changeToNow"
                 >
                     {{ t('el.datepicker.now') }}
                 </el-button>
-                <el-button plain size="mini" class="el-picker-panel__link-btn" @click="confirm">
-                    {{ t('el.datepicker.confirm') }}
-                </el-button>
+                <el-button type="primary" size="mini" class="el-picker-panel__link-btn" @click="confirm">{{ t('el.datepicker.confirm') }}</el-button>
             </div>
         </div>
     </transition>

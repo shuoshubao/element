@@ -36,14 +36,14 @@
                             </slot>
                         </div>
                     </div>
-                    <div v-show="showInput" class="el-message-box__input">
+                    <div v-if="showInput" class="el-message-box__input">
                         <el-input ref="input" v-model="inputValue" :type="inputType" :placeholder="inputPlaceholder" @keydown.enter.native="handleInputEnter" />
                         <div class="el-message-box__errormsg" :style="{ visibility: !!editorErrorMessage ? 'visible' : 'hidden' }">
                             {{ editorErrorMessage }}
                         </div>
                     </div>
                 </div>
-                <div class="el-message-box__btns">
+                <div v-if="showCancelButton || showConfirmButton" class="el-message-box__btns">
                     <el-button
                         v-if="showCancelButton"
                         :loading="cancelButtonLoading"
@@ -56,7 +56,7 @@
                         {{ cancelButtonText || t('el.messagebox.cancel') }}
                     </el-button>
                     <el-button
-                        v-show="showConfirmButton"
+                        v-if="showConfirmButton"
                         ref="confirm"
                         :loading="confirmButtonLoading"
                         :class="[confirmButtonClasses]"

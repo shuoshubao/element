@@ -19,7 +19,7 @@ export default {
         },
         placement: {
             type: String,
-            default: 'bottom'
+            default: 'top'
         },
         boundariesPadding: {
             type: Number,

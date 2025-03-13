@@ -14,14 +14,14 @@ export default {
             default: ''
         },
         contentStyle: {
-            type: Object
+            type: [String, Object]
         },
         labelClassName: {
             type: String,
             default: ''
         },
         labelStyle: {
-            type: Object
+            type: [String, Object]
         }
     },
     render() {

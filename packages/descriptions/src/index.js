@@ -1,5 +1,5 @@
-import DescriptionsRow from './descriptions-row';
 import { isFunction } from 'element-ui/src/utils/types';
+import DescriptionsRow from './descriptions-row';
 
 export default {
     name: 'ElDescriptions',
@@ -32,10 +32,10 @@ export default {
             default: ''
         },
         labelStyle: {
-            type: Object
+            type: [String, Object]
         },
         contentStyle: {
-            type: Object
+            type: [String, Object]
         },
         labelClassName: {
             type: String,
