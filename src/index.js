@@ -1,12 +1,10 @@
-import pkg from '../package.json';
-
+import InfiniteScroll from 'element-ui/packages/infinite-scroll/index';
+import Loading from 'element-ui/packages/loading/index';
+import MessageBox from 'element-ui/packages/message-box/index';
+import Message from 'element-ui/packages/message/index';
+import Notification from 'element-ui/packages/notification/index';
 import locale from 'element-ui/src/locale/index';
-
-import InfiniteScroll from '../packages/infinite-scroll/index';
-import Loading from '../packages/loading/index';
-import MessageBox from '../packages/message-box/index';
-import Message from '../packages/message/index';
-import Notification from '../packages/notification/index';
+import pkg from '../package.json';
 import components from './components';
 
 const install = function (Vue, opts = {}) {

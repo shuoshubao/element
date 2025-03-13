@@ -8,7 +8,8 @@
     ],
     "scripts": {
         "dev": "npx rollup -c -w",
-        "build": "rollup -c"
+        "build": "rollup -c",
+        "prepublishOnly": "npm run build"
     },
     "dependencies": {
         "async-validator": "~1.8.1",
