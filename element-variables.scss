@@ -1,0 +1,55 @@
+// color
+$--color-primary: #065fe7;
+$--color-success: #00a730;
+$--color-warning: #bb740c;
+$--color-danger: #f45636;
+$--color-info: #333;
+$--color-primary-light-7: #c6e2ff;
+$--color-primary-light-9: #ecf5ff;
+
+// link
+$--link-color: #065fe7;
+
+// button
+$--button-default-border-color: #666;
+$--button-default-font-color: #000;
+$--button-primary-background-color: #3d91f7;
+$--button-primary-border-color: #3d91f7;
+
+// input
+$--input-focus-border: #3d91f7;
+
+// color|1|Font Color|2
+$--color-text-primary: #000;
+// color|1|Font Color|2
+$--color-text-regular: #333;
+// color|1|Font Color|2
+$--color-text-secondary: #666;
+
+$--color-text-placeholder: #bfbfbf;
+
+// select
+$--select-group-color: #999;
+
+// table
+$--table-header-background-color: #fafafa;
+$--table-header-font-color: #333;
+$--table-current-row-background-color: #ebf2fd;
+$--table-row-hover-background-color: #eff5fd;
+
+// tree
+$--tree-node-hover-background-color: #ebf2fd;
+
+// menu
+$--menu-item-font-color: #333;
+
+// tag
+$--tag-border-radius: 12px;
+$--tag-info-color: #555;
+
+// radio
+$--radio-checked-font-color: #333;
+
+$--font-path: 'https://code.bdstatic.com/npm/@baidu-log/components@0.1.3/dist/fonts';
+
+@import 'node_modules/element-theme-chalk/src/index.scss';
