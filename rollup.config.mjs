@@ -49,11 +49,12 @@ export default defineConfig([
             file: 'dist/index.umd.js',
             name: 'ELEMENT',
             globals: {
+                vue: 'Vue',
                 lodash: '_',
-                vue: 'Vue'
+                dayjs: 'dayjs'
             }
         },
-        external: ['lodash', 'vue'],
+        external: ['vue', 'lodash', 'dayjs'],
         plugins: [
             ...plugins,
             nodeResolve(),

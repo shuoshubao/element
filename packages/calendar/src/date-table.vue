@@ -1,11 +1,11 @@
 <script>
-import fecha from 'element-ui/src/utils/date';
+import dayjs from 'dayjs';
 import {
-    range as rangeArr,
     getFirstDayOfMonth,
-    getPrevMonthLastDays,
-    getMonthDays,
     getI18nSettings,
+    getMonthDays,
+    getPrevMonthLastDays,
+    range as rangeArr,
     validateRangeInOneMonth
 } from 'element-ui/src/utils/date-util';
 
@@ -33,16 +33,16 @@ export default {
         prevMonthDatePrefix() {
             const temp = new Date(this.date.getTime());
             temp.setDate(0);
-            return fecha.format(temp, 'yyyy-MM');
+            return dayjs(temp).format('YYYY-MM');
         },
 
         curMonthDatePrefix() {
-            return fecha.format(this.date, 'yyyy-MM');
+            return dayjs(this.date).format('YYYY-MM');
         },
 
         nextMonthDatePrefix() {
             const temp = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 1);
-            return fecha.format(temp, 'yyyy-MM');
+            return dayjs(temp).format('YYYY-MM');
         },
 
         formatedToday() {

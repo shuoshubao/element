@@ -9,12 +9,13 @@
     "scripts": {
         "dev": "rollup -c -w",
         "build": "rollup -c",
-        "theme:dev": "sass --quiet element-variables.scss dist/element-ui.css -w --no-source-map",
-        "theme:build": "sass --quiet element-variables.scss dist/element-ui.css --no-source-map --style compressed",
+        "theme:dev": "sass --quiet element-variables.scss dist/index.css -w --no-source-map",
+        "theme:build": "sass --quiet element-variables.scss dist/index.css --no-source-map --style compressed",
         "prepublishOnly": "npm run theme:build && npm run build"
     },
     "dependencies": {
         "async-validator": "~1.8.1",
+        "dayjs": "^1.11.13",
         "lodash": "^4.17.21",
         "normalize-wheel": "^1.0.1"
     },
