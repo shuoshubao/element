@@ -3,9 +3,10 @@ import Loading from 'element-ui/packages/loading/index';
 import MessageBox from 'element-ui/packages/message-box/index';
 import Message from 'element-ui/packages/message/index';
 import Notification from 'element-ui/packages/notification/index';
-import locale from 'element-ui/src/locale/index';
 import pkg from '../package.json';
 import components from './components';
+import locale from './locale/index';
+import emitter from './mixins/emitter';
 
 const install = function (Vue, opts = {}) {
     locale.use(opts.locale);
@@ -34,9 +35,8 @@ const install = function (Vue, opts = {}) {
 
 export default {
     version: pkg.version,
-    locale: locale.use,
-    i18n: locale.i18n,
     install,
+    emitter,
     Loading,
     Message,
     MessageBox,

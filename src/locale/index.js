@@ -1,4 +1,4 @@
-import deepmerge from 'deepmerge';
+import { merge } from 'lodash';
 import Vue from 'vue';
 import Format from './format';
 import defaultLang from './lang/zh-CN';
@@ -11,7 +11,7 @@ let i18nHandler = function () {
     if (typeof vuei18n === 'function' && !!Vue.locale) {
         if (!merged) {
             merged = true;
-            Vue.locale(Vue.config.lang, deepmerge(lang, Vue.locale(Vue.config.lang) || {}, { clone: true }));
+            Vue.locale(Vue.config.lang, merge(lang, Vue.locale(Vue.config.lang) || {}, { clone: true }));
         }
         return vuei18n.apply(this, arguments);
     }
