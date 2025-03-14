@@ -134,7 +134,7 @@
             <div v-show="footerVisible && (currentView === 'date' || currentView === 'month' || currentView === 'year')" class="el-picker-panel__footer">
                 <el-button
                     v-show="selectionMode !== 'dates' && selectionMode !== 'months' && selectionMode !== 'years'"
-                    type="text"
+                    type="primary"
                     size="mini"
                     class="el-picker-panel__link-btn"
                     @click="changeToNow"

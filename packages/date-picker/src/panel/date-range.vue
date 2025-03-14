@@ -170,7 +170,7 @@
                 </div>
             </div>
             <div v-if="showTime" class="el-picker-panel__footer">
-                <el-button type="text" size="mini" class="el-picker-panel__link-btn" @click="handleClear">{{ t('el.datepicker.clear') }}</el-button>
+                <el-button size="mini" class="el-picker-panel__link-btn" @click="handleClear">{{ t('el.datepicker.clear') }}</el-button>
                 <el-button type="primary" size="mini" class="el-picker-panel__link-btn" :disabled="btnDisabled" @click="handleConfirm(false)">
                     {{ t('el.datepicker.confirm') }}
                 </el-button>
