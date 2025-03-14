@@ -6,8 +6,8 @@
                 <span v-if="title || $slots.title" class="el-alert__title" :class="[isBoldTitle]">
                     <slot name="title">{{ title }}</slot>
                 </span>
-                <p v-if="$slots.default && !description" class="el-alert__description"><slot /></p>
-                <p v-if="description && !$slots.default" class="el-alert__description">{{ description }}</p>
+                <div v-if="$slots.default && !description" class="el-alert__description"><slot /></div>
+                <div v-if="description && !$slots.default" class="el-alert__description">{{ description }}</div>
                 <i v-if="closable" class="el-alert__closebtn" :class="{ 'is-customed': closeText !== '', 'el-icon-close': closeText === '' }" @click="close()">
                     {{ closeText }}
                 </i>

@@ -1,11 +1,11 @@
 <template>
     <div class="el-transfer-panel">
-        <p class="el-transfer-panel__header">
+        <div class="el-transfer-panel__header">
             <el-checkbox v-model="allChecked" :indeterminate="isIndeterminate" @change="handleAllCheckedChange">
                 {{ title }}
                 <span>{{ checkedSummary }}</span>
             </el-checkbox>
-        </p>
+        </div>
 
         <div :class="['el-transfer-panel__body', hasFooter ? 'is-with-footer' : '']">
             <el-input
@@ -35,12 +35,12 @@
                     <OptionContent :option="item" />
                 </el-checkbox>
             </el-checkbox-group>
-            <p v-show="hasNoMatch" class="el-transfer-panel__empty">{{ t('el.transfer.noMatch') }}</p>
-            <p v-show="data.length === 0 && !hasNoMatch" class="el-transfer-panel__empty">{{ t('el.transfer.noData') }}</p>
+            <div v-if="hasNoMatch" class="el-transfer-panel__empty">{{ t('el.transfer.noMatch') }}</div>
+            <div v-if="data.length === 0 && !hasNoMatch" class="el-transfer-panel__empty">{{ t('el.transfer.noData') }}</div>
         </div>
-        <p v-if="hasFooter" class="el-transfer-panel__footer">
+        <div v-if="hasFooter" class="el-transfer-panel__footer">
             <slot />
-        </p>
+        </div>
     </div>
 </template>
 

@@ -31,8 +31,8 @@
                         <div v-if="icon && !center && message !== ''" :class="['el-message-box__status', icon]" />
                         <div v-if="message !== ''" class="el-message-box__message">
                             <slot>
-                                <p v-if="!dangerouslyUseHTMLString">{{ message }}</p>
-                                <p v-else v-html="message" />
+                                <div v-if="!dangerouslyUseHTMLString">{{ message }}</div>
+                                <div v-else v-html="message" />
                             </slot>
                         </div>
                     </div>

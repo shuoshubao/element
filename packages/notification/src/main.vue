@@ -11,11 +11,11 @@
         >
             <i v-if="type || iconClass" class="el-notification__icon" :class="[typeClass, iconClass]" />
             <div class="el-notification__group" :class="{ 'is-with-icon': typeClass || iconClass }">
-                <h2 class="el-notification__title" v-text="title" />
+                <div class="el-notification__title" v-text="title" />
                 <div v-show="message" class="el-notification__content">
                     <slot>
-                        <p v-if="!dangerouslyUseHTMLString">{{ message }}</p>
-                        <p v-else v-html="message" />
+                        <div v-if="!dangerouslyUseHTMLString">{{ message }}</div>
+                        <div v-else v-html="message" />
                     </slot>
                 </div>
                 <div v-if="showClose" class="el-notification__closeBtn el-icon-close" @click.stop="close" />

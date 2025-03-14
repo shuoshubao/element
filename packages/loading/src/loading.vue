@@ -6,7 +6,7 @@
                     <circle class="path" cx="50" cy="50" r="20" fill="none" />
                 </svg>
                 <i v-else :class="spinner" />
-                <p v-if="text" class="el-loading-text">{{ text }}</p>
+                <div v-if="text" class="el-loading-text">{{ text }}</div>
             </div>
         </div>
     </transition>

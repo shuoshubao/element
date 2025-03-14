@@ -1,10 +1,10 @@
 <template>
     <el-popover v-bind="$attrs" v-model="visible" trigger="click">
         <div class="el-popconfirm">
-            <p class="el-popconfirm__main">
+            <div class="el-popconfirm__main">
                 <i v-if="!hideIcon" :class="icon" class="el-popconfirm__icon" :style="{ color: iconColor }" />
                 {{ title }}
-            </p>
+            </div>
             <div class="el-popconfirm__action">
                 <el-button size="mini" :type="cancelButtonType" @click="cancel">
                     {{ displayCancelButtonText }}
@@ -45,15 +45,15 @@ export default {
         },
         cancelButtonType: {
             type: String,
-            default: 'text'
+            default: ''
         },
         icon: {
             type: String,
-            default: 'el-icon-question'
+            default: 'el-icon-info'
         },
         iconColor: {
             type: String,
-            default: '#f90'
+            default: '#ed5b56'
         },
         hideIcon: {
             type: Boolean,

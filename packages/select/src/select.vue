@@ -108,9 +108,9 @@
                 </el-scrollbar>
                 <template v-if="emptyText && (!allowCreate || loading || (allowCreate && options.length === 0))">
                     <slot v-if="$slots.empty" name="empty" />
-                    <p v-else class="el-select-dropdown__empty">
+                    <div v-else class="el-select-dropdown__empty">
                         {{ emptyText }}
-                    </p>
+                    </div>
                 </template>
             </el-select-menu>
         </transition>
