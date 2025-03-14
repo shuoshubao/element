@@ -410,7 +410,7 @@ Popper.prototype._setupEventListeners = function () {
         var target = getScrollParent(this._reference);
         // here it could be both `body` or `documentElement` thanks to Firefox, we then check both
         if (target === window.document.body || target === window.document.documentElement) {
-            target = root;
+            target = window;
         }
         target.addEventListener('scroll', this.state.updateBound);
         this.state.scrollTarget = target;
