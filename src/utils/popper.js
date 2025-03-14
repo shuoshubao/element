@@ -1,5 +1,3 @@
-const root = window;
-
 // default options
 const DEFAULTS = {
     // placement of the popper
@@ -234,7 +232,7 @@ Popper.prototype.parse = function (config) {
         tagName: 'div',
         classNames: ['popper'],
         attributes: [],
-        parent: root.document.body,
+        parent: window.document.body,
         content: '',
         contentType: 'text',
         arrowTagName: 'div',
@@ -243,7 +241,7 @@ Popper.prototype.parse = function (config) {
     };
     config = Object.assign({}, defaultConfig, config);
 
-    var d = root.document;
+    var d = window.document;
 
     var popper = d.createElement(config.tagName);
     addClassNames(popper, config.classNames);
@@ -406,12 +404,12 @@ Popper.prototype._getOffsets = function (popper, reference, placement) {
 Popper.prototype._setupEventListeners = function () {
     // NOTE: 1 DOM access here
     this.state.updateBound = this.update.bind(this);
-    root.addEventListener('resize', this.state.updateBound);
+    window.addEventListener('resize', this.state.updateBound);
     // if the boundariesElement is window we don't need to listen for the scroll event
     if (this._options.boundariesElement !== 'window') {
         var target = getScrollParent(this._reference);
         // here it could be both `body` or `documentElement` thanks to Firefox, we then check both
-        if (target === root.document.body || target === root.document.documentElement) {
+        if (target === window.document.body || target === window.document.documentElement) {
             target = root;
         }
         target.addEventListener('scroll', this.state.updateBound);
@@ -427,7 +425,7 @@ Popper.prototype._setupEventListeners = function () {
  */
 Popper.prototype._removeEventListeners = function () {
     // NOTE: 1 DOM access here
-    root.removeEventListener('resize', this.state.updateBound);
+    window.removeEventListener('resize', this.state.updateBound);
     if (this._options.boundariesElement !== 'window' && this.state.scrollTarget) {
         this.state.scrollTarget.removeEventListener('scroll', this.state.updateBound);
         this.state.scrollTarget = null;
@@ -450,8 +448,8 @@ Popper.prototype._getBoundaries = function (data, padding, boundariesElement) {
     var boundaries = {};
     var width, height;
     if (boundariesElement === 'window') {
-        var body = root.document.body,
-            html = root.document.documentElement;
+        var body = window.document.body,
+            html = window.document.documentElement;
 
         height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
         width = Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
@@ -481,8 +479,8 @@ Popper.prototype._getBoundaries = function (data, padding, boundariesElement) {
 
         boundaries = {
             top: 0 - (offsetParentRect.top - scrollTop),
-            right: root.document.documentElement.clientWidth - (offsetParentRect.left - scrollLeft),
-            bottom: root.document.documentElement.clientHeight - (offsetParentRect.top - scrollTop),
+            right: window.document.documentElement.clientWidth - (offsetParentRect.left - scrollLeft),
+            bottom: window.document.documentElement.clientHeight - (offsetParentRect.top - scrollTop),
             left: 0 - (offsetParentRect.left - scrollLeft)
         };
     } else {
@@ -910,7 +908,7 @@ function getOuterSizes(element) {
     var calcWidthToForceRepaint = element.offsetWidth;
 
     // original method
-    var styles = root.getComputedStyle(element);
+    var styles = window.getComputedStyle(element);
     var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
     var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
     var result = { width: element.offsetWidth + y, height: element.offsetHeight + x };
@@ -978,7 +976,7 @@ function getArrayKeyIndex(arr, keyToFind) {
  */
 function getStyleComputedProperty(element, property) {
     // NOTE: 1 DOM access here
-    var css = root.getComputedStyle(element, null);
+    var css = window.getComputedStyle(element, null);
     return css[property];
 }
 
@@ -992,7 +990,7 @@ function getStyleComputedProperty(element, property) {
 function getOffsetParent(element) {
     // NOTE: 1 DOM access here
     var offsetParent = element.offsetParent;
-    return offsetParent === root.document.body || !offsetParent ? root.document.documentElement : offsetParent;
+    return offsetParent === window.document.body || !offsetParent ? window.document.documentElement : offsetParent;
 }
 
 /**
@@ -1009,13 +1007,13 @@ function getScrollParent(element) {
         return element;
     }
 
-    if (parent === root.document) {
+    if (parent === window.document) {
         // Firefox puts the scrollTOp value on `documentElement` instead of `body`, we then check which of them is
         // greater than 0 and return the proper element
-        if (root.document.body.scrollTop || root.document.body.scrollLeft) {
-            return root.document.body;
+        if (window.document.body.scrollTop || window.document.body.scrollLeft) {
+            return window.document.body;
         } else {
-            return root.document.documentElement;
+            return window.document.documentElement;
         }
     }
 
@@ -1042,7 +1040,7 @@ function getScrollParent(element) {
  * @returns {Boolean} answer to "isFixed?"
  */
 function isFixed(element) {
-    if (element === root.document.body) {
+    if (element === window.document.body) {
         return false;
     }
     if (getStyleComputedProperty(element, 'position') === 'fixed') {
@@ -1175,7 +1173,7 @@ function getSupportedPropertyName(property) {
 
     for (var i = 0; i < prefixes.length; i++) {
         var toCheck = prefixes[i] ? prefixes[i] + property.charAt(0).toUpperCase() + property.slice(1) : property;
-        if (typeof root.document.body.style[toCheck] !== 'undefined') {
+        if (typeof window.document.body.style[toCheck] !== 'undefined') {
             return toCheck;
         }
     }
