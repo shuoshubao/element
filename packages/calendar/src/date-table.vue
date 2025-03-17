@@ -1,5 +1,5 @@
 <script>
-import dayjs from 'dayjs';
+import fecha from 'element-ui/src/utils/date';
 import {
     getFirstDayOfMonth,
     getI18nSettings,
@@ -33,16 +33,16 @@ export default {
         prevMonthDatePrefix() {
             const temp = new Date(this.date.getTime());
             temp.setDate(0);
-            return dayjs(temp).format('YYYY-MM');
+            return fecha.format(temp, 'yyyy-MM');
         },
 
         curMonthDatePrefix() {
-            return dayjs(this.date).format('YYYY-MM');
+            return fecha.format(this.date, 'yyyy-MM');
         },
 
         nextMonthDatePrefix() {
             const temp = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 1);
-            return dayjs(temp).format('YYYY-MM');
+            return fecha.format(temp, 'yyyy-MM');
         },
 
         formatedToday() {

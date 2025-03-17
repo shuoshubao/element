@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import dayjs from 'dayjs';
 import ElButton from 'element-ui/packages/button/index';
 import ElButtonGroup from 'element-ui/packages/button/src/button-group.vue';
 import Locale from 'element-ui/src/mixins/locale';
+import fecha from 'element-ui/src/utils/date';
 import { validateRangeInOneMonth } from 'element-ui/src/utils/date-util';
 import DateTable from './date-table.vue';
 
@@ -93,20 +93,20 @@ export default {
         prevMonthDatePrefix() {
             const temp = new Date(this.date.getTime());
             temp.setDate(0);
-            return dayjs(temp).format('YYYY-MM');
+            return fecha.format(temp, 'yyyy-MM');
         },
 
         curMonthDatePrefix() {
-            return dayjs(this.date).format('YYYY-MM');
+            return fecha.format(this.date, 'yyyy-MM');
         },
 
         nextMonthDatePrefix() {
             const temp = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 1);
-            return dayjs(temp).format('YYYY-MM');
+            return fecha.format(temp, 'yyyy-MM');
         },
 
         formatedDate() {
-            return dayjs(this.date).format('YYYY-MM-DD');
+            return fecha.format(this.date, 'yyyy-MM-dd');
         },
 
         i18nDate() {
@@ -116,7 +116,7 @@ export default {
         },
 
         formatedToday() {
-            return dayjs(this.now).format('YYYY-MM-DD');
+            return fecha.format(this.now, 'yyyy-MM-dd');
         },
 
         realSelectedDay: {
