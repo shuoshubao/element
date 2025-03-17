@@ -15,7 +15,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const plugins = [
     vue({
-        css: false
+        css: false,
+        template: {
+            compilerOptions: {
+                preserveWhitespace: false
+            }
+        }
     }),
     babel({
         runtimeHelpers: true,
