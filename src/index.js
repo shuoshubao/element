@@ -6,7 +6,6 @@ import Notification from 'element-ui/packages/notification/index';
 import pkg from '../package.json';
 import components from './components';
 import locale from './locale/index';
-import emitter from './mixins/emitter';
 
 const install = function (Vue, opts = {}) {
     locale.use(opts.locale);
@@ -36,7 +35,6 @@ const install = function (Vue, opts = {}) {
 export default {
     version: pkg.version,
     install,
-    emitter,
     Loading,
     Message,
     MessageBox,
