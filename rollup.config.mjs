@@ -50,11 +50,10 @@ export default defineConfig([
             name: 'ELEMENT',
             globals: {
                 vue: 'Vue',
-                lodash: '_',
-                dayjs: 'dayjs'
+                lodash: '_'
             }
         },
-        external: ['vue', 'lodash', 'dayjs'],
+        external: ['vue', 'lodash'],
         plugins: [
             ...plugins,
             nodeResolve(),
