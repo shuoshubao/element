@@ -38,5 +38,6 @@ export default {
     Loading,
     Message,
     MessageBox,
-    Notification
+    Notification,
+    InfiniteScroll
 };
