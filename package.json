@@ -13,6 +13,9 @@
         "theme:build": "sass --quiet element-variables.scss dist/index.css --no-source-map --style compressed",
         "prepublishOnly": "npm run theme:build && npm run build"
     },
+    "overrides": {
+        "rollup": "^4.34.8"
+    },
     "devDependencies": {
         "@babel/core": "^7.26.10",
         "@rollup/plugin-alias": "^5.1.1",
