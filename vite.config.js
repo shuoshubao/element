@@ -4,6 +4,7 @@ import { createVuePlugin } from 'vite-plugin-vue2';
 
 export default defineConfig(() => {
     return {
+        publicDir: 'dist',
         plugins: [
             createVuePlugin({ jsx: true }),
             viteExternalsPlugin({
