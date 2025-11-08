@@ -6,7 +6,7 @@ export default function () {
     if (Vue.prototype.$isServer) return 0;
     if (scrollBarWidth !== undefined) return scrollBarWidth;
 
-    const outer = document.createElement('div');
+    let outer = document.createElement('div');
     outer.className = 'el-scrollbar__wrap';
     outer.style.visibility = 'hidden';
     outer.style.width = '100px';
@@ -17,13 +17,16 @@ export default function () {
     const widthNoScroll = outer.offsetWidth;
     outer.style.overflow = 'scroll';
 
-    const inner = document.createElement('div');
+    let inner = document.createElement('div');
     inner.style.width = '100%';
     outer.appendChild(inner);
 
     const widthWithScroll = inner.offsetWidth;
     outer.parentNode.removeChild(outer);
     scrollBarWidth = widthNoScroll - widthWithScroll;
+
+    outer = null;
+    inner = null;
 
     return scrollBarWidth;
 }
