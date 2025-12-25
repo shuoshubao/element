@@ -1,3 +1,4 @@
+import AsyncValidator from 'async-validator';
 import InfiniteScroll from 'element-ui/packages/infinite-scroll/index';
 import Loading from 'element-ui/packages/loading/index';
 import MessageBox from 'element-ui/packages/message-box/index';
@@ -39,5 +40,6 @@ export default {
     Message,
     MessageBox,
     Notification,
-    InfiniteScroll
+    InfiniteScroll,
+    AsyncValidator
 };
