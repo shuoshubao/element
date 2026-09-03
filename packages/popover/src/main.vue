@@ -13,7 +13,8 @@
             >
                 <div v-if="title" class="el-popover__title" v-text="title" />
                 <div>
-                    <slot v-if="!disabled && showPopper">{{ content }}</slot>
+                    <slot v-if="keepAlive" v-show="!disabled && showPopper">{{ content }}</slot>
+                    <slot v-else-if="!disabled && showPopper">{{ content }}</slot>
                 </div>
             </div>
         </transition>
@@ -50,6 +51,7 @@ export default {
         title: String,
         disabled: Boolean,
         content: String,
+        keepAlive: Boolean,
         reference: {},
         popperClass: String,
         width: {},
