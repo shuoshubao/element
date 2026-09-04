@@ -16,12 +16,6 @@ $typeMap: (
     justify-content: center;
     vertical-align: middle;
     position: relative;
-    text-decoration: none;
-    outline: none;
-    cursor: pointer;
-    padding: 0;
-    font-size: $--link-font-size;
-    font-weight: $--link-font-weight;
 
     @include when(underline) {
         &:hover:after {

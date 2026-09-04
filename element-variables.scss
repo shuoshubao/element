@@ -9,6 +9,7 @@ $--color-primary-light-9: #ecf5ff;
 
 // link
 $--link-color: #065fe7;
+$--link-disabled-font-color: #c0c4cc;
 
 // button
 $--button-default-border-color: #666;
@@ -53,4 +54,4 @@ $--radio-checked-font-color: #333;
 
 $--font-path: 'https://code.bdstatic.com/npm/@baidu-log/element-ui@1.0.0/dist/fonts';
 
-@import 'node_modules/element-theme-chalk/src/index.scss';
+@import 'element-theme-chalk/src/index.scss';
