@@ -9,6 +9,8 @@
 
 ## 组件
 
+-   popover
+    -   增加属性 `keepAlive` 控制内容是否保留, 默认 `false`
 -   alert
     -   关闭按钮: `v-show` => `v-if`
 -   message-box
