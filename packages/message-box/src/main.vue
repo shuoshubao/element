@@ -190,11 +190,6 @@ export default {
         visible(val) {
             if (val) {
                 this.uid++;
-                if (this.$type === 'alert' || this.$type === 'confirm') {
-                    this.$nextTick(() => {
-                        this.$refs.confirm.$el.focus();
-                    });
-                }
                 this.focusAfterClosed = document.activeElement;
                 messageBox = new Dialog(this.$el, this.focusAfterClosed, this.getFirstFocus());
             }
