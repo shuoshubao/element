@@ -4,8 +4,6 @@ $--color-success: #00a730;
 $--color-warning: #ff6600;
 $--color-danger: #ff0000;
 $--color-info: #333;
-$--color-primary-light-7: #c6e2ff;
-$--color-primary-light-9: #ecf5ff;
 
 // link
 $--link-color: #065fe7;
@@ -16,9 +14,12 @@ $--button-default-border-color: #666;
 $--button-default-font-color: #000;
 $--button-primary-background-color: #3d91f7;
 $--button-primary-border-color: #3d91f7;
+$--font-weight-primary: 400;
 
 // input
 $--input-focus-border: #3d91f7;
+$--input-hover-border: $--input-focus-border;
+$--select-border-color-hover: $--input-focus-border;
 
 // color|1|Font Color|2
 $--color-text-primary: #000;
@@ -51,6 +52,17 @@ $--tag-info-color: #555;
 
 // radio
 $--radio-checked-font-color: #333;
+
+// radius
+$--border-radius-base: 6px;
+$--button-small-border-radius: 4px;
+$--button-mini-border-radius: 4px;
+
+// shadow
+$--box-shadow-base: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.08);
+$--box-shadow-light: 0 4px 16px rgba(0, 0, 0, 0.08);
+$--box-shadow-dark: 0 1px 2px rgba(0, 0, 0, 0.06), 0 6px 20px rgba(0, 0, 0, 0.12);
+$--dialog-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 
 $--font-path: 'https://code.bdstatic.com/npm/@baidu-log/element-ui@1.0.0/dist/fonts';
 

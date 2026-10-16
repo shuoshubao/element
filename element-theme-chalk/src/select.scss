@@ -69,6 +69,7 @@
 
         &.is-focus .el-input__inner {
             border-color: $--select-input-focus-border-color;
+            @include focus-ring();
         }
     }
 

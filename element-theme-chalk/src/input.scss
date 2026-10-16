@@ -34,6 +34,7 @@
         &:focus {
             outline: none;
             border-color: $--input-focus-border;
+            @include focus-ring();
         }
     }
 
@@ -135,6 +136,7 @@
         &:focus {
             outline: none;
             border-color: $--input-focus-border;
+            @include focus-ring();
         }
     }
 
@@ -187,6 +189,7 @@
         .el-input__inner {
             outline: none;
             border-color: $--input-focus-border;
+            @include focus-ring();
         }
     }
 
