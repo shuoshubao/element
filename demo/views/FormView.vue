@@ -9,12 +9,14 @@
 
 <script>
 export default {
-    name: "FormView",
+    name: 'FormView',
     data() {
         return {
             sections: [
-{ title: "典型表单", comp: {
-template: `<div>
+                {
+                    title: '典型表单',
+                    comp: {
+                        template: `<div>
 <el-form :model="formModel" label-width="80px">
         <el-form-item label="活动名称">
             <el-input v-model="formModel.name" />
@@ -56,28 +58,31 @@ template: `<div>
         </el-form-item>
     </el-form>
 </div>`,
-data() {
-        return {
-            formModel: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            }
-        };
-    },
-    methods: {
-        handleSubmit() {
-            console.log(this.formModel);
-        }
-    }
-} },
-{ title: "行内表单", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                formModel: {
+                                    name: '',
+                                    region: '',
+                                    date1: '',
+                                    date2: '',
+                                    delivery: false,
+                                    type: [],
+                                    resource: '',
+                                    desc: ''
+                                }
+                            };
+                        },
+                        methods: {
+                            handleSubmit() {
+                                console.log(this.formModel);
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '行内表单',
+                    comp: {
+                        template: `<div>
 <el-form :model="formModel" inline>
         <el-form-item label="审批人">
             <el-input v-model="formModel.user" placeholder="审批人" />
@@ -93,22 +98,25 @@ template: `<div>
         </el-form-item>
     </el-form>
 </div>`,
-data() {
-        return {
-            formModel: {
-                user: '',
-                region: ''
-            }
-        };
-    },
-    methods: {
-        handleSubmit() {
-            console.log(this.formModel);
-        }
-    }
-} },
-{ title: "对齐方式", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                formModel: {
+                                    user: '',
+                                    region: ''
+                                }
+                            };
+                        },
+                        methods: {
+                            handleSubmit() {
+                                console.log(this.formModel);
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '对齐方式',
+                    comp: {
+                        template: `<div>
 <el-radio-group v-model="labelPosition">
         <el-radio-button label="left">左对齐</el-radio-button>
         <el-radio-button label="right">右对齐</el-radio-button>
@@ -129,19 +137,22 @@ template: `<div>
         </el-form-item>
     </el-form>
 </div>`,
-data() {
-        return {
-            labelPosition: 'right',
-            formModel: {
-                name: '',
-                region: '',
-                type: ''
-            }
-        };
-    }
-} },
-{ title: "表单验证", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                labelPosition: 'right',
+                                formModel: {
+                                    name: '',
+                                    region: '',
+                                    type: ''
+                                }
+                            };
+                        }
+                    }
+                },
+                {
+                    title: '表单验证',
+                    comp: {
+                        template: `<div>
 <el-form ref="formRef" :model="formModel" :rules="rules" label-width="100px">
         <el-form-item label="活动名称" prop="name">
             <el-input v-model="formModel.name" />
@@ -187,49 +198,52 @@ template: `<div>
         </el-form-item>
     </el-form>
 </div>`,
-data() {
-        return {
-            formModel: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
-            rules: {
-                name: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ],
-                region: [{ required: true, message: '请选择活动区域', trigger: 'change' }],
-                date1: [{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }],
-                date2: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
-                type: [{ type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }],
-                resource: [{ required: true, message: '请选择活动资源', trigger: 'change' }],
-                desc: [{ required: true, message: '请填写活动形式', trigger: 'blur' }]
-            }
-        };
-    },
-    methods: {
-        handleSubmit() {
-            this.$refs.formRef.validate(valid => {
-                if (valid) {
-                    alert('submit!');
-                } else {
-                    console.log('error submit!');
-                }
-            });
-        },
-        handleReset() {
-            this.$refs.formRef.resetFields();
-        }
-    }
-} },
-{ title: "自定义校验规则", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                formModel: {
+                                    name: '',
+                                    region: '',
+                                    date1: '',
+                                    date2: '',
+                                    delivery: false,
+                                    type: [],
+                                    resource: '',
+                                    desc: ''
+                                },
+                                rules: {
+                                    name: [
+                                        { required: true, message: '请输入活动名称', trigger: 'blur' },
+                                        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                                    ],
+                                    region: [{ required: true, message: '请选择活动区域', trigger: 'change' }],
+                                    date1: [{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }],
+                                    date2: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
+                                    type: [{ type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }],
+                                    resource: [{ required: true, message: '请选择活动资源', trigger: 'change' }],
+                                    desc: [{ required: true, message: '请填写活动形式', trigger: 'blur' }]
+                                }
+                            };
+                        },
+                        methods: {
+                            handleSubmit() {
+                                this.$refs.formRef.validate(valid => {
+                                    if (valid) {
+                                        alert('submit!');
+                                    } else {
+                                        console.log('error submit!');
+                                    }
+                                });
+                            },
+                            handleReset() {
+                                this.$refs.formRef.resetFields();
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '自定义校验规则',
+                    comp: {
+                        template: `<div>
 <el-form ref="formRef" :model="formModel" :rules="rules" label-width="100px" status-icon>
         <el-form-item label="密码" prop="pass">
             <el-input v-model="formModel.pass" type="password" autocomplete="off" />
@@ -246,70 +260,73 @@ template: `<div>
         </el-form-item>
     </el-form>
 </div>`,
-data() {
-        const checkAge = (rule, value, callback) => {
-            if (!value) {
-                return callback(new Error('年龄不能为空'));
-            }
-            setTimeout(() => {
-                if (!Number.isInteger(value)) {
-                    callback(new Error('请输入数字值'));
-                } else if (value < 18) {
-                    callback(new Error('必须年满18岁'));
-                } else {
-                    callback();
-                }
-            }, 1000);
-        };
-        const validatePass = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入密码'));
-            } else {
-                if (this.formModel.checkPass !== '') {
-                    this.$refs.formRef.validateField('checkPass');
-                }
-                callback();
-            }
-        };
-        const validatePass2 = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请再次输入密码'));
-            } else if (value !== this.formModel.pass) {
-                callback(new Error('两次输入密码不一致!'));
-            } else {
-                callback();
-            }
-        };
-        return {
-            formModel: {
-                pass: '',
-                checkPass: '',
-                age: ''
-            },
-            rules: {
-                pass: [{ validator: validatePass, trigger: 'blur' }],
-                checkPass: [{ validator: validatePass2, trigger: 'blur' }],
-                age: [{ validator: checkAge, trigger: 'blur' }]
-            }
-        };
-    },
-    methods: {
-        handleSubmit() {
-            this.$refs.formRef.validate(valid => {
-                if (valid) {
-                    alert('submit!');
-                } else {
-                    console.log('error submit!!');
-                }
-            });
-        },
-        handleReset() {
-            this.$refs.formRef.resetFields();
-        }
-    }
-} },
-{ title: "动态增减表单项", comp: {
-template: `<div>
+                        data() {
+                            const checkAge = (rule, value, callback) => {
+                                if (!value) {
+                                    return callback(new Error('年龄不能为空'));
+                                }
+                                setTimeout(() => {
+                                    if (!Number.isInteger(value)) {
+                                        callback(new Error('请输入数字值'));
+                                    } else if (value < 18) {
+                                        callback(new Error('必须年满18岁'));
+                                    } else {
+                                        callback();
+                                    }
+                                }, 1000);
+                            };
+                            const validatePass = (rule, value, callback) => {
+                                if (value === '') {
+                                    callback(new Error('请输入密码'));
+                                } else {
+                                    if (this.formModel.checkPass !== '') {
+                                        this.$refs.formRef.validateField('checkPass');
+                                    }
+                                    callback();
+                                }
+                            };
+                            const validatePass2 = (rule, value, callback) => {
+                                if (value === '') {
+                                    callback(new Error('请再次输入密码'));
+                                } else if (value !== this.formModel.pass) {
+                                    callback(new Error('两次输入密码不一致!'));
+                                } else {
+                                    callback();
+                                }
+                            };
+                            return {
+                                formModel: {
+                                    pass: '',
+                                    checkPass: '',
+                                    age: ''
+                                },
+                                rules: {
+                                    pass: [{ validator: validatePass, trigger: 'blur' }],
+                                    checkPass: [{ validator: validatePass2, trigger: 'blur' }],
+                                    age: [{ validator: checkAge, trigger: 'blur' }]
+                                }
+                            };
+                        },
+                        methods: {
+                            handleSubmit() {
+                                this.$refs.formRef.validate(valid => {
+                                    if (valid) {
+                                        alert('submit!');
+                                    } else {
+                                        console.log('error submit!!');
+                                    }
+                                });
+                            },
+                            handleReset() {
+                                this.$refs.formRef.resetFields();
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '动态增减表单项',
+                    comp: {
+                        template: `<div>
 <el-form ref="formRef" :model="formModel" label-width="100px">
         <el-form-item
             label="邮箱"
@@ -342,48 +359,51 @@ template: `<div>
         </el-form-item>
     </el-form>
 </div>`,
-data() {
-        return {
-            formModel: {
-                domains: [
-                    {
-                        value: ''
-                    }
-                ],
-                email: ''
-            }
-        };
-    },
-    methods: {
-        handleSubmit() {
-            this.$refs.formRef.validate(valid => {
-                if (valid) {
-                    alert('submit!');
-                } else {
-                    console.log('error submit!!');
-                }
-            });
-        },
-        handleReset() {
-            this.$refs.formRef.resetFields();
-        },
-        handleRemoveDomain(item) {
-            const index = this.formModel.domains.indexOf(item);
+                        data() {
+                            return {
+                                formModel: {
+                                    domains: [
+                                        {
+                                            value: ''
+                                        }
+                                    ],
+                                    email: ''
+                                }
+                            };
+                        },
+                        methods: {
+                            handleSubmit() {
+                                this.$refs.formRef.validate(valid => {
+                                    if (valid) {
+                                        alert('submit!');
+                                    } else {
+                                        console.log('error submit!!');
+                                    }
+                                });
+                            },
+                            handleReset() {
+                                this.$refs.formRef.resetFields();
+                            },
+                            handleRemoveDomain(item) {
+                                const index = this.formModel.domains.indexOf(item);
 
-            if (index !== -1) {
-                this.formModel.domains.splice(index, 1);
-            }
-        },
-        handleAddDomain() {
-            this.formModel.domains.push({
-                value: '',
-                key: Date.now()
-            });
-        }
-    }
-} },
-{ title: "数字类型验证", comp: {
-template: `<div>
+                                if (index !== -1) {
+                                    this.formModel.domains.splice(index, 1);
+                                }
+                            },
+                            handleAddDomain() {
+                                this.formModel.domains.push({
+                                    value: '',
+                                    key: Date.now()
+                                });
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '数字类型验证',
+                    comp: {
+                        template: `<div>
 <el-form ref="formRef" :model="formModel" label-width="100px">
         <el-form-item
             label="年龄"
@@ -401,31 +421,34 @@ template: `<div>
         </el-form-item>
     </el-form>
 </div>`,
-data() {
-        return {
-            formModel: {
-                age: ''
-            }
-        };
-    },
-    methods: {
-        handleSubmit() {
-            this.$refs.formRef.validate(valid => {
-                if (valid) {
-                    alert('submit!');
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
-        handleReset() {
-            this.$refs.formRef.resetFields();
-        }
-    }
-} },
-{ title: "表单内组件尺寸控制", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                formModel: {
+                                    age: ''
+                                }
+                            };
+                        },
+                        methods: {
+                            handleSubmit() {
+                                this.$refs.formRef.validate(valid => {
+                                    if (valid) {
+                                        alert('submit!');
+                                    } else {
+                                        console.log('error submit!!');
+                                        return false;
+                                    }
+                                });
+                            },
+                            handleReset() {
+                                this.$refs.formRef.resetFields();
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '表单内组件尺寸控制',
+                    comp: {
+                        template: `<div>
 <el-form :model="formModel" label-width="80px" size="mini">
         <el-form-item label="活动名称">
             <el-input v-model="formModel.name" />
@@ -460,29 +483,29 @@ template: `<div>
         </el-form-item>
     </el-form>
 </div>`,
-data() {
-        return {
-            formModel: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            }
-        };
-    },
-    methods: {
-        handleSubmit() {
-            console.log('submit!');
-        }
-    }
-} }
-]
+                        data() {
+                            return {
+                                formModel: {
+                                    name: '',
+                                    region: '',
+                                    date1: '',
+                                    date2: '',
+                                    delivery: false,
+                                    type: [],
+                                    resource: '',
+                                    desc: ''
+                                }
+                            };
+                        },
+                        methods: {
+                            handleSubmit() {
+                                console.log('submit!');
+                            }
+                        }
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

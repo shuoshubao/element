@@ -9,11 +9,14 @@
 
 <script>
 export default {
-    name: "ContainerView",
+    name: 'ContainerView',
     data() {
         return {
             sections: [
-{ title: "常见页面布局", comp: { template: `<div>
+                {
+                    title: '常见页面布局',
+                    comp: {
+                        template: `<div>
 <div class="container-demo-wrap">
         <el-container>
             <el-header>Header</el-header>
@@ -79,9 +82,13 @@ export default {
             </el-container>
         </el-container>
     </div>
-</div>` } },
-{ title: "实例", comp: {
-template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '实例',
+                    comp: {
+                        template: `<div>
 <el-container style="height: 500px; border: 1px solid #eee">
         <el-aside width="200px" style="background-color: rgb(238, 241, 246); color: #333;">
             <el-menu :default-openeds="['1', '3']">
@@ -90,25 +97,25 @@ template: `<div>
                         <i class="el-icon-message" />
                         导航一
 </div>`,
-data() {
-        const item = {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-        };
-        return {
-            tableData: Array(20).fill(item)
-        };
-    }
-} }
-]
+                        data() {
+                            const item = {
+                                date: '2016-05-02',
+                                name: '王小虎',
+                                address: '上海市普陀区金沙江路 1518 弄'
+                            };
+                            return {
+                                tableData: Array(20).fill(item)
+                            };
+                        }
+                    }
+                }
+            ]
         };
     }
 };
 </script>
 
 <style>
-
 .container-demo-wrap .el-header,
 .container-demo-wrap .el-footer {
     background-color: #b3c0d1;
@@ -139,5 +146,4 @@ data() {
 .container-demo-wrap .el-container:nth-child(7) .el-aside {
     line-height: 320px;
 }
-
 </style>

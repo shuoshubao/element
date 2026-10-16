@@ -9,12 +9,14 @@
 
 <script>
 export default {
-    name: "UploadView",
+    name: 'UploadView',
     data() {
         return {
             sections: [
-{ title: "点击上传", comp: {
-template: `<div>
+                {
+                    title: '点击上传',
+                    comp: {
+                        template: `<div>
 <el-upload
         action="https://jsonplaceholder.typicode.com/posts/"
         :file-list="fileList"
@@ -29,37 +31,42 @@ template: `<div>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件, 且不超过500kb</div>
     </el-upload>
 </div>`,
-data() {
-        return {
-            fileList: [
-                {
-                    name: 'food.jpeg',
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                        data() {
+                            return {
+                                fileList: [
+                                    {
+                                        name: 'food.jpeg',
+                                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                                    },
+                                    {
+                                        name: 'food2.jpeg',
+                                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                                    }
+                                ]
+                            };
+                        },
+                        methods: {
+                            handleRemove(file, fileList) {
+                                console.log(file, fileList);
+                            },
+                            handlePreview(file) {
+                                console.log(file);
+                            },
+                            handleExceed(files, fileList) {
+                                this.$message.warning(
+                                    `当前限制选择 3 个文件, 本次选择了 ${files.length} 个文件, 共选择了 ${files.length + fileList.length} 个文件`
+                                );
+                            },
+                            beforeRemove(file, fileList) {
+                                return this.$confirm(`确定移除 ${file.name}?`);
+                            }
+                        }
+                    }
                 },
                 {
-                    name: 'food2.jpeg',
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                }
-            ]
-        };
-    },
-    methods: {
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-        handleExceed(files, fileList) {
-            this.$message.warning(`当前限制选择 3 个文件, 本次选择了 ${files.length} 个文件, 共选择了 ${files.length + fileList.length} 个文件`);
-        },
-        beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${file.name}?`);
-        }
-    }
-} },
-{ title: "用户头像上传", comp: {
-template: `<div>
+                    title: '用户头像上传',
+                    comp: {
+                        template: `<div>
 <el-upload
         action="https://jsonplaceholder.typicode.com/posts/"
         :show-file-list="false"
@@ -69,34 +76,37 @@ template: `<div>
         <el-button type="primary">点击上传</el-button>
     </el-upload>
 </div>`,
-data() {
-        return {
-            imageUrl: ''
-        };
-    },
-    methods: {
-        handleAvatarSuccess(res, file) {
-            this.imageUrl = URL.createObjectURL(file.raw);
-        },
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
+                        data() {
+                            return {
+                                imageUrl: ''
+                            };
+                        },
+                        methods: {
+                            handleAvatarSuccess(res, file) {
+                                this.imageUrl = URL.createObjectURL(file.raw);
+                            },
+                            beforeAvatarUpload(file) {
+                                const isJPG = file.type === 'image/jpeg';
 
-            const isLt2M = file.size / 1024 / 1024 < 2;
+                                const isLt2M = file.size / 1024 / 1024 < 2;
 
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
-            }
+                                if (!isJPG) {
+                                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                                }
 
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
+                                if (!isLt2M) {
+                                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                                }
 
-            return isJPG && isLt2M;
-        }
-    }
-} },
-{ title: "照片墙", comp: {
-template: `<div>
+                                return isJPG && isLt2M;
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '照片墙',
+                    comp: {
+                        template: `<div>
 <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
         <i class="el-icon-plus" />
     </el-upload>
@@ -105,24 +115,27 @@ template: `<div>
         <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
 </div>`,
-data() {
-        return {
-            dialogImageUrl: '',
-            dialogVisible: false
-        };
-    },
-    methods: {
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
-        }
-    }
-} },
-{ title: "文件缩略图", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                dialogImageUrl: '',
+                                dialogVisible: false
+                            };
+                        },
+                        methods: {
+                            handleRemove(file, fileList) {
+                                console.log(file, fileList);
+                            },
+                            handlePictureCardPreview(file) {
+                                this.dialogImageUrl = file.url;
+                                this.dialogVisible = true;
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '文件缩略图',
+                    comp: {
+                        template: `<div>
 <el-upload action="#" list-type="picture-card" :auto-upload="false">
         <i slot="default" class="el-icon-plus" />
         <div slot="file" slot-scope="{ file }">
@@ -145,28 +158,31 @@ template: `<div>
         <img width="100%" :src="dialogImageUrl" alt="" />
     </el-dialog>
 </div>`,
-data() {
-        return {
-            dialogImageUrl: '',
-            dialogVisible: false,
-            disabled: false
-        };
-    },
-    methods: {
-        handleRemove(file) {
-            console.log(file);
-        },
-        handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
-        },
-        handleDownload(file) {
-            console.log(file);
-        }
-    }
-} },
-{ title: "图片列表缩略图", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                dialogImageUrl: '',
+                                dialogVisible: false,
+                                disabled: false
+                            };
+                        },
+                        methods: {
+                            handleRemove(file) {
+                                console.log(file);
+                            },
+                            handlePictureCardPreview(file) {
+                                this.dialogImageUrl = file.url;
+                                this.dialogVisible = true;
+                            },
+                            handleDownload(file) {
+                                console.log(file);
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '图片列表缩略图',
+                    comp: {
+                        template: `<div>
 <el-upload
         action="https://jsonplaceholder.typicode.com/posts/"
         list-type="picture"
@@ -178,57 +194,64 @@ template: `<div>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件, 且不超过500kb</div>
     </el-upload>
 </div>`,
-data() {
-        return {
-            fileList: [
-                {
-                    name: 'food.jpeg',
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                        data() {
+                            return {
+                                fileList: [
+                                    {
+                                        name: 'food.jpeg',
+                                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                                    },
+                                    {
+                                        name: 'food2.jpeg',
+                                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                                    }
+                                ]
+                            };
+                        },
+                        methods: {
+                            handleRemove(file, fileList) {
+                                console.log(file, fileList);
+                            },
+                            handlePreview(file) {
+                                console.log(file);
+                            }
+                        }
+                    }
                 },
                 {
-                    name: 'food2.jpeg',
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                }
-            ]
-        };
-    },
-    methods: {
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        }
-    }
-} },
-{ title: "上传文件列表控制", comp: {
-template: `<div>
+                    title: '上传文件列表控制',
+                    comp: {
+                        template: `<div>
 <el-upload action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange" :file-list="fileList">
         <el-button type="primary">点击上传</el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件, 且不超过500kb</div>
     </el-upload>
 </div>`,
-data() {
-        return {
-            fileList: [
-                {
-                    name: 'food.jpeg',
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                        data() {
+                            return {
+                                fileList: [
+                                    {
+                                        name: 'food.jpeg',
+                                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                                    },
+                                    {
+                                        name: 'food2.jpeg',
+                                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                                    }
+                                ]
+                            };
+                        },
+                        methods: {
+                            handleChange(file, fileList) {
+                                this.fileList = fileList.slice(-3);
+                            }
+                        }
+                    }
                 },
                 {
-                    name: 'food2.jpeg',
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                }
-            ]
-        };
-    },
-    methods: {
-        handleChange(file, fileList) {
-            this.fileList = fileList.slice(-3);
-        }
-    }
-} },
-{ title: "拖拽上传", comp: { template: `<div>
+                    title: '拖拽上传',
+                    comp: {
+                        template: `<div>
 <el-upload drag action="https://jsonplaceholder.typicode.com/posts/" multiple>
         <i class="el-icon-upload" />
         <div class="el-upload__text">
@@ -237,9 +260,13 @@ data() {
         </div>
         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件, 且不超过500kb</div>
     </el-upload>
-</div>` } },
-{ title: "手动上传", comp: {
-template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '手动上传',
+                    comp: {
+                        template: `<div>
 <el-upload
         ref="uploadRef"
         action="https://jsonplaceholder.typicode.com/posts/"
@@ -254,35 +281,35 @@ template: `<div>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件, 且不超过500kb</div>
     </el-upload>
 </div>`,
-data() {
-        return {
-            fileList: [
-                {
-                    name: 'food.jpeg',
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                },
-                {
-                    name: 'food2.jpeg',
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                        data() {
+                            return {
+                                fileList: [
+                                    {
+                                        name: 'food.jpeg',
+                                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                                    },
+                                    {
+                                        name: 'food2.jpeg',
+                                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                                    }
+                                ]
+                            };
+                        },
+                        methods: {
+                            submitUpload() {
+                                this.$refs.uploadRef.submit();
+                            },
+                            handleRemove(file, fileList) {
+                                console.log(file, fileList);
+                            },
+                            handlePreview(file) {
+                                console.log(file);
+                            }
+                        }
+                    }
                 }
             ]
-        };
-    },
-    methods: {
-        submitUpload() {
-            this.$refs.uploadRef.submit();
-        },
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        }
-    }
-} }
-]
         };
     }
 };
 </script>
-

@@ -9,21 +9,25 @@
 
 <script>
 export default {
-    name: "IconView",
+    name: 'IconView',
     data() {
         return {
             sections: [
-{ title: "使用方法", comp: { template: `<div>
+                {
+                    title: '使用方法',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <i class="el-icon-edit" />
         <i class="el-icon-share" />
         <i class="el-icon-delete" />
         <el-button type="primary" icon="el-icon-search">搜索</el-button>
     </div>
-</div>` } }
-]
+</div>`
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

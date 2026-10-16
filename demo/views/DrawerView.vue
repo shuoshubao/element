@@ -9,12 +9,14 @@
 
 <script>
 export default {
-    name: "DrawerView",
+    name: 'DrawerView',
     data() {
         return {
             sections: [
-{ title: "基本用法", comp: {
-template: `<div>
+                {
+                    title: '基本用法',
+                    comp: {
+                        template: `<div>
 <el-radio-group v-model="direction">
         <el-radio label="ltr">从左往右开</el-radio>
         <el-radio label="rtl">从右往左开</el-radio>
@@ -30,29 +32,35 @@ template: `<div>
         <div>我来啦!</div>
     </el-drawer>
 </div>`,
-data() {
-        return {
-            drawerVisible: false,
-            direction: 'rtl'
-        };
-    }
-} },
-{ title: "不添加 Title", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                drawerVisible: false,
+                                direction: 'rtl'
+                            };
+                        }
+                    }
+                },
+                {
+                    title: '不添加 Title',
+                    comp: {
+                        template: `<div>
 <el-button @click="drawerVisible = true">点我打开</el-button>
 
     <el-drawer title="我是标题" :visible.sync="drawerVisible" :with-header="false">
         <div>我来啦!</div>
     </el-drawer>
 </div>`,
-data() {
-        return {
-            drawerVisible: false
-        };
-    }
-} },
-{ title: "自定义内容", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                drawerVisible: false
+                            };
+                        }
+                    }
+                },
+                {
+                    title: '自定义内容',
+                    comp: {
+                        template: `<div>
 <el-button @click="tableDrawerVisible = true">打开嵌套表格的 Drawer</el-button>
 
     <el-button @click="formDrawerVisible = true">打开嵌套 Form 的 Drawer</el-button>
@@ -84,67 +92,70 @@ template: `<div>
         </div>
     </el-drawer>
 </div>`,
-data() {
-        return {
-            tableDrawerVisible: false,
-            formDrawerVisible: false,
-            loading: false,
-            tableData: [
-                {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
+                        data() {
+                            return {
+                                tableDrawerVisible: false,
+                                formDrawerVisible: false,
+                                loading: false,
+                                tableData: [
+                                    {
+                                        date: '2016-05-02',
+                                        name: '王小虎',
+                                        address: '上海市普陀区金沙江路 1518 弄'
+                                    },
+                                    {
+                                        date: '2016-05-04',
+                                        name: '王小虎',
+                                        address: '上海市普陀区金沙江路 1518 弄'
+                                    },
+                                    {
+                                        date: '2016-05-01',
+                                        name: '王小虎',
+                                        address: '上海市普陀区金沙江路 1518 弄'
+                                    },
+                                    {
+                                        date: '2016-05-03',
+                                        name: '王小虎',
+                                        address: '上海市普陀区金沙江路 1518 弄'
+                                    }
+                                ],
+                                formModel: {
+                                    name: '',
+                                    region: ''
+                                },
+                                timer: null
+                            };
+                        },
+                        methods: {
+                            handleClose(done) {
+                                if (this.loading) {
+                                    return;
+                                }
+                                this.$confirm('确定要提交表单吗?')
+                                    .then(() => {
+                                        this.loading = true;
+                                        this.timer = setTimeout(() => {
+                                            done();
+                                            // 动画关闭需要一定的时间
+                                            setTimeout(() => {
+                                                this.loading = false;
+                                            }, 400);
+                                        }, 2000);
+                                    })
+                                    .catch(() => {});
+                            },
+                            handleCancel() {
+                                this.loading = false;
+                                this.formDrawerVisible = false;
+                                clearTimeout(this.timer);
+                            }
+                        }
+                    }
                 },
                 {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                },
-                {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                },
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }
-            ],
-            formModel: {
-                name: '',
-                region: ''
-            },
-            timer: null
-        };
-    },
-    methods: {
-        handleClose(done) {
-            if (this.loading) {
-                return;
-            }
-            this.$confirm('确定要提交表单吗?')
-                .then(() => {
-                    this.loading = true;
-                    this.timer = setTimeout(() => {
-                        done();
-                        // 动画关闭需要一定的时间
-                        setTimeout(() => {
-                            this.loading = false;
-                        }, 400);
-                    }, 2000);
-                })
-                .catch(() => {});
-        },
-        handleCancel() {
-            this.loading = false;
-            this.formDrawerVisible = false;
-            clearTimeout(this.timer);
-        }
-    }
-} },
-{ title: "多层嵌套", comp: {
-template: `<div>
+                    title: '多层嵌套',
+                    comp: {
+                        template: `<div>
 <el-button @click="outerDrawerVisible = true">点我打开</el-button>
 
     <el-drawer title="我是外面的 Drawer" :visible.sync="outerDrawerVisible" size="500px">
@@ -155,25 +166,25 @@ template: `<div>
         <div>内容</div>
     </el-drawer>
 </div>`,
-data() {
-        return {
-            outerDrawerVisible: false,
-            innerDrawerVisible: false
-        };
-    },
-    methods: {
-        handleClose(done) {
-            this.$confirm('还有未保存的工作哦确定关闭吗?')
-                .then(() => {
-                    done();
-                })
-                .catch(() => {});
-        }
-    }
-} }
-]
+                        data() {
+                            return {
+                                outerDrawerVisible: false,
+                                innerDrawerVisible: false
+                            };
+                        },
+                        methods: {
+                            handleClose(done) {
+                                this.$confirm('还有未保存的工作哦确定关闭吗?')
+                                    .then(() => {
+                                        done();
+                                    })
+                                    .catch(() => {});
+                            }
+                        }
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

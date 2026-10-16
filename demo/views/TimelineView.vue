@@ -9,12 +9,14 @@
 
 <script>
 export default {
-    name: "TimelineView",
+    name: 'TimelineView',
     data() {
         return {
             sections: [
-{ title: "基础用法", comp: {
-template: `<div>
+                {
+                    title: '基础用法',
+                    comp: {
+                        template: `<div>
 <el-radio-group v-model="reverse">
         <el-radio :label="true">倒序</el-radio>
         <el-radio :label="false">正序</el-radio>
@@ -26,28 +28,31 @@ template: `<div>
         <el-timeline-item v-for="(activity, index) in activities" :key="index" :timestamp="activity.timestamp">{{ activity.content }}</el-timeline-item>
     </el-timeline>
 </div>`,
-data() {
-        return {
-            reverse: true,
-            activities: [
-                {
-                    content: '活动按期开始',
-                    timestamp: '2018-04-15'
+                        data() {
+                            return {
+                                reverse: true,
+                                activities: [
+                                    {
+                                        content: '活动按期开始',
+                                        timestamp: '2018-04-15'
+                                    },
+                                    {
+                                        content: '通过审核',
+                                        timestamp: '2018-04-13'
+                                    },
+                                    {
+                                        content: '创建成功',
+                                        timestamp: '2018-04-11'
+                                    }
+                                ]
+                            };
+                        }
+                    }
                 },
                 {
-                    content: '通过审核',
-                    timestamp: '2018-04-13'
-                },
-                {
-                    content: '创建成功',
-                    timestamp: '2018-04-11'
-                }
-            ]
-        };
-    }
-} },
-{ title: "⾃定义节点样式", comp: {
-template: `<div>
+                    title: '⾃定义节点样式',
+                    comp: {
+                        template: `<div>
 <el-timeline>
         <el-timeline-item
             v-for="(activity, index) in activities"
@@ -62,35 +67,39 @@ template: `<div>
         </el-timeline-item>
     </el-timeline>
 </div>`,
-data() {
-        return {
-            activities: [
-                {
-                    content: '支持使用图标',
-                    timestamp: '2018-04-12 20:46',
-                    size: 'large',
-                    type: 'primary',
-                    icon: 'el-icon-more'
+                        data() {
+                            return {
+                                activities: [
+                                    {
+                                        content: '支持使用图标',
+                                        timestamp: '2018-04-12 20:46',
+                                        size: 'large',
+                                        type: 'primary',
+                                        icon: 'el-icon-more'
+                                    },
+                                    {
+                                        content: '支持自定义颜色',
+                                        timestamp: '2018-04-03 20:46',
+                                        color: '#0bbd87'
+                                    },
+                                    {
+                                        content: '支持自定义尺寸',
+                                        timestamp: '2018-04-03 20:46',
+                                        size: 'large'
+                                    },
+                                    {
+                                        content: '默认样式的节点',
+                                        timestamp: '2018-04-03 20:46'
+                                    }
+                                ]
+                            };
+                        }
+                    }
                 },
                 {
-                    content: '支持自定义颜色',
-                    timestamp: '2018-04-03 20:46',
-                    color: '#0bbd87'
-                },
-                {
-                    content: '支持自定义尺寸',
-                    timestamp: '2018-04-03 20:46',
-                    size: 'large'
-                },
-                {
-                    content: '默认样式的节点',
-                    timestamp: '2018-04-03 20:46'
-                }
-            ]
-        };
-    }
-} },
-{ title: "⾃定义时间戳", comp: { template: `<div>
+                    title: '⾃定义时间戳',
+                    comp: {
+                        template: `<div>
 <el-timeline>
         <el-timeline-item timestamp="2018/4/12">
             <el-card>
@@ -111,10 +120,11 @@ data() {
             </el-card>
         </el-timeline-item>
     </el-timeline>
-</div>` } }
-]
+</div>`
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

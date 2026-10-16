@@ -9,39 +9,50 @@
 
 <script>
 export default {
-    name: "CalendarView",
+    name: 'CalendarView',
     data() {
         return {
             sections: [
-{ title: "基本", comp: {
-template: `<div>
+                {
+                    title: '基本',
+                    comp: {
+                        template: `<div>
 <el-calendar v-model="value" />
 </div>`,
-data() {
-        return {
-            value: new Date()
-        };
-    }
-} },
-{ title: "自定义内容", comp: { template: `<div>
+                        data() {
+                            return {
+                                value: new Date()
+                            };
+                        }
+                    }
+                },
+                {
+                    title: '自定义内容',
+                    comp: {
+                        template: `<div>
 <el-calendar>
         <!-- 这里使用的是 2.5 slot 语法, 对于新项目请使用 2.6 slot 语法-->
         <template slot="dateCell" slot-scope="{ date, data }">
             <div :class="data.isSelected ? 'is-selected' : ''">{{ data.day.split('-').slice(1).join('-') }} {{ data.isSelected ? '✔️' : '' }}</div>
-</div>` } },
-{ title: "自定义范围", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '自定义范围',
+                    comp: {
+                        template: `<div>
 <el-calendar :range="['2019-03-04', '2019-03-24']" />
-</div>` } }
-]
+</div>`
+                    }
+                }
+            ]
         };
     }
 };
 </script>
 
 <style>
-
 .is-selected {
     color: #1989fa;
 }
-
 </style>

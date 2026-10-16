@@ -9,15 +9,23 @@
 
 <script>
 export default {
-    name: "BacktopView",
+    name: 'BacktopView',
     data() {
         return {
             sections: [
-{ title: "基础用法", comp: { template: `<div>
+                {
+                    title: '基础用法',
+                    comp: {
+                        template: `<div>
 Scroll down to see the bottom-right button.
     <el-backtop target=".page-component__scroll .el-scrollbar__wrap" />
-</div>` } },
-{ title: "自定义显示内容", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '自定义显示内容',
+                    comp: {
+                        template: `<div>
 <div>Scroll down to see the bottom-right button.</div>
     <el-backtop target=".page-component__scroll .el-scrollbar__wrap" :bottom="100">
         <div
@@ -26,10 +34,11 @@ Scroll down to see the bottom-right button.
             UP
         </div>
     </el-backtop>
-</div>` } }
-]
+</div>`
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

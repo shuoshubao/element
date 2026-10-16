@@ -9,11 +9,14 @@
 
 <script>
 export default {
-    name: "ButtonView",
+    name: 'ButtonView',
     data() {
         return {
             sections: [
-{ title: "基础用法", comp: { template: `<div>
+                {
+                    title: '基础用法',
+                    comp: {
+                        template: `<div>
 <el-button>默认按钮</el-button>
     <el-button type="primary">主要按钮</el-button>
     <el-button type="success">成功按钮</el-button>
@@ -47,8 +50,13 @@ export default {
     <el-button type="info" icon="el-icon-message" circle />
     <el-button type="warning" icon="el-icon-star-off" circle />
     <el-button type="danger" icon="el-icon-delete" circle />
-</div>` } },
-{ title: "禁用状态", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '禁用状态',
+                    comp: {
+                        template: `<div>
 <el-button disabled>默认按钮</el-button>
     <el-button type="primary" disabled>主要按钮</el-button>
     <el-button type="success" disabled>成功按钮</el-button>
@@ -64,12 +72,22 @@ export default {
     <el-button type="info" plain disabled>信息按钮</el-button>
     <el-button type="warning" plain disabled>警告按钮</el-button>
     <el-button type="danger" plain disabled>危险按钮</el-button>
-</div>` } },
-{ title: "文字按钮", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '文字按钮',
+                    comp: {
+                        template: `<div>
 <el-button type="text">文字按钮</el-button>
     <el-button type="text" disabled>文字按钮</el-button>
-</div>` } },
-{ title: "图标按钮", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '图标按钮',
+                    comp: {
+                        template: `<div>
 <el-button type="primary" icon="el-icon-edit" />
     <el-button type="primary" icon="el-icon-share" />
     <el-button type="primary" icon="el-icon-delete" />
@@ -78,8 +96,13 @@ export default {
         上传
         <i class="el-icon-upload" />
     </el-button>
-</div>` } },
-{ title: "按钮组", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '按钮组',
+                    comp: {
+                        template: `<div>
 <el-button-group>
         <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
         <el-button type="primary">
@@ -92,11 +115,21 @@ export default {
         <el-button type="primary" icon="el-icon-share" />
         <el-button type="primary" icon="el-icon-delete" />
     </el-button-group>
-</div>` } },
-{ title: "加载中", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '加载中',
+                    comp: {
+                        template: `<div>
 <el-button type="primary" loading>加载中</el-button>
-</div>` } },
-{ title: "不同尺寸", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '不同尺寸',
+                    comp: {
+                        template: `<div>
 <el-button>默认按钮</el-button>
     <el-button size="medium">中等按钮</el-button>
     <el-button size="small">小型按钮</el-button>
@@ -108,10 +141,11 @@ export default {
     <el-button round size="medium">中等按钮</el-button>
     <el-button round size="small">小型按钮</el-button>
     <el-button round size="mini">超小按钮</el-button>
-</div>` } }
-]
+</div>`
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

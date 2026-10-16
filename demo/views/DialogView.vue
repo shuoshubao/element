@@ -9,12 +9,14 @@
 
 <script>
 export default {
-    name: "DialogView",
+    name: 'DialogView',
     data() {
         return {
             sections: [
-{ title: "基本用法", comp: {
-template: `<div>
+                {
+                    title: '基本用法',
+                    comp: {
+                        template: `<div>
 <el-button @click="dialogVisible = true">点击打开 Dialog</el-button>
 
     <el-dialog title="提示" :visible.sync="dialogVisible" width="500px" :before-close="handleClose">
@@ -24,23 +26,26 @@ template: `<div>
             <el-button @click="dialogVisible = false">取消</el-button>
             <el-button type="primary" @click="dialogVisible = false">确定</el-button>
 </div>`,
-data() {
-        return {
-            dialogVisible: false
-        };
-    },
-    methods: {
-        handleClose(done) {
-            this.$confirm('确认关闭?')
-                .then(_ => {
-                    done();
-                })
-                .catch(_ => {});
-        }
-    }
-} },
-{ title: "自定义内容", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                dialogVisible: false
+                            };
+                        },
+                        methods: {
+                            handleClose(done) {
+                                this.$confirm('确认关闭?')
+                                    .then(_ => {
+                                        done();
+                                    })
+                                    .catch(_ => {});
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '自定义内容',
+                    comp: {
+                        template: `<div>
 <el-button @click="tableDialogVisible = true">打开嵌套表格的 Dialog</el-button>
 
     <el-dialog title="收货地址" :visible.sync="tableDialogVisible">
@@ -70,47 +75,50 @@ template: `<div>
             <el-button @click="formDialogVisible = false">取消</el-button>
             <el-button type="primary" @click="formDialogVisible = false">确定</el-button>
 </div>`,
-data() {
-        return {
-            tableDialogVisible: false,
-            formDialogVisible: false,
-            tableData: [
-                {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
+                        data() {
+                            return {
+                                tableDialogVisible: false,
+                                formDialogVisible: false,
+                                tableData: [
+                                    {
+                                        date: '2016-05-02',
+                                        name: '王小虎',
+                                        address: '上海市普陀区金沙江路 1518 弄'
+                                    },
+                                    {
+                                        date: '2016-05-04',
+                                        name: '王小虎',
+                                        address: '上海市普陀区金沙江路 1518 弄'
+                                    },
+                                    {
+                                        date: '2016-05-01',
+                                        name: '王小虎',
+                                        address: '上海市普陀区金沙江路 1518 弄'
+                                    },
+                                    {
+                                        date: '2016-05-03',
+                                        name: '王小虎',
+                                        address: '上海市普陀区金沙江路 1518 弄'
+                                    }
+                                ],
+                                formModel: {
+                                    name: '',
+                                    region: '',
+                                    date1: '',
+                                    date2: '',
+                                    delivery: false,
+                                    type: [],
+                                    resource: '',
+                                    desc: ''
+                                }
+                            };
+                        }
+                    }
                 },
                 {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                },
-                {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                },
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }
-            ],
-            formModel: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            }
-        };
-    }
-} },
-{ title: "嵌套的 Dialog", comp: {
-template: `<div>
+                    title: '嵌套的 Dialog',
+                    comp: {
+                        template: `<div>
 <el-button @click="outerDialogVisible = true">点击打开外层 Dialog</el-button>
 
     <el-dialog title="外层 Dialog" :visible.sync="outerDialogVisible">
@@ -120,15 +128,18 @@ template: `<div>
             <el-button @click="outerDialogVisible = false">取消</el-button>
             <el-button type="primary" @click="innerDialogVisible = true">打开内层 Dialog</el-button>
 </div>`,
-data() {
-        return {
-            outerDialogVisible: false,
-            innerDialogVisible: false
-        };
-    }
-} },
-{ title: "居中布局", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                outerDialogVisible: false,
+                                innerDialogVisible: false
+                            };
+                        }
+                    }
+                },
+                {
+                    title: '居中布局',
+                    comp: {
+                        template: `<div>
 <el-button @click="centerDialogVisible = true">点击打开 Dialog</el-button>
 
     <el-dialog title="提示" :visible.sync="centerDialogVisible" width="500px" center>
@@ -138,15 +149,15 @@ template: `<div>
             <el-button @click="centerDialogVisible = false">取消</el-button>
             <el-button type="primary" @click="centerDialogVisible = false">确定</el-button>
 </div>`,
-data() {
-        return {
-            centerDialogVisible: false
-        };
-    }
-} }
-]
+                        data() {
+                            return {
+                                centerDialogVisible: false
+                            };
+                        }
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

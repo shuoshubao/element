@@ -9,12 +9,14 @@
 
 <script>
 export default {
-    name: "DatetimePickerView",
+    name: 'DatetimePickerView',
     data() {
         return {
             sections: [
-{ title: "日期和时间点", comp: {
-template: `<div>
+                {
+                    title: '日期和时间点',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <div>
             <div>默认</div>
@@ -32,42 +34,45 @@ template: `<div>
         </div>
     </div>
 </div>`,
-data() {
-        return {
-            pickerOptions: {
-                shortcuts: [
-                    {
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    },
-                    {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    },
-                    {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
+                        data() {
+                            return {
+                                pickerOptions: {
+                                    shortcuts: [
+                                        {
+                                            text: '今天',
+                                            onClick(picker) {
+                                                picker.$emit('pick', new Date());
+                                            }
+                                        },
+                                        {
+                                            text: '昨天',
+                                            onClick(picker) {
+                                                const date = new Date();
+                                                date.setTime(date.getTime() - 3600 * 1000 * 24);
+                                                picker.$emit('pick', date);
+                                            }
+                                        },
+                                        {
+                                            text: '一周前',
+                                            onClick(picker) {
+                                                const date = new Date();
+                                                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                                                picker.$emit('pick', date);
+                                            }
+                                        }
+                                    ]
+                                },
+                                value1: '',
+                                value2: '',
+                                value3: ''
+                            };
                         }
                     }
-                ]
-            },
-            value1: '',
-            value2: '',
-            value3: ''
-        };
-    }
-} },
-{ title: "日期和时间范围", comp: {
-template: `<div>
+                },
+                {
+                    title: '日期和时间范围',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <div>
             <div>默认</div>
@@ -88,46 +93,49 @@ template: `<div>
         </div>
     </div>
 </div>`,
-data() {
-        return {
-            pickerOptions: {
-                shortcuts: [
-                    {
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
+                        data() {
+                            return {
+                                pickerOptions: {
+                                    shortcuts: [
+                                        {
+                                            text: '最近一周',
+                                            onClick(picker) {
+                                                const end = new Date();
+                                                const start = new Date();
+                                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                                                picker.$emit('pick', [start, end]);
+                                            }
+                                        },
+                                        {
+                                            text: '最近一个月',
+                                            onClick(picker) {
+                                                const end = new Date();
+                                                const start = new Date();
+                                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                                                picker.$emit('pick', [start, end]);
+                                            }
+                                        },
+                                        {
+                                            text: '最近三个月',
+                                            onClick(picker) {
+                                                const end = new Date();
+                                                const start = new Date();
+                                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                                                picker.$emit('pick', [start, end]);
+                                            }
+                                        }
+                                    ]
+                                },
+                                value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+                                value2: ''
+                            };
                         }
                     }
-                ]
-            },
-            value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-            value2: ''
-        };
-    }
-} },
-{ title: "默认的起始与结束时刻", comp: {
-template: `<div>
+                },
+                {
+                    title: '默认的起始与结束时刻',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <div>
             <div>起始日期时刻为 12:00:00</div>
@@ -147,16 +155,16 @@ template: `<div>
         </div>
     </div>
 </div>`,
-data() {
-        return {
-            value1: '',
-            value2: ''
-        };
-    }
-} }
-]
+                        data() {
+                            return {
+                                value1: '',
+                                value2: ''
+                            };
+                        }
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

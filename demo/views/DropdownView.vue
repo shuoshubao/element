@@ -9,11 +9,14 @@
 
 <script>
 export default {
-    name: "DropdownView",
+    name: 'DropdownView',
     data() {
         return {
             sections: [
-{ title: "基础用法", comp: { template: `<div>
+                {
+                    title: '基础用法',
+                    comp: {
+                        template: `<div>
 <el-dropdown>
         <span>
             下拉菜单
@@ -27,8 +30,13 @@ export default {
             <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
         </el-dropdown-menu>
     </el-dropdown>
-</div>` } },
-{ title: "触发对象", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '触发对象',
+                    comp: {
+                        template: `<div>
 <el-dropdown>
         <el-button type="primary">
             更多菜单
@@ -54,8 +62,13 @@ export default {
             <el-dropdown-item>蚵仔煎</el-dropdown-item>
         </el-dropdown-menu>
     </el-dropdown>
-</div>` } },
-{ title: "触发方式", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '触发方式',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <el-dropdown>
             <span>
@@ -85,8 +98,13 @@ export default {
             </el-dropdown-menu>
         </el-dropdown>
     </div>
-</div>` } },
-{ title: "菜单隐藏方式", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '菜单隐藏方式',
+                    comp: {
+                        template: `<div>
 <el-dropdown :hide-on-click="false">
         <span>
             下拉菜单
@@ -100,9 +118,13 @@ export default {
             <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
         </el-dropdown-menu>
     </el-dropdown>
-</div>` } },
-{ title: "指令事件", comp: {
-template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '指令事件',
+                    comp: {
+                        template: `<div>
 <el-dropdown @command="handleCommand">
         <span>
             下拉菜单
@@ -117,13 +139,17 @@ template: `<div>
         </el-dropdown-menu>
     </el-dropdown>
 </div>`,
-methods: {
-        handleCommand(command) {
-            this.$message('click on item ' + command);
-        }
-    }
-} },
-{ title: "不同尺寸", comp: { template: `<div>
+                        methods: {
+                            handleCommand(command) {
+                                this.$message('click on item ' + command);
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '不同尺寸',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <el-dropdown split-button type="primary">
             默认尺寸
@@ -169,10 +195,11 @@ methods: {
             </el-dropdown-menu>
         </el-dropdown>
     </div>
-</div>` } }
-]
+</div>`
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

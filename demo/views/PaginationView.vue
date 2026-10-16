@@ -9,11 +9,14 @@
 
 <script>
 export default {
-    name: "PaginationView",
+    name: 'PaginationView',
     data() {
         return {
             sections: [
-{ title: "基础用法", comp: { template: `<div>
+                {
+                    title: '基础用法',
+                    comp: {
+                        template: `<div>
 <div>
         <div>页数较少时的效果</div>
         <el-pagination :total="50" layout="prev, pager, next" />
@@ -23,18 +26,37 @@ export default {
         <div>大于 7 页时的效果</div>
         <el-pagination :total="1000" layout="prev, pager, next" />
     </div>
-</div>` } },
-{ title: "设置最大页码按钮数", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '设置最大页码按钮数',
+                    comp: {
+                        template: `<div>
 <el-pagination :total="1000" :page-size="20" :pager-count="11" layout="prev, pager, next" />
-</div>` } },
-{ title: "带有背景色的分页", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '带有背景色的分页',
+                    comp: {
+                        template: `<div>
 <el-pagination :total="1000" background layout="prev, pager, next" />
-</div>` } },
-{ title: "小型分页", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '小型分页',
+                    comp: {
+                        template: `<div>
 <el-pagination :total="50" small layout="prev, pager, next" />
-</div>` } },
-{ title: "附加功能", comp: {
-template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '附加功能',
+                    comp: {
+                        template: `<div>
 <div class="block-vertical">
         <div>
             <div>显示总数</div>
@@ -87,39 +109,42 @@ template: `<div>
         </div>
     </div>
 </div>`,
-methods: {
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-        }
-    },
-    data() {
-        return {
-            currentPage1: 5,
-            currentPage2: 5,
-            currentPage3: 5,
-            currentPage4: 4
-        };
-    }
-} },
-{ title: "当只有一页时隐藏分页", comp: {
-template: `<div>
+                        methods: {
+                            handleSizeChange(val) {
+                                console.log(`每页 ${val} 条`);
+                            },
+                            handleCurrentChange(val) {
+                                console.log(`当前页: ${val}`);
+                            }
+                        },
+                        data() {
+                            return {
+                                currentPage1: 5,
+                                currentPage2: 5,
+                                currentPage3: 5,
+                                currentPage4: 4
+                            };
+                        }
+                    }
+                },
+                {
+                    title: '当只有一页时隐藏分页',
+                    comp: {
+                        template: `<div>
 <div>
         <el-switch v-model="value" />
         <el-pagination :total="5" :hide-on-single-page="value" layout="prev, pager, next" />
     </div>
 </div>`,
-data() {
-        return {
-            value: false
-        };
-    }
-} }
-]
+                        data() {
+                            return {
+                                value: false
+                            };
+                        }
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

@@ -9,11 +9,14 @@
 
 <script>
 export default {
-    name: "BadgeView",
+    name: 'BadgeView',
     data() {
         return {
             sections: [
-{ title: "基础用法", comp: { template: `<div>
+                {
+                    title: '基础用法',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <el-badge :value="12">
             <el-button>评论</el-button>
@@ -48,8 +51,13 @@ export default {
             </el-dropdown-menu>
         </el-dropdown>
     </div>
-</div>` } },
-{ title: "最大值", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '最大值',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <el-badge :value="200" :max="99">
             <el-button>评论</el-button>
@@ -58,8 +66,13 @@ export default {
             <el-button>回复</el-button>
         </el-badge>
     </div>
-</div>` } },
-{ title: "自定义内容", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '自定义内容',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <el-badge value="new">
             <el-button>评论</el-button>
@@ -68,18 +81,24 @@ export default {
             <el-button>回复</el-button>
         </el-badge>
     </div>
-</div>` } },
-{ title: "小红点", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '小红点',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <el-badge is-dot>数据查询</el-badge>
         <el-badge is-dot>
             <el-button type="primary" icon="el-icon-share" />
         </el-badge>
     </div>
-</div>` } }
-]
+</div>`
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

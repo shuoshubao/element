@@ -9,20 +9,38 @@
 
 <script>
 export default {
-    name: "SkeletonView",
+    name: 'SkeletonView',
     data() {
         return {
             sections: [
-{ title: "基础用法", comp: { template: `<div>
+                {
+                    title: '基础用法',
+                    comp: {
+                        template: `<div>
 <el-skeleton />
-</div>` } },
-{ title: "更多参数", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '更多参数',
+                    comp: {
+                        template: `<div>
 <el-skeleton :rows="6" />
-</div>` } },
-{ title: "动画效果", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '动画效果',
+                    comp: {
+                        template: `<div>
 <el-skeleton :rows="6" animated />
-</div>` } },
-{ title: "自定义样式", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '自定义样式',
+                    comp: {
+                        template: `<div>
 <el-skeleton style="width: 240px">
         <template slot="template">
             <el-skeleton-item variant="image" style="width: 240px; height: 240px;" />
@@ -33,9 +51,13 @@ export default {
                     <el-skeleton-item variant="text" style="width: 30%;" />
                 </div>
             </div>
-</div>` } },
-{ title: "Loading 状态", comp: {
-template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: 'Loading 状态',
+                    comp: {
+                        template: `<div>
 <label>切换 Loading</label>
     <el-switch v-model="loading" />
 
@@ -54,14 +76,17 @@ template: `<div>
                 </div>
             </div>
 </div>`,
-data() {
-        return {
-            loading: true
-        };
-    }
-} },
-{ title: "渲染多条数据", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                loading: true
+                            };
+                        }
+                    }
+                },
+                {
+                    title: '渲染多条数据',
+                    comp: {
+                        template: `<div>
 <el-button @click="setLoading">点我重新加载</el-button>
 
     <el-divider />
@@ -79,40 +104,43 @@ template: `<div>
                 </div>
             </div>
 </div>`,
-data() {
-        return {
-            loading: true,
-            lists: []
-        };
-    },
-    mounted() {
-        this.loading = false;
-        this.lists = [
-            {
-                imgUrl: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
-                name: '鹿'
-            },
-            {
-                imgUrl: 'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
-                name: '马'
-            },
-            {
-                imgUrl: 'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
-                name: '山狮'
-            }
-        ];
-    },
-    methods: {
-        setLoading() {
-            this.loading = true;
-            setTimeout(() => {
-                this.loading = false;
-            }, 2000);
-        }
-    }
-} },
-{ title: "防止渲染抖动", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                loading: true,
+                                lists: []
+                            };
+                        },
+                        mounted() {
+                            this.loading = false;
+                            this.lists = [
+                                {
+                                    imgUrl: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+                                    name: '鹿'
+                                },
+                                {
+                                    imgUrl: 'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
+                                    name: '马'
+                                },
+                                {
+                                    imgUrl: 'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
+                                    name: '山狮'
+                                }
+                            ];
+                        },
+                        methods: {
+                            setLoading() {
+                                this.loading = true;
+                                setTimeout(() => {
+                                    this.loading = false;
+                                }, 2000);
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '防止渲染抖动',
+                    comp: {
+                        template: `<div>
 <span>切换 Loading</span>
     <el-switch v-model="loading" />
 
@@ -131,15 +159,15 @@ template: `<div>
                 </div>
             </div>
 </div>`,
-data() {
-        return {
-            loading: false
-        };
-    }
-} }
-]
+                        data() {
+                            return {
+                                loading: false
+                            };
+                        }
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

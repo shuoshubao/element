@@ -9,12 +9,14 @@
 
 <script>
 export default {
-    name: "CollapseView",
+    name: 'CollapseView',
     data() {
         return {
             sections: [
-{ title: "基础用法", comp: {
-template: `<div>
+                {
+                    title: '基础用法',
+                    comp: {
+                        template: `<div>
 <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="一致性 Consistency" name="1">
             <div>与现实生活一致: 与现实生活的流程、逻辑保持一致, 遵循用户习惯的语言和概念;</div>
@@ -35,19 +37,22 @@ template: `<div>
         </el-collapse-item>
     </el-collapse>
 </div>`,
-data() {
-        return {
-            activeNames: ['1']
-        };
-    },
-    methods: {
-        handleChange(val) {
-            console.log(val);
-        }
-    }
-} },
-{ title: "手风琴效果", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                activeNames: ['1']
+                            };
+                        },
+                        methods: {
+                            handleChange(val) {
+                                console.log(val);
+                            }
+                        }
+                    }
+                },
+                {
+                    title: '手风琴效果',
+                    comp: {
+                        template: `<div>
 <el-collapse v-model="activeName" accordion>
         <el-collapse-item title="一致性 Consistency" name="1">
             <div>与现实生活一致: 与现实生活的流程、逻辑保持一致, 遵循用户习惯的语言和概念;</div>
@@ -68,22 +73,27 @@ template: `<div>
         </el-collapse-item>
     </el-collapse>
 </div>`,
-data() {
-        return {
-            activeName: '1'
-        };
-    }
-} },
-{ title: "自定义面板标题", comp: { template: `<div>
+                        data() {
+                            return {
+                                activeName: '1'
+                            };
+                        }
+                    }
+                },
+                {
+                    title: '自定义面板标题',
+                    comp: {
+                        template: `<div>
 <el-collapse accordion>
         <el-collapse-item>
             <template slot="title">
                 一致性 Consistency
                 <i class="el-icon-info" style="margin-left: 4px" />
-</div>` } }
-]
+</div>`
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

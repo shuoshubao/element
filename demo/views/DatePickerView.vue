@@ -9,12 +9,14 @@
 
 <script>
 export default {
-    name: "DatePickerView",
+    name: 'DatePickerView',
     data() {
         return {
             sections: [
-{ title: "选择日", comp: {
-template: `<div>
+                {
+                    title: '选择日',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <div>
             <div>默认</div>
@@ -27,44 +29,47 @@ template: `<div>
         </div>
     </div>
 </div>`,
-data() {
-        return {
-            pickerOptions: {
-                disabledDate(time) {
-                    return time.getTime() > Date.now();
-                },
-                shortcuts: [
-                    {
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    },
-                    {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    },
-                    {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
+                        data() {
+                            return {
+                                pickerOptions: {
+                                    disabledDate(time) {
+                                        return time.getTime() > Date.now();
+                                    },
+                                    shortcuts: [
+                                        {
+                                            text: '今天',
+                                            onClick(picker) {
+                                                picker.$emit('pick', new Date());
+                                            }
+                                        },
+                                        {
+                                            text: '昨天',
+                                            onClick(picker) {
+                                                const date = new Date();
+                                                date.setTime(date.getTime() - 3600 * 1000 * 24);
+                                                picker.$emit('pick', date);
+                                            }
+                                        },
+                                        {
+                                            text: '一周前',
+                                            onClick(picker) {
+                                                const date = new Date();
+                                                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                                                picker.$emit('pick', date);
+                                            }
+                                        }
+                                    ]
+                                },
+                                value1: '',
+                                value2: ''
+                            };
                         }
                     }
-                ]
-            },
-            value1: '',
-            value2: ''
-        };
-    }
-} },
-{ title: "其他日期单位", comp: {
-template: `<div>
+                },
+                {
+                    title: '其他日期单位',
+                    comp: {
+                        template: `<div>
 <div class="block-vertical">
         <div class="block-horizontal">
             <div>
@@ -101,19 +106,22 @@ template: `<div>
         </div>
     </div>
 </div>`,
-data() {
-        return {
-            value1: '',
-            value2: '',
-            value3: '',
-            value4: '',
-            value5: '',
-            value6: ''
-        };
-    }
-} },
-{ title: "选择日期范围", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                value1: '',
+                                value2: '',
+                                value3: '',
+                                value4: '',
+                                value5: '',
+                                value6: ''
+                            };
+                        }
+                    }
+                },
+                {
+                    title: '选择日期范围',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <div>
             <div>默认</div>
@@ -135,46 +143,49 @@ template: `<div>
         </div>
     </div>
 </div>`,
-data() {
-        return {
-            pickerOptions: {
-                shortcuts: [
-                    {
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
+                        data() {
+                            return {
+                                pickerOptions: {
+                                    shortcuts: [
+                                        {
+                                            text: '最近一周',
+                                            onClick(picker) {
+                                                const end = new Date();
+                                                const start = new Date();
+                                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                                                picker.$emit('pick', [start, end]);
+                                            }
+                                        },
+                                        {
+                                            text: '最近一个月',
+                                            onClick(picker) {
+                                                const end = new Date();
+                                                const start = new Date();
+                                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                                                picker.$emit('pick', [start, end]);
+                                            }
+                                        },
+                                        {
+                                            text: '最近三个月',
+                                            onClick(picker) {
+                                                const end = new Date();
+                                                const start = new Date();
+                                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                                                picker.$emit('pick', [start, end]);
+                                            }
+                                        }
+                                    ]
+                                },
+                                value1: '',
+                                value2: ''
+                            };
                         }
                     }
-                ]
-            },
-            value1: '',
-            value2: ''
-        };
-    }
-} },
-{ title: "选择月份范围", comp: {
-template: `<div>
+                },
+                {
+                    title: '选择月份范围',
+                    comp: {
+                        template: `<div>
 <div class="block-horizontal">
         <div>
             <div>默认</div>
@@ -196,42 +207,45 @@ template: `<div>
         </div>
     </div>
 </div>`,
-data() {
-        return {
-            pickerOptions: {
-                shortcuts: [
-                    {
-                        text: '本月',
-                        onClick(picker) {
-                            picker.$emit('pick', [new Date(), new Date()]);
-                        }
-                    },
-                    {
-                        text: '今年至今',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date(new Date().getFullYear(), 0);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: '最近六个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setMonth(start.getMonth() - 6);
-                            picker.$emit('pick', [start, end]);
+                        data() {
+                            return {
+                                pickerOptions: {
+                                    shortcuts: [
+                                        {
+                                            text: '本月',
+                                            onClick(picker) {
+                                                picker.$emit('pick', [new Date(), new Date()]);
+                                            }
+                                        },
+                                        {
+                                            text: '今年至今',
+                                            onClick(picker) {
+                                                const end = new Date();
+                                                const start = new Date(new Date().getFullYear(), 0);
+                                                picker.$emit('pick', [start, end]);
+                                            }
+                                        },
+                                        {
+                                            text: '最近六个月',
+                                            onClick(picker) {
+                                                const end = new Date();
+                                                const start = new Date();
+                                                start.setMonth(start.getMonth() - 6);
+                                                picker.$emit('pick', [start, end]);
+                                            }
+                                        }
+                                    ]
+                                },
+                                value1: '',
+                                value2: ''
+                            };
                         }
                     }
-                ]
-            },
-            value1: '',
-            value2: ''
-        };
-    }
-} },
-{ title: "日期格式", comp: {
-template: `<div>
+                },
+                {
+                    title: '日期格式',
+                    comp: {
+                        template: `<div>
 <div>
         <div>默认为 Date 对象</div>
         <div>值: {{ value1 }}</div>
@@ -248,30 +262,33 @@ template: `<div>
         <el-date-picker v-model="value3" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="timestamp" />
     </div>
 </div>`,
-data() {
-        return {
-            value1: '',
-            value2: '',
-            value3: ''
-        };
-    }
-} },
-{ title: "默认显示日期", comp: {
-template: `<div>
+                        data() {
+                            return {
+                                value1: '',
+                                value2: '',
+                                value3: ''
+                            };
+                        }
+                    }
+                },
+                {
+                    title: '默认显示日期',
+                    comp: {
+                        template: `<div>
 <div>
         <div>组件值: {{ value }}</div>
         <el-date-picker v-model="value" type="daterange" :default-time="['00:00:00', '23:59:59']" start-placeholder="开始日期" end-placeholder="结束日期" />
     </div>
 </div>`,
-data() {
-        return {
-            value: ''
-        };
-    }
-} }
-]
+                        data() {
+                            return {
+                                value: ''
+                            };
+                        }
+                    }
+                }
+            ]
         };
     }
 };
 </script>
-

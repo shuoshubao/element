@@ -9,11 +9,14 @@
 
 <script>
 export default {
-    name: "LayoutView",
+    name: 'LayoutView',
     data() {
         return {
             sections: [
-{ title: "基础布局", comp: { template: `<div>
+                {
+                    title: '基础布局',
+                    comp: {
+                        template: `<div>
 <el-row>
         <el-col :span="24">
             <div class="grid-content bg-purple-dark" />
@@ -72,8 +75,13 @@ export default {
             <div class="grid-content bg-purple-light" />
         </el-col>
     </el-row>
-</div>` } },
-{ title: "分栏间隔", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '分栏间隔',
+                    comp: {
+                        template: `<div>
 <el-row :gutter="20">
         <el-col :span="6">
             <div class="grid-content bg-purple" />
@@ -88,8 +96,13 @@ export default {
             <div class="grid-content bg-purple" />
         </el-col>
     </el-row>
-</div>` } },
-{ title: "混合布局", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '混合布局',
+                    comp: {
+                        template: `<div>
 <el-row :gutter="20">
         <el-col :span="16">
             <div class="grid-content bg-purple" />
@@ -123,8 +136,13 @@ export default {
             <div class="grid-content bg-purple" />
         </el-col>
     </el-row>
-</div>` } },
-{ title: "分栏偏移", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '分栏偏移',
+                    comp: {
+                        template: `<div>
 <el-row :gutter="20">
         <el-col :span="6">
             <div class="grid-content bg-purple" />
@@ -146,8 +164,13 @@ export default {
             <div class="grid-content bg-purple" />
         </el-col>
     </el-row>
-</div>` } },
-{ title: "对齐方式", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '对齐方式',
+                    comp: {
+                        template: `<div>
 <el-row type="flex" class="row-bg">
         <el-col :span="6">
             <div class="grid-content bg-purple" />
@@ -203,8 +226,13 @@ export default {
             <div class="grid-content bg-purple" />
         </el-col>
     </el-row>
-</div>` } },
-{ title: "响应式布局", comp: { template: `<div>
+</div>`
+                    }
+                },
+                {
+                    title: '响应式布局',
+                    comp: {
+                        template: `<div>
 <el-row :gutter="10">
         <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
             <div class="grid-content bg-purple" />
@@ -219,15 +247,16 @@ export default {
             <div class="grid-content bg-purple-light" />
         </el-col>
     </el-row>
-</div>` } }
-]
+</div>`
+                    }
+                }
+            ]
         };
     }
 };
 </script>
 
 <style>
-
 .el-row {
     margin-bottom: 20px;
     &:last-child {
@@ -255,7 +284,6 @@ export default {
     background-color: #f9fafc;
 }
 
-
 .el-col {
     border-radius: 4px;
 }
@@ -272,5 +300,4 @@ export default {
     border-radius: 4px;
     min-height: 36px;
 }
-
 </style>
