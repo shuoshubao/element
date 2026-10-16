@@ -18,9 +18,9 @@ export default {
                     comp: {
                         template: `<div>
 <el-card>
-        <template #header>
-            <span>卡片名称</span>
-            <el-link type="primary" style="float: right">操作按钮</el-link>
+        <template>
+            <span slot="header">卡片名称</span>
+            <el-link slot="extra" type="primary">操作按钮</el-link>
 </div>`
                     }
                 },

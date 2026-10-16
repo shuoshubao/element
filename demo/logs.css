@@ -727,7 +727,6 @@ body .el-card {
     border-radius: 10px;
 }
 body .el-card .el-card__header {
-    padding: 10px 20px;
     color: #000;
     font-weight: bold;
     font-size: 16px;

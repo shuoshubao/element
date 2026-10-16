@@ -20,9 +20,22 @@
         }
     }
 
-    @include e(header) {
-        padding: #{$--card-padding - 2 $--card-padding};
+    @include e(header_wrap) {
+        display: flex;
+        align-items: center;
         border-bottom: 1px solid $--card-border-color;
+    }
+
+    @include e(header) {
+        padding: $--card-padding;
+        color: #000;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    @include e(extra) {
+        margin-left: auto;
+        padding-right: $--card-padding;
     }
 
     @include e(body) {
