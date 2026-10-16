@@ -12,6 +12,7 @@
         "start": "npx vite",
         "theme:dev": "sass --quiet element-variables.scss dist/index.css -w --no-source-map",
         "theme:build": "sass --quiet element-variables.scss dist/index.css --no-source-map --style compressed",
+        "deploy": "npm run build && npm run theme:build && vite build",
         "prepublishOnly": "npm run theme:build && npm run build"
     },
     "overrides": {
@@ -35,7 +36,7 @@
         "rollup-plugin-babel": "^4.4.0",
         "rollup-plugin-cleanup": "^3.2.1",
         "rollup-plugin-vue": "5.1.9",
-        "sass": "^1.85.1",
+        "sass": "^1.105.2",
         "vite-plugin-externals": "^0.6.2",
         "vite-plugin-vue2": "^2.0.3",
         "vue": "2.6.14",

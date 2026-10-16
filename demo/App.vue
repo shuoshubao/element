@@ -1,7 +1,7 @@
 <template>
     <el-container class="demo-app">
         <el-aside width="220px" class="demo-aside">
-            <el-menu :default-active="current" @select="onSelect" :unique-opened="false">
+            <el-menu :default-active="current" @select="onSelect" :unique-opened="false" :default-openeds="menu.map(g => g.title)">
                 <el-submenu v-for="g in menu" :key="g.title" :index="g.title">
                     <template slot="title">{{ g.title }}</template>
                     <el-menu-item v-for="item in g.children" :key="item.key" :index="item.key">
