@@ -1,97 +1,83 @@
 <template>
-    <div style="padding: 20px">
-        <div>
-            <el-button>默认按钮</el-button>
-            <el-button type="primary">主要按钮</el-button>
-            <el-button type="success">成功按钮</el-button>
-            <el-button type="info">信息按钮</el-button>
-            <el-button type="warning">警告按钮</el-button>
-            <el-button type="danger">危险按钮</el-button>
-        </div>
-
-        <el-divider />
-
-        <div>
-            <el-link href="https://baidu.com" target="_blank">默认链接</el-link>
-            <el-link type="primary">主要链接</el-link>
-            <el-link type="success">成功链接</el-link>
-            <el-link type="warning">警告链接</el-link>
-            <el-link type="danger">危险链接</el-link>
-            <el-link type="info">信息链接</el-link>
-        </div>
-
-        <el-divider />
-
-        <div>
-            <el-link disabled>默认链接</el-link>
-            <el-link type="primary" disabled>主要链接</el-link>
-            <el-link type="success" disabled>成功链接</el-link>
-            <el-link type="warning" disabled>警告链接</el-link>
-            <el-link type="danger" disabled>危险链接</el-link>
-            <el-link type="info" disabled>信息链接</el-link>
-        </div>
-
-        <el-divider />
-
-        <div>
-            <el-link :underline="false">无下划线</el-link>
-            <el-link>有下划线</el-link>
-        </div>
-
-        <el-divider />
-
-        <div>
-            <el-link icon="el-icon-edit">编辑</el-link>
-            <el-link>
-                查看
-                <i class="el-icon-view" />
-            </el-link>
-        </div>
-
-        <el-divider />
-
-        <div>
-            <span>文字</span>
-            <el-link href="https://baidu.com" target="_blank">默认链接</el-link>
-            <span>文字</span>
-        </div>
-    </div>
+    <el-container class="demo-app">
+        <el-aside width="220px" class="demo-aside">
+            <el-menu :default-active="current" @select="onSelect" :unique-opened="false">
+                <el-submenu v-for="g in menu" :key="g.title" :index="g.title">
+                    <template slot="title">{{ g.title }}</template>
+                    <el-menu-item v-for="item in g.children" :key="item.key" :index="item.key">
+                        {{ item.label }}
+                    </el-menu-item>
+                </el-submenu>
+            </el-menu>
+        </el-aside>
+        <el-container>
+            <el-main>
+                <component v-if="currentComp" :is="currentComp" :key="current" />
+            </el-main>
+        </el-container>
+    </el-container>
 </template>
 
 <script>
+import menu from './menu.js';
+
+const modules = import.meta.glob('./views/*.vue', { eager: true });
+const keyToComp = {};
+const keyToLabel = {};
+menu.forEach(g => {
+    g.children.forEach(item => {
+        const mod = modules['./views/' + item.name + '.vue'];
+        if (mod) keyToComp[item.key] = mod.default;
+        keyToLabel[item.key] = item.label;
+    });
+});
+
+const firstKey = menu[0].children[0].key;
+
 export default {
-    name: 'App'
+    name: 'App',
+    data() {
+        return { menu, current: firstKey };
+    },
+    computed: {
+        currentComp() {
+            return keyToComp[this.current];
+        },
+        currentLabel() {
+            return keyToLabel[this.current] || '';
+        }
+    },
+    created() {
+        this.syncFromHash();
+        window.addEventListener('hashchange', this.syncFromHash);
+    },
+    beforeDestroy() {
+        window.removeEventListener('hashchange', this.syncFromHash);
+    },
+    methods: {
+        syncFromHash() {
+            const key = (window.location.hash || '').replace(/^#\/?/, '');
+            if (key && keyToComp[key]) this.current = key;
+        },
+        onSelect(key) {
+            window.location.hash = '/' + key;
+            this.current = key;
+        }
+    }
 };
 </script>
 
 <style>
-body {
-    color: #333;
-    font-size: 14px;
-    font-family: PingFangSC-Regular, 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', SimSun, Arial, sans-serif !important;
-    line-height: 1.5;
-    background-color: #fff;
-    -webkit-font-smoothing: antialiased;
-    scroll-behavior: smooth;
+.demo-app {
+    height: 100vh;
 }
 
-.el-link + .el-link,
-.el-button + .el-button {
-    margin-left: 10px;
+.demo-aside {
+    border-right: 1px solid #ebeef5;
+    overflow-y: auto;
 }
 
-a {
-    color: #065fe7;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #065fe7;
-}
-
-img {
-    user-select: none;
-    -webkit-user-drag: none;
+.demo-aside .el-menu {
+    border-right: none;
 }
 </style>
