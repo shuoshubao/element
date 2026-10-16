@@ -7,7 +7,7 @@
     align-items: center;
     flex-direction: column;
     text-align: center;
-    box-sizing: border-box;
+
     padding: $--empty-padding;
 
     @include e(image) {

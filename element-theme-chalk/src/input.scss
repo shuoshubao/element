@@ -13,7 +13,7 @@
         resize: vertical;
         padding: 5px 15px;
         line-height: 1.5;
-        box-sizing: border-box;
+
         width: 100%;
         font-size: inherit;
         color: $--input-font-color;
@@ -110,7 +110,7 @@
         background-image: none;
         border-radius: $--input-border-radius;
         border: $--input-border;
-        box-sizing: border-box;
+
         color: $--input-font-color;
         display: inline-block;
         font-size: inherit;

@@ -3,7 +3,7 @@
 
 @include b(avatar) {
     display: inline-block;
-    box-sizing: border-box;
+
     text-align: center;
     overflow: hidden;
     color: $--avatar-font-color;

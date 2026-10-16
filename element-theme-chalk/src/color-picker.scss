@@ -42,7 +42,7 @@
 
 @include b(color-hue-slider) {
     position: relative;
-    box-sizing: border-box;
+
     width: 280px;
     height: 12px;
     background-color: #f00;
@@ -57,7 +57,7 @@
     @include e(thumb) {
         position: absolute;
         cursor: pointer;
-        box-sizing: border-box;
+
         left: 0;
         top: 0;
         width: 4px;
@@ -127,7 +127,7 @@
 
 @include b(color-alpha-slider) {
     position: relative;
-    box-sizing: border-box;
+
     width: 280px;
     height: 12px;
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
@@ -141,7 +141,7 @@
     @include e(thumb) {
         position: absolute;
         cursor: pointer;
-        box-sizing: border-box;
+
         left: 0;
         top: 0;
         width: 4px;
@@ -307,7 +307,7 @@
 
     @include e(trigger) {
         display: inline-block;
-        box-sizing: border-box;
+
         height: 40px;
         width: 40px;
         padding: 4px;
@@ -321,7 +321,7 @@
     @include e(color) {
         position: relative;
         display: block;
-        box-sizing: border-box;
+
         border: 1px solid #999;
         border-radius: $--border-radius-small;
         width: 100%;

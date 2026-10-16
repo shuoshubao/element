@@ -68,7 +68,7 @@
     vertical-align: middle;
     width: $--transfer-panel-width;
     max-height: 100%;
-    box-sizing: border-box;
+
     position: relative;
 
     @include e(body) {
@@ -85,7 +85,6 @@
         list-style: none;
         height: $--transfer-panel-body-height;
         overflow: auto;
-        box-sizing: border-box;
 
         @include when(filterable) {
             height: #{$--transfer-panel-body-height - $--transfer-filter-height - 20px};
@@ -115,7 +114,7 @@
             width: 100%;
             @include utils-ellipsis;
             display: block;
-            box-sizing: border-box;
+
             padding-left: 24px;
             line-height: $--transfer-item-height;
         }
@@ -129,7 +128,7 @@
     @include e(filter) {
         text-align: center;
         margin: 15px;
-        box-sizing: border-box;
+
         display: block;
         width: auto;
 
@@ -138,7 +137,7 @@
             width: 100%;
             font-size: 12px;
             display: inline-block;
-            box-sizing: border-box;
+
             border-radius: #{$--transfer-filter-height / 2};
             padding-right: 10px;
             padding-left: 30px;
@@ -160,7 +159,7 @@
         margin: 0;
         padding-left: 15px;
         border-bottom: 1px solid $--transfer-border-color;
-        box-sizing: border-box;
+
         color: $--color-black;
 
         .el-checkbox {

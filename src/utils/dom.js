@@ -30,7 +30,7 @@ export const on = (function () {
             element.attachEvent(`on${event}`, handler);
         }
     };
-}());
+})();
 
 export const off = (function () {
     if (!isServer && document.removeEventListener) {
@@ -45,7 +45,7 @@ export const off = (function () {
             element.detachEvent(`on${event}`, handler);
         }
     };
-}());
+})();
 
 export const once = function (el, event, fn) {
     const listener = function () {

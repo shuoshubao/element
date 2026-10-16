@@ -3,7 +3,6 @@
 @import 'descriptions-item';
 
 @include b(descriptions) {
-    box-sizing: border-box;
     font-size: $--font-size-base;
     color: $--color-text-primary;
 
@@ -29,7 +28,6 @@
             table-layout: fixed;
 
             .el-descriptions-item__cell {
-                box-sizing: border-box;
                 text-align: left;
                 font-weight: normal;
                 line-height: 1.5;

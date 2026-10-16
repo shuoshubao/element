@@ -90,7 +90,6 @@
         flex-wrap: wrap;
         line-height: normal;
         text-align: left;
-        box-sizing: border-box;
 
         .el-tag {
             display: inline-flex;
@@ -174,7 +173,6 @@
         color: $--cascader-menu-font-color;
         border: none;
         outline: none;
-        box-sizing: border-box;
 
         &::placeholder {
             color: $--color-text-placeholder;

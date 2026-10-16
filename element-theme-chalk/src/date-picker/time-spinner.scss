@@ -20,7 +20,6 @@
         }
 
         @include when(arrow) {
-            box-sizing: border-box;
             text-align: center;
             overflow: hidden;
 

@@ -36,7 +36,7 @@
         width: 32px;
         height: 30px;
         padding: 4px 0;
-        box-sizing: border-box;
+
         text-align: center;
         cursor: pointer;
         position: relative;
@@ -44,7 +44,6 @@
         & div {
             height: 30px;
             padding: 3px 0;
-            box-sizing: border-box;
         }
 
         & span {

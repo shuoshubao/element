@@ -12,7 +12,7 @@
         color: $--select-option-color;
         height: $--select-option-height;
         line-height: $--select-option-height;
-        box-sizing: border-box;
+
         cursor: pointer;
 
         @include when(disabled) {

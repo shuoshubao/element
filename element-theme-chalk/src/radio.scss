@@ -20,7 +20,7 @@
         padding: $--radio-bordered-padding;
         border-radius: $--border-radius-base;
         border: $--border-base;
-        box-sizing: border-box;
+
         height: $--radio-bordered-height;
 
         &.is-checked {
@@ -154,7 +154,6 @@
         position: relative;
         cursor: pointer;
         display: inline-block;
-        box-sizing: border-box;
 
         &:hover {
             border-color: $--radio-input-border-color-hover;

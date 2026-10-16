@@ -24,9 +24,9 @@ export default {
             }
             return this.$slots && this.$slots.default
                 ? this.$slots.default.some(vnode => {
-                    const tag = vnode.componentOptions && vnode.componentOptions.tag;
-                    return tag === 'el-header' || tag === 'el-footer';
-                })
+                      const tag = vnode.componentOptions && vnode.componentOptions.tag;
+                      return tag === 'el-header' || tag === 'el-footer';
+                  })
                 : false;
         }
     }

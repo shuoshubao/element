@@ -43,7 +43,7 @@
     @include e(content) {
         float: left;
         width: 50%;
-        box-sizing: border-box;
+
         margin: 0;
         padding: 16px;
 
@@ -59,7 +59,6 @@
     }
 
     @include e(editors-wrap) {
-        box-sizing: border-box;
         display: table-cell;
 
         @include when(right) {
@@ -74,7 +73,6 @@
         padding: 8px 5px 5px 5px;
         display: table;
         width: 100%;
-        box-sizing: border-box;
 
         > .el-icon-arrow-right {
             font-size: 20px;

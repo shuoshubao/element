@@ -209,13 +209,13 @@ export default {
         barStyle() {
             return this.vertical
                 ? {
-                    height: this.barSize,
-                    bottom: this.barStart
-                }
+                      height: this.barSize,
+                      bottom: this.barStart
+                  }
                 : {
-                    width: this.barSize,
-                    left: this.barStart
-                };
+                      width: this.barSize,
+                      left: this.barStart
+                  };
         },
 
         sliderDisabled() {

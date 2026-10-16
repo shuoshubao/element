@@ -4,7 +4,7 @@
 @include b(alert) {
     width: 100%;
     padding: $--alert-padding;
-    box-sizing: border-box;
+
     border-radius: $--alert-border-radius;
     position: relative;
     background-color: $--color-white;

@@ -17,7 +17,7 @@
 
 @include b(cascader-menu) {
     min-width: 180px;
-    box-sizing: border-box;
+
     color: $--cascader-menu-font-color;
     border-right: $--cascader-menu-border;
 
@@ -38,7 +38,6 @@
         margin: 0;
         padding: 6px 0;
         list-style: none;
-        box-sizing: border-box;
     }
 
     @include e(hover-zone) {
