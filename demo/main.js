@@ -2,7 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import './logs.css';
 
-Vue.use(window.ELEMENT, { size: 'mini' });
+Vue.use(window.ELEMENT, { size: localStorage.getItem('componentSize') || 'mini' });
 
 new Vue({
     el: '#app',

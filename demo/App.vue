@@ -1,6 +1,14 @@
 <template>
     <el-container class="demo-app">
         <el-aside width="220px" class="demo-aside">
+            <div style="padding: 10px">
+                <el-select v-model="componentSize" style="width: 100%" @change="onSizeChange">
+                    <el-option label="mini" value="mini" />
+                    <el-option label="small" value="small" />
+                    <el-option label="medium" value="medium" />
+                    <el-option label="large" value="large" />
+                </el-select>
+            </div>
             <el-menu :default-active="current" @select="onSelect" :unique-opened="false" :default-openeds="menu.map(g => g.title)">
                 <el-submenu v-for="g in menu" :key="g.title" :index="g.title">
                     <template slot="title">{{ g.title }}</template>
@@ -37,7 +45,11 @@ const firstKey = menu[0].children[0].key;
 export default {
     name: 'App',
     data() {
-        return { menu, current: firstKey };
+        return {
+            menu,
+            current: firstKey,
+            componentSize: localStorage.getItem('componentSize') || 'mini'
+        };
     },
     computed: {
         currentComp() {
@@ -62,6 +74,10 @@ export default {
         onSelect(key) {
             window.location.hash = '/' + key;
             this.current = key;
+        },
+        onSizeChange(val) {
+            localStorage.setItem('componentSize', val);
+            window.location.reload();
         }
     }
 };

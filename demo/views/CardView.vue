@@ -17,10 +17,10 @@ export default {
                     title: '基础用法',
                     comp: {
                         template: `<div>
-<el-card>
-        <template>
-            <span slot="header">卡片名称</span>
-            <el-link slot="extra" type="primary">操作按钮</el-link>
+<el-card header="卡片名称">
+        <el-link slot="extra" type="primary" style="float: right">操作按钮</el-link>
+        <div>卡片内容</div>
+</el-card>
 </div>`
                     }
                 },
@@ -28,7 +28,7 @@ export default {
                     title: '简单卡片',
                     comp: {
                         template: `<div>
-<el-card>
+    <el-card>
         <div v-for="item in 4" :key="item">{{ '列表内容 ' + item }}</div>
     </el-card>
 </div>`
