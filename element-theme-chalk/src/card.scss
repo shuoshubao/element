@@ -34,6 +34,8 @@
     }
 
     @include e(extra) {
+        display: flex;
+        align-items: center;
         margin-left: auto;
         padding-right: $--card-padding;
     }

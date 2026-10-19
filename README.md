@@ -9,6 +9,8 @@
 
 ## 组件
 
+-   card
+    -   增加 `slot=extra`
 -   popover
     -   增加属性 `keepAlive` 控制内容是否保留, 默认 `false`
 -   alert
