@@ -9,6 +9,8 @@
 
 ## 组件
 
+-   tree
+    -   增加 `scoped-slot=children-footer`
 -   card
     -   增加 `slot=extra`
 -   popover
