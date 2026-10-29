@@ -15,6 +15,8 @@
     -   增加 `slot=extra`
 -   popover
     -   增加属性 `keepAlive` 控制内容是否保留, 默认 `false`
+-   popconfirm
+    -   当弹窗显示时, 添加属性 `aria-expanded=true`
 -   alert
     -   关闭按钮: `v-show` => `v-if`
 -   message-box
