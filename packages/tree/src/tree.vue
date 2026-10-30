@@ -484,12 +484,6 @@ export default {
                 ev.preventDefault();
                 currentItem.click(); // 选中
             }
-            const hasInput = currentItem.querySelector('[type="checkbox"]');
-            if ([13, 32].indexOf(keyCode) > -1 && hasInput) {
-                // space enter选中checkbox
-                ev.preventDefault();
-                hasInput.click();
-            }
         }
     }
 };
