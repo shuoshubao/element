@@ -1,5 +1,5 @@
 <template>
-    <el-popover ref="popover" v-bind="$attrs" v-model="visible" trigger="click">
+    <el-popover v-bind="$attrs" v-model="visible" trigger="click">
         <div class="el-popconfirm">
             <div class="el-popconfirm__main">
                 <i v-if="!hideIcon" :class="icon" class="el-popconfirm__icon" :style="{ color: iconColor }" />
@@ -71,11 +71,6 @@ export default {
         },
         displayCancelButtonText() {
             return this.cancelButtonText || t('el.popconfirm.cancelButtonText');
-        }
-    },
-    watch: {
-        visible(val) {
-            this.$refs.popover?.referenceElm?.setAttribute('aria-expanded', val);
         }
     },
     methods: {

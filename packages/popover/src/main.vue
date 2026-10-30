@@ -82,6 +82,7 @@ export default {
             if (this.disabled) {
                 return;
             }
+            this.referenceElm?.setAttribute('aria-expanded', val);
             val ? this.$emit('show') : this.$emit('hide');
         }
     },
