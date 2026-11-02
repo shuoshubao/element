@@ -24,6 +24,9 @@
                     <section v-if="rendered" class="el-drawer__body">
                         <slot />
                     </section>
+                    <footer v-if="$slots.footer" class="el-drawer__footer">
+                        <slot name="footer" />
+                    </footer>
                 </div>
             </div>
         </div>

@@ -113,10 +113,7 @@ $directions: rtl, ltr, ttb, btt;
     background-color: $--dialog-background-color;
     display: flex;
     flex-direction: column;
-    box-shadow:
-        0 8px 10px -5px rgba(0, 0, 0, 0.2),
-        0 16px 24px 2px rgba(0, 0, 0, 0.14),
-        0 6px 30px 5px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);
     overflow: hidden;
     outline: 0;
 
@@ -164,9 +161,16 @@ $directions: rtl, ltr, ttb, btt;
 
     &__body {
         flex: 1;
-        overflow: auto;
-        & > * {
-        }
+        padding: 10px 20px;
+        overflow-y: auto;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 10px 20px;
+        border-top: 1px solid $--border-color-lighter;
     }
 
     &.ltr,
