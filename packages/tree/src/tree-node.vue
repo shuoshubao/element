@@ -54,7 +54,6 @@
                     :node="child"
                     @node-expand="handleChildNodeExpand"
                 />
-                <NodeChildrenFooter v-if="tree.$scopedSlots['children-footer']" :node="node" />
             </div>
         </el-collapse-transition>
     </div>
@@ -92,19 +91,6 @@ export default {
                             ? tree.$scopedSlots.default({ node, data })
                             : <span class="el-tree-node__label">{ node.label }</span>
                 );
-            }
-        },
-        NodeChildrenFooter: {
-            props: {
-                node: {
-                    required: true
-                }
-            },
-            render() {
-                const { tree } = this.$parent;
-                const { node } = this;
-                const { data } = node;
-                return tree.$scopedSlots['children-footer']({ node, data });
             }
         }
     },
