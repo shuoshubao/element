@@ -31,6 +31,9 @@ export default {
 
     methods: {
         handleClick(e) {
+            if (this.disabled) {
+                return;
+            }
             this.dispatch('ElDropdown', 'menu-item-click', [this.command, this]);
         }
     }

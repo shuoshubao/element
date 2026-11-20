@@ -117,9 +117,8 @@
         }
 
         @include when(disabled) {
-            cursor: default;
+            cursor: not-allowed;
             color: $--font-color-disabled-base;
-            pointer-events: none;
         }
     }
 
